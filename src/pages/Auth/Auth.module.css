@@ -59,6 +59,25 @@
 .brandIcon {
   font-size: 2rem;
   margin-bottom: 0.5rem;
+  color: #113e21; 
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 2px 4px rgba(255, 189, 89, 0.3));
+}
+
+.brandIcon:hover {
+  color: #e67e22;
+  transform: scale(1.05);
+  filter: drop-shadow(0 4px 8px rgba(255, 189, 89, 0.4));
+}
+
+.darkMode .brandIcon {
+  color: #ffbd59; 
+  filter: drop-shadow(0 2px 4px rgba(17, 62, 33, 0.3));
+}
+
+.darkMode .brandIcon:hover {
+  color: #1a5d32;
+  filter: drop-shadow(0 4px 8px rgba(17, 62, 33, 0.4));
 }
 
 .brandTitle {
@@ -316,6 +335,30 @@
   font-size: 1.25rem;
   flex-shrink: 0;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  transition: all 0.3s ease;
+}
+
+/* Specific colors for different badge icons */
+.recipeBadge:first-child .badgeIcon {
+  color: #e67e22; /* Orange for FaUtensils */
+}
+
+.recipeBadge:last-child .badgeIcon {
+  color: #27ae60; /* Green for FaLeaf */
+}
+
+/* Hover effects for badge icons */
+.recipeBadge:hover .badgeIcon {
+  transform: scale(1.1);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.recipeBadge:first-child:hover .badgeIcon {
+  color: #d35400;
+}
+
+.recipeBadge:last-child:hover .badgeIcon {
+  color: #229954;
 }
 
 .badgeText {

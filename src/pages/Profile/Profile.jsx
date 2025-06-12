@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import RecipeCard from '../../components/RecipeCard/RecipeCard';
 import { mockRecipes } from '../../data/mockData';
+import { FaCamera, FaEdit, FaHeart } from 'react-icons/fa';
 import styles from './Profile.module.css';
 
 const Profile = () => {
@@ -144,7 +145,7 @@ const Profile = () => {
                     {isUploadingAvatar ? (
                       <div className={styles.uploadSpinner}></div>
                     ) : (
-                      '📷'
+                      <FaCamera />
                     )}
                   </button>
                   <input
@@ -278,7 +279,7 @@ const Profile = () => {
                     </div>
                   ) : (
                     <div className={styles.emptyState}>
-                      <div className={styles.emptyIcon}>📝</div>
+                      <div className={styles.emptyIcon}><FaEdit /></div>
                       <h3>No recipes yet</h3>
                       <p>Start sharing your favorite recipes with the community!</p>
                       <button className={styles.createBtn}>
@@ -299,7 +300,7 @@ const Profile = () => {
                     </div>
                   ) : (
                     <div className={styles.emptyState}>
-                      <div className={styles.emptyIcon}>❤️</div>
+                      <div className={styles.emptyIcon}><FaHeart /></div>
                       <h3>No favorites yet</h3>
                       <p>Start exploring recipes and save your favorites!</p>
                       <button 

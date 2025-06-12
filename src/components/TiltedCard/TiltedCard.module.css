@@ -1,0 +1,87 @@
+/* src/components/TiltedCard/TiltedCard.module.css */
+
+.tiltedCard {
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+  cursor: pointer;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.tiltedCard * {
+  transform-style: preserve-3d;
+}
+
+.glare {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 1;
+  mix-blend-mode: overlay;
+}
+
+/* Light Mode Glare */
+.lightMode .glare {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 50%);
+}
+
+/* Dark Mode Glare */
+.darkMode .glare {
+  background: radial-gradient(circle, rgba(255, 189, 89, 0.6) 0%, transparent 50%);
+}
+
+/* Enhanced shadow for 3D effect */
+.tiltedCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tiltedCard:hover::before {
+  opacity: 1;
+}
+
+/* Dark mode adjustments */
+.darkMode.tiltedCard::before {
+  background: linear-gradient(135deg, transparent 0%, rgba(255, 189, 89, 0.1) 50%, transparent 100%);
+}
+
+/* Performance optimizations */
+.tiltedCard {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .tiltedCard {
+    transform: none !important;
+    transition: none !important;
+  }
+  
+  .glare {
+    display: none;
+  }
+}
+
+/* Focus state for accessibility */
+.tiltedCard:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

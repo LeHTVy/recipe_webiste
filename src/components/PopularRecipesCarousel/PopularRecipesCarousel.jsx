@@ -1,199 +1,251 @@
-import React, { useState, useRef, useEffect, useCallback  } from 'react';
-import RecipeCard from '../RecipeCard/RecipeCard';
-import { mockRecipes } from '../../data/mockData';
+// src/components/PopularRecipesCarousel/PopularRecipesCarousel.jsx
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../../context/ThemeContext';
+import { getPopularRecipes, getTopRatedRecipes } from '../../data/mockData';
+import { FaFire, FaComments, FaTrophy, FaStar, FaShare } from 'react-icons/fa';
 import styles from './PopularRecipesCarousel.module.css';
 
 const PopularRecipesCarousel = ({ selectedTag }) => {
-  const [popularRecipes, setPopularRecipes] = useState([]);
+  const { isDarkMode } = useTheme();
+  const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-  const carouselRef = useRef(null);
-  const [itemsPerView, setItemsPerView] = useState(3);
+  const [viewMode, setViewMode] = useState('popular'); // 'popular' or 'toprated'
 
-  // Get popular recipes based on rating
-  useEffect(() => {
-    let filteredRecipes = [...mockRecipes];
-    
-    if (selectedTag) {
-      filteredRecipes = mockRecipes.filter(recipe => 
-        recipe.tags.includes(selectedTag)
-      );
+  // Get recipes based on view mode
+  const getRecipes = () => {
+    if (viewMode === 'popular') {
+      return getPopularRecipes(6);
+    } else {
+      return getTopRatedRecipes(6);
     }
-    
-    // Sort by rating and get top recipes
-    const popular = filteredRecipes
-      .sort((a, b) => b.rating - a.rating)
-      .slice(0, 12); // Get top 12 recipes
-    
-    setPopularRecipes(popular);
-    setCurrentIndex(0);
-  }, [selectedTag]);
+  };
 
-  // Update items per view based on screen size
-  useEffect(() => {
-    const updateItemsPerView = () => {
-      const width = window.innerWidth;
-      if (width < 768) {
-        setItemsPerView(1);
-      } else if (width < 1024) {
-        setItemsPerView(2);
-      } else if (width < 1440) {
-        setItemsPerView(3);
+  const recipes = getRecipes();
+
+  const scrollLeft = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
+  const scrollRight = () => {
+    if (currentIndex < recipes.length - 3) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+
+  const renderStars = (rating) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    
+    for (let i = 0; i < 5; i++) {
+      if (i < fullStars) {
+        stars.push('★');
       } else {
-        setItemsPerView(4);
+        stars.push('☆');
       }
-    };
-
-    updateItemsPerView();
-    window.addEventListener('resize', updateItemsPerView);
-    return () => window.removeEventListener('resize', updateItemsPerView);
-  }, []);
-
-  // Update scroll buttons state
-  useEffect(() => {
-    setCanScrollLeft(currentIndex > 0);
-    setCanScrollRight(currentIndex < popularRecipes.length - itemsPerView);
-  }, [currentIndex, popularRecipes.length, itemsPerView]);
-
-  const scrollRight = useCallback(() => {
-    if (canScrollRight) {
-      setCurrentIndex(prev => 
-        Math.min(popularRecipes.length - itemsPerView, prev + 1)
-      );
     }
-  }, [canScrollRight, popularRecipes.length, itemsPerView]);
+    return stars.join('');
+  };
 
-  const scrollLeft = useCallback(() => {
-    if (canScrollLeft) {
-      setCurrentIndex(prev => Math.max(0, prev - 1));
-    }
-  }, [canScrollLeft]);
+  const handleViewRecipe = (recipeId) => {
+    navigate(`/recipes/${recipeId}`);
+  };
 
-  // Auto-scroll functionality với dependency array đúng
-  useEffect(() => {
-    const autoScroll = setInterval(() => {
-      if (canScrollRight) {
-        scrollRight();
-      } else {
-        setCurrentIndex(0);
+  const getBadgeInfo = (recipe, index) => {
+    if (viewMode === 'popular') {
+      if (index === 0) {
+        return { text: 'MOST POPULAR', class: styles.mostPopularBadge, icon: <FaFire /> };
+      } else if (recipe.commentCount > 10) {
+        return { text: 'TRENDING', class: styles.trendingBadge, icon: <FaComments /> };
       }
-    }, 5000);
-
-    return () => clearInterval(autoScroll);
-  }, [canScrollRight, scrollRight]);
-
-  // Touch/Mouse drag functionality
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeftStart, setScrollLeftStart] = useState(0);
-
-  const handleMouseDown = (e) => {
-    setIsDragging(true);
-    setStartX(e.pageX - carouselRef.current.offsetLeft);
-    setScrollLeftStart(carouselRef.current.scrollLeft);
+    } else {
+      if (index === 0) {
+        return { text: 'TOP RATED', class: styles.topRatedBadge, icon: <FaTrophy /> };
+      } else if (recipe.rating >= 4.8) {
+        return { text: 'EXCELLENT', class: styles.excellentBadge, icon: <FaStar /> };
+      }
+    }
+    return null;
   };
-
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const x = e.pageX - carouselRef.current.offsetLeft;
-    const walk = (x - startX) * 2;
-    carouselRef.current.scrollLeft = scrollLeftStart - walk;
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  if (popularRecipes.length === 0) {
-    return (
-      <div className={styles.loading}>
-        <div className={styles.spinner}></div>
-        <p>Loading popular recipes...</p>
-      </div>
-    );
-  }
 
   return (
-    <div className={styles.carouselContainer}>
-      <div className={styles.carouselHeader}>
-        <div className={styles.headerContent}>
+    <div className={`${styles.popularSection} ${isDarkMode ? styles.darkMode : ''}`}>
+      {/* Header với Title Style Cũ và View Toggle */}
+      <div className={styles.header}>
+        <div className={styles.headerLeft}>
+          {/* Title với Underline như code cũ */}
           <h3 className={styles.carouselTitle}>
-            {selectedTag ? `Popular ${selectedTag.replace('-', ' ')} recipes` : 'Popular recipes'}
+            {viewMode === 'popular' 
+              ? (selectedTag ? `Popular ${selectedTag.replace('-', ' ')} recipes` : 'Popular recipes')
+              : (selectedTag ? `Top Rated ${selectedTag.replace('-', ' ')} recipes` : 'Top Rated recipes')
+            }
           </h3>
-          <p className={styles.carouselSubtitle}>
-            {selectedTag 
-              ? `Top-rated ${selectedTag.replace('-', ' ')} recipes loved by our community`
-              : 'Top-rated recipes loved by our community'
+          <p className={styles.subtitle}>
+            {viewMode === 'popular' 
+              ? 'Most loved recipes by our community' 
+              : 'Highest rated recipes from our collection'
             }
           </p>
         </div>
         
-        <div className={styles.carouselControls}>
-          <button 
-            className={`${styles.controlBtn} ${!canScrollLeft ? styles.disabled : ''}`}
-            onClick={scrollLeft}
-            disabled={!canScrollLeft}
-            aria-label="Scroll left"
-          >
-            ←
-          </button>
-          <button 
-            className={`${styles.controlBtn} ${!canScrollRight ? styles.disabled : ''}`}
-            onClick={scrollRight}
-            disabled={!canScrollRight}
-            aria-label="Scroll right"
-          >
-            →
-          </button>
+        <div className={styles.headerRight}>
+          {/* View Mode Toggle */}
+          <div className={styles.viewToggle}>
+            <button 
+              className={`${styles.toggleBtn} ${viewMode === 'popular' ? styles.active : ''}`}
+              onClick={() => {
+                setViewMode('popular');
+                setCurrentIndex(0);
+              }}
+            >
+              <FaFire /> Popular
+            </button>
+            <button 
+              className={`${styles.toggleBtn} ${viewMode === 'toprated' ? styles.active : ''}`}
+              onClick={() => {
+                setViewMode('toprated');
+                setCurrentIndex(0);
+              }}
+            >
+              <FaStar /> Top Rated
+            </button>
+          </div>
+          
+          {/* Navigation Controls */}
+          <div className={styles.controls}>
+            <button 
+              className={styles.controlBtn}
+              onClick={scrollLeft}
+              disabled={currentIndex === 0}
+            >
+              ←
+            </button>
+            <button 
+              className={styles.controlBtn}
+              onClick={scrollRight}
+              disabled={currentIndex >= recipes.length - 3}
+            >
+              →
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className={styles.carouselWrapper}>
+      {/* Carousel */}
+      <div className={styles.carousel}>
         <div 
           className={styles.carouselTrack}
-          ref={carouselRef}
-          style={{
-            transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)`,
-          }}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
+          style={{ transform: `translateX(-${currentIndex * 33.333}%)` }}
         >
-          {popularRecipes.map((recipe, index) => (
-            <div 
-              key={recipe.id} 
-              className={styles.carouselItem}
-              style={{ minWidth: `${100 / itemsPerView}%` }}
-            >
-              <RecipeCard recipe={recipe} />
-              {index === 0 && (
-                <div className={styles.popularBadge}>
-                  🏆 Most Popular
+          {recipes.map((recipe, index) => {
+            const badgeInfo = getBadgeInfo(recipe, index);
+            
+            return (
+              <div key={recipe.id} className={styles.recipeCard}>
+                {/* Dynamic Badge */}
+                {badgeInfo && (
+                  <div className={badgeInfo.class}>
+                    {badgeInfo.icon} {badgeInfo.text}
+                  </div>
+                )}
+                
+                {/* Image */}
+                <div className={styles.imageContainer}>
+                  <img 
+                    src={recipe.image} 
+                    alt={recipe.title}
+                    className={styles.recipeImage}
+                  />
+                  
+                  {/* Popularity/Rating Indicator */}
+                  <div className={styles.scoreIndicator}>
+                    {viewMode === 'popular' ? (
+                      <div className={styles.popularityScore}>
+                        <FaComments className={styles.scoreIcon} />
+                        <span className={styles.scoreValue}>{recipe.commentCount}</span>
+                      </div>
+                    ) : (
+                      <div className={styles.ratingScore}>
+                        <FaStar className={styles.scoreIcon} />
+                        <span className={styles.scoreValue}>{recipe.rating}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              )}
-              {recipe.rating >= 4.8 && index !== 0 && (
-                <div className={styles.topRatedBadge}>
-                  ⭐ Top Rated
+
+                {/* Content */}
+                <div className={styles.cardContent}>
+                  <h3 className={styles.recipeTitle}>{recipe.title}</h3>
+                  <p className={styles.recipeDescription}>{recipe.description}</p>
+
+                  {/* Rating và Comments */}
+                  <div className={styles.engagement}>
+                    <div className={styles.rating}>
+                      <span className={styles.stars}>{renderStars(recipe.rating)}</span>
+                      <span className={styles.ratingValue}>{recipe.rating}</span>
+                      <span className={styles.ratingCount}>({recipe.totalRatings})</span>
+                    </div>
+                    <div className={styles.comments}>
+                      <FaComments className={styles.commentIcon} />
+                      <span className={styles.commentCount}>{recipe.commentCount}</span>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className={styles.actions}>
+                    <button 
+                      className={styles.favoriteBtn}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        console.log('Added to favorites:', recipe.id);
+                      }}
+                    >
+                      ♡
+                    </button>
+                    <button 
+                      className={styles.shareBtn}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        console.log('Share recipe:', recipe.id);
+                      }}
+                    >
+                      <FaShare />
+                    </button>
+                    <button 
+                      className={styles.viewBtn}
+                      onClick={() => handleViewRecipe(recipe.id)}
+                    >
+                      View Recipe
+                    </button>
+                  </div>
                 </div>
-              )}
-            </div>
-          ))}
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* Dots indicator */}
-      <div className={styles.dotsContainer}>
-        {Array.from({ length: Math.ceil(popularRecipes.length / itemsPerView) }).map((_, index) => (
+      {/* Dots Indicator */}
+      <div className={styles.dots}>
+        {Array.from({ length: Math.max(0, recipes.length - 2) }).map((_, index) => (
           <button
             key={index}
-            className={`${styles.dot} ${Math.floor(currentIndex / itemsPerView) === index ? styles.activeDot : ''}`}
-            onClick={() => setCurrentIndex(index * itemsPerView)}
-            aria-label={`Go to slide ${index + 1}`}
+            className={`${styles.dot} ${index === currentIndex ? styles.activeDot : ''}`}
+            onClick={() => setCurrentIndex(index)}
           />
         ))}
+      </div>
+
+      {/* View Mode Info */}
+      <div className={styles.viewInfo}>
+        <span className={styles.viewLabel}>
+          Showing {viewMode === 'popular' ? 'Popular' : 'Top Rated'} • 
+        </span>
+        <span className={styles.viewCount}>
+          {recipes.length} recipes
+        </span>
       </div>
     </div>
   );

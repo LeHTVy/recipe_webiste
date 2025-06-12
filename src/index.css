@@ -13,18 +13,18 @@
   --shadow-light: rgba(0, 0, 0, 0.05);
   --shadow-heavy: rgba(0, 0, 0, 0.15);
   
-  /* Primary accent colors - Light Mode (Green #00bf63) */
-  --accent: #00bf63;
-  --accent-light: #00d470;
-  --accent-dark: #00a855;
-  --accent-alpha: rgba(0, 191, 99, 0.1);
-  --accent-alpha-light: rgba(0, 191, 99, 0.05);
-  --accent-shadow: rgba(0, 191, 99, 0.3);
+  /* Primary accent colors - Light Mode (Green #113E21) */
+  --accent: #113E21;
+  --accent-light: #1A5D32;
+  --accent-dark: #0A2714;
+  --accent-alpha: rgba(17, 62, 33, 0.1);
+  --accent-alpha-light: rgba(17, 62, 33, 0.05);
+  --accent-shadow: rgba(17, 62, 33, 0.3);
   
   /* Button and interactive elements */
-  --button-primary: #00bf63;
-  --button-primary-hover: #00a855;
-  --button-primary-active: #009649;
+  --button-primary: #113E21;
+  --button-primary-hover: #0A2714;
+  --button-primary-active: #051A0C;
   --button-secondary: #f8f9fa;
   --button-secondary-hover: #e9ecef;
   --button-secondary-text: #6c757d;
@@ -33,14 +33,14 @@
   --nav-bg: #ffffff;
   --nav-border: #e9ecef;
   --nav-text: #1a1a1a;
-  --nav-text-hover: #00bf63;
-  --nav-text-active: #00a855;
+  --nav-text-hover: #113E21;
+  --nav-text-active: #0A2714;
   
   /* Recipe card specific colors */
   --card-border: #e9ecef;
-  --card-border-hover: #00bf63;
-  --card-hover-shadow: rgba(0, 191, 99, 0.15);
-  --badge-bg: #00bf63;
+  --card-border-hover: #113E21;
+  --card-hover-shadow: rgba(17, 62, 33, 0.15);
+  --badge-bg: #113E21;
   --badge-text: #ffffff;
   --badge-secondary: #6c757d;
   
@@ -52,16 +52,16 @@
   /* Form elements */
   --input-bg: #ffffff;
   --input-border: #e9ecef;
-  --input-border-focus: #00bf63;
+  --input-border-focus: #113E21;
   --input-text: #1a1a1a;
   --input-placeholder: #6c757d;
   
   /* Carousel and interactive elements */
-  --carousel-nav: #00bf63;
-  --carousel-nav-hover: #00a855;
+  --carousel-nav: #113E21;
+  --carousel-nav-hover: #0A2714;
   --carousel-nav-disabled: #e9ecef;
   --carousel-dot: #e9ecef;
-  --carousel-dot-active: #00bf63;
+  --carousel-dot-active: #113E21;
   --carousel-dot-hover: #6c757d;
   
   /* Status colors */
@@ -71,7 +71,7 @@
   --info: #17a2b8;
   
   /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #00bf63, #00d470);
+  --gradient-primary: linear-gradient(135deg, #113E21, #1A5D32);
   --gradient-secondary: linear-gradient(135deg, #f8f9fa, #e9ecef);
   --gradient-hero: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
 }

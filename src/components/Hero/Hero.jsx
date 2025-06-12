@@ -1,5 +1,6 @@
 // src/components/Hero/Hero.jsx - Cập nhật với Aurora effect
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 import TasteMateAurora from '../Aurora/Aurora';
 import styles from './Hero.module.css';
@@ -10,6 +11,11 @@ import heroGifDark from '../../assets/hero/hero-dark.gif';
 
 const Hero = () => {
   const { isDarkMode } = useTheme();
+  const navigate = useNavigate();
+
+  const handleExploreClick = () => {
+    navigate('/recipes');
+  };
 
   return (
     <section className={styles.hero}>
@@ -36,7 +42,7 @@ const Hero = () => {
               <br />
               of food recipes and get inspired!
             </p>
-            <button className={styles.exploreBtn}>
+            <button className={styles.exploreBtn} onClick={handleExploreClick}>
               Explore recipes →
             </button>
           </div>

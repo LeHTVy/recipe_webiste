@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
 import { useNavigate } from "react-router-dom";
+import { FaUser, FaUtensils, FaLeaf } from 'react-icons/fa';
 import Stack from "../../components/Stack/Stack";
 import styles from "./Auth.module.css";
 
@@ -205,7 +206,7 @@ const Auth = () => {
   };
 
   return (
-    <div className={styles.authContainer}>
+    <div className={`${styles.authContainer} ${isDarkMode ? styles.darkMode : ''}`}>
       {/* Left Side - Form */}
       <div className={styles.formSection}>
         <div className={styles.formContainer}>
@@ -216,7 +217,7 @@ const Auth = () => {
 
           {/* Brand Header */}
           <div className={styles.brandHeader}>
-            <div className={styles.brandIcon}>👨‍🍳</div>
+            <FaUser className={styles.brandIcon} />
             <h1 className={styles.brandTitle}>TasteMate</h1>
             <p className={styles.brandSubtitle}>
               {isSignUp
@@ -414,7 +415,7 @@ const Auth = () => {
           {/* Recipe Badges - Top Right */}
           <div className={styles.recipeBadges}>
             <div className={styles.recipeBadge}>
-              <span className={styles.badgeIcon}>🍳</span>
+              <FaUtensils className={styles.badgeIcon} />
               <span className={styles.badgeText}>
                 Choose your favorite recipes
               </span>
@@ -424,7 +425,7 @@ const Auth = () => {
               <span className={styles.badgeText}>Share your taste</span>
             </div>
             <div className={styles.recipeBadge}>
-              <span className={styles.badgeIcon}>🥗</span>
+              <FaLeaf className={styles.badgeIcon} />
               <span className={styles.badgeText}>Find your soulmate</span>
             </div>
           </div>

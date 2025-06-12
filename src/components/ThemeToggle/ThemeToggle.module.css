@@ -18,14 +18,14 @@
 
 .toggleContainer {
   position: relative;
-  width: 54px;
-  height: 28px;
+  width: 50px;
+  height: 26px;
   background-color: var(--border);
-  border-radius: 14px;
+  border-radius: 13px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 3px;
+  padding: 2px;
   transition: all 0.3s ease;
   border: 2px solid transparent;
 }
@@ -35,8 +35,8 @@
 }
 
 .icon {
-  font-size: 0.875rem;
-  z-index: 2;
+  font-size: 0.7rem;
+  z-index: 3;
   transition: all 0.3s ease;
   opacity: 0.6;
   display: flex;
@@ -48,23 +48,35 @@
 
 .icon.active {
   opacity: 1;
-  transform: scale(1.1);
+  transform: scale(1.0);
 }
 
 .sun {
-  color: #ffa500;
+  color: #f39c12;
+  filter: drop-shadow(0 0 2px rgba(243, 156, 18, 0.5));
+}
+
+.sun.active {
+  color: #f1c40f;
+  filter: drop-shadow(0 0 3px rgba(241, 196, 15, 0.7));
 }
 
 .moon {
-  color: #4169e1;
+  color: #3498db;
+  filter: drop-shadow(0 0 2px rgba(52, 152, 219, 0.5));
+}
+
+.moon.active {
+  color: #9b59b6;
+  filter: drop-shadow(0 0 3px rgba(155, 89, 182, 0.7));
 }
 
 .slider {
   position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 22px;
-  height: 22px;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
   background: var(--gradient-primary);
   border-radius: 50%;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -73,7 +85,7 @@
 }
 
 .slider.dark {
-  transform: translateX(26px);
+  transform: translateX(24px);
 }
 
 .label {
@@ -130,8 +142,8 @@
   }
 
   .icon {
-    font-size: 0.75rem;
-    width: 16px;
-    height: 16px;
+    font-size: 0.6rem;
+    width: 14px;
+    height: 14px;
   }
 }

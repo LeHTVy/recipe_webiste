@@ -1,0 +1,298 @@
+/* src/components/OurPicks/OurPicks.module.css */
+
+.ourPicksSection {
+  margin: 4rem 0;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.sectionTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  text-align: center;
+  background: var(--gradient-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.darkMode .sectionTitle {
+  color: #FFFFFF;
+  background: linear-gradient(135deg, #ffbd59 0%, #FFA500 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.sectionDescription {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.darkMode .sectionDescription {
+  color: #B0B0B0;
+}
+
+.picksGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.pickCard {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px var(--shadow);
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  cursor: pointer;
+}
+
+.darkMode .pickCard {
+  background-color: #2A2A2A;
+  border-color: #404040;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+.pickCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px var(--shadow-heavy);
+  border-color: var(--accent);
+}
+
+.darkMode .pickCard:hover {
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+  border-color: #ffbd59;
+}
+
+.pickCard:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.pickImageContainer {
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.pickImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.pickCard:hover .pickImage {
+  transform: scale(1.1);
+}
+
+.imageOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.pickCard:hover .imageOverlay {
+  opacity: 1;
+}
+
+.viewRecipeText {
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.75rem 1.5rem;
+  background: var(--gradient-primary);
+  border-radius: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.darkMode .viewRecipeText {
+  background: linear-gradient(135deg, #ffbd59 0%, #FFA500 100%);
+  color: #1A1A1A;
+}
+
+.pickContent {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.pickTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.75rem 0;
+  transition: color 0.3s ease;
+}
+
+.pickCard:hover .pickTitle {
+  color: var(--accent);
+}
+
+.darkMode .pickTitle {
+  color: #FFFFFF;
+}
+
+.darkMode .pickCard:hover .pickTitle {
+  color: #ffbd59;
+}
+
+.pickDescription {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.darkMode .pickDescription {
+  color: #B0B0B0;
+}
+
+.pickStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+  width: 100%;
+}
+
+.darkMode .pickStats {
+  border-top-color: #404040;
+}
+
+.pickStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.darkMode .statLabel {
+  color: #B0B0B0;
+}
+
+.statValue {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+  transition: transform 0.3s ease;
+}
+
+.pickCard:hover .statValue {
+  transform: scale(1.05);
+}
+
+.darkMode .statValue {
+  color: #ffbd59;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.darkMode .emptyState {
+  color: #B0B0B0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .ourPicksSection {
+    padding: 0 1rem;
+    margin: 2rem auto;
+  }
+
+  .picksGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .sectionTitle {
+    font-size: 2rem;
+  }
+
+  .pickContent {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sectionTitle {
+    font-size: 1.75rem;
+  }
+
+  .sectionDescription {
+    font-size: 1rem;
+  }
+
+  .pickImageContainer {
+    height: 180px;
+  }
+
+  .pickContent {
+    padding: 1rem;
+  }
+
+  .pickStats {
+    gap: 0.75rem;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .pickCard,
+  .pickImage,
+  .imageOverlay,
+  .statValue {
+    transition: none !important;
+  }
+}

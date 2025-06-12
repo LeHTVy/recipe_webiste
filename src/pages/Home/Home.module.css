@@ -124,7 +124,7 @@
 }
 
 .resultsCount::before {
-  content: '🍽️';
+  content: '🍽';
   font-size: 1.2rem;
   opacity: 0.7;
 }
@@ -235,6 +235,37 @@
 .featureIcon {
   font-size: 2rem;
   margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+/* Icon colors for feature cards */
+.featureIcon svg {
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* Search icon styling */
+.featureCard:first-child .featureIcon svg {
+  color: #3498db;
+}
+
+/* Bolt icon styling */
+.featureCard:last-child .featureIcon svg {
+  color: #f39c12;
+}
+
+/* Hover effects */
+.featureCard:hover .featureIcon svg {
+  transform: scale(1.1);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.featureCard:first-child:hover .featureIcon svg {
+  color: #2980b9;
+}
+
+.featureCard:last-child:hover .featureIcon svg {
+  color: #e67e22;
 }
 
 .featureTitle {
@@ -287,7 +318,28 @@
 }
 
 /* ===========================================
-   10. RESPONSIVE DESIGN
+   10. FEATURES CAROUSEL SECTION
+   =========================================== */
+.featuresCarouselSection {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  position: relative;
+}
+
+.featuresCarouselSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 40%, var(--accent-alpha) 0%, transparent 50%),
+              radial-gradient(circle at 70% 60%, var(--accent-alpha-light) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* ===========================================
+   11. RESPONSIVE DESIGN
    =========================================== */
 @media (max-width: 768px) {
   /* Popular Section */
@@ -339,6 +391,11 @@
 
   /* Features Section */
   .featuresSection {
+    padding: 2rem 0;
+  }
+
+  /* Feature Card */
+  .featuresCarouselSection {
     padding: 2rem 0;
   }
 }

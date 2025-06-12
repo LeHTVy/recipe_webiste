@@ -131,8 +131,8 @@ const TasteMateAurora = ({
       // Dark mode: Orange/amber aurora (#ffbd59 theme)
       return ["#ffbd59", "#ffc970", "#e6a84a"];
     } else {
-      // Light mode: Green aurora (#00bf63 theme)
-      return ["#00bf63", "#00d470", "#00a855"];
+      // Light mode: Green aurora (#113E21 theme)
+      return ["#113E21", "#1A5D32", "#0A2714"];
     }
   };
 

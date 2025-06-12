@@ -4,11 +4,16 @@
   transition: background-color 0.3s ease;
   display: flex;
   flex-direction: column;
+  
+  /* Zoom toàn bộ app */
+  zoom: 1.2; /* Tăng 20% */
+  
 }
 
 main {
   flex: 1;
   padding-top: 0;
+  width: 100%;
 }
 
 /* Smooth scrolling */

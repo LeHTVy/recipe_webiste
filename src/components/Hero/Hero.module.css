@@ -1,4 +1,4 @@
-/* src/components/Hero/Hero.module.css */
+/* src/components/Hero/Hero.module.css - Áp dụng font style từ Recipe page */
 
 /* ===========================================
    1. HERO SECTION BASE
@@ -21,15 +21,15 @@
   right: 0;
   bottom: 0;
   background: radial-gradient(
-      circle at 30% 40%,
-      var(--accent-alpha) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 70% 60%,
-      var(--accent-alpha-light) 0%,
-      transparent 50%
-    );
+    circle at 30% 40%,
+    var(--accent-alpha) 0%,
+    transparent 50%
+  ),
+  radial-gradient(
+    circle at 70% 60%,
+    var(--accent-alpha-light) 0%,
+    transparent 50%
+  );
   pointer-events: none;
 }
 
@@ -59,32 +59,40 @@
 }
 
 /* ===========================================
-   3. HERO TEXT SECTION
+   3. HERO TEXT SECTION - ÁP DỤNG FONT STYLE TỪ RECIPE PAGE
    =========================================== */
 .heroText {
   max-width: 500px;
 }
 
 .heroTitle {
-  font-size: 3.5rem;
-  font-weight: 700;
-  line-height: 1.1;
-  color: var(--text-primary);
+  font-size: 4.5rem; /* Tăng từ 3.5rem lên 4.5rem như Recipe page */
+  font-weight: 900; /* Tăng từ 700 lên 900 như Recipe page */
+  line-height: 0.9; /* Giảm từ 1.1 xuống 0.9 như Recipe page */
+  letter-spacing: -2px; /* Thêm letter-spacing như Recipe page */
+  color: #FEFEFE;
   margin-bottom: 1.5rem;
   position: relative;
   z-index: 3;
 }
 
-.highlightText {
+.titleFind {
+  color: #FFFFFF;
+  display: block;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.titlePerfect {
   background: var(--gradient-primary);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  display: inline-block;
+  display: block;
+  margin-top: -0.5rem; /* Thêm negative margin như Recipe page */
   position: relative;
 }
 
-.highlightText::after {
+.titlePerfect::after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -98,7 +106,7 @@
 
 .heroSubtitle {
   font-size: 1.125rem;
-  color: var(--text-secondary);
+  color: #F0F0F0;
   margin-bottom: 2rem;
   line-height: 1.6;
   animation: fadeIn 0.8s ease-out 0.3s both;
@@ -306,7 +314,7 @@
   }
 
   .heroTitle {
-    font-size: 3rem;
+    font-size: 3.5rem; /* Giảm responsive như Recipe page */
   }
 
   .gifContainer {
@@ -321,7 +329,7 @@
   }
 
   .heroTitle {
-    font-size: 2.5rem;
+    font-size: 2.5rem; /* Giảm responsive như Recipe page */
   }
 
   .heroSubtitle {
@@ -356,7 +364,7 @@
   }
 
   .heroTitle {
-    font-size: 2rem;
+    font-size: 2rem; /* Giảm responsive như Recipe page */
   }
 
   .gifContainer {
@@ -385,14 +393,14 @@
    =========================================== */
 @media (prefers-reduced-motion: reduce) {
   .hero::after,
-  .highlightText::after,
+  .titlePerfect::after,
   .heroSubtitle,
   .exploreBtn,
   .heroImage,
   .overlayContent {
     animation: none;
   }
-  
+
   .gifContainer,
   .gifOverlay,
   .auroraCard {

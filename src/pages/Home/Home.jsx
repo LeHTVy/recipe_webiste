@@ -1,11 +1,20 @@
-// src/pages/Home/Home.jsx - Cập nhật để thêm Popular Recipes Carousel
-import React, { useState, useEffect } from "react";
-import Hero from "../../components/Hero/Hero";
-import RecipeCard from "../../components/RecipeCard/RecipeCard";
-import RecipeTagsCarousel from "../../components/RecipeTagsCarousel/RecipeTagsCarousel";
-import PopularRecipesCarousel from "../../components/PopularRecipesCarousel/PopularRecipesCarousel";
-import { mockRecipes, getRecipesByTag } from "../../data/mockData";
-import styles from "./Home.module.css";
+import React, { useState, useEffect } from 'react';
+// eslint-disable-next-line
+import { useTheme } from '../../context/ThemeContext';
+import Hero from '../../components/Hero/Hero';
+import RecipeCard from '../../components/RecipeCard/RecipeCard';
+import RecipeTagsCarousel from '../../components/RecipeTagsCarousel/RecipeTagsCarousel';
+import PopularRecipesCarousel from '../../components/PopularRecipesCarousel/PopularRecipesCarousel';
+import { FeatureCarousel } from '../../components/FeatureCarousel/FeatureCarousel';
+import { mockRecipes, getRecipesByTag } from '../../data/mockData';
+import { FaSearch, FaBolt } from 'react-icons/fa';
+import styles from './Home.module.css';
+
+// Images for Feature Carousel
+import worldFlavors from '../../assets/images/world-flavor.png';
+import recipeSharing from '../../assets/images/recipe-sharing.png';
+import communitySharing from '../../assets/images/community-sharing.png';
+import shareyourFlavors from '../../assets/images/own_flavor.png';
 
 const Home = () => {
   const [recipes, setRecipes] = useState([]);
@@ -44,6 +53,24 @@ const Home = () => {
     }
   };
 
+  const featureImages = {
+    // Step 1: World Flavors - Cần 2 hình
+    step1light1: worldFlavors,
+    step1light2: recipeSharing, 
+    
+    // Step 2: Recipe Sharing - Cần 2 hình
+    step2light1: recipeSharing,
+    step2light2: communitySharing, 
+    
+    // Step 3: Community Sharing - Chỉ cần 1 hình
+    step3light: communitySharing,
+    
+    // Step 4: Share Your Flavors - Chỉ cần 1 hình
+    step4light: shareyourFlavors,
+    
+    alt: "TasteMate Features Showcase"
+  };
+
   return (
     <div className={styles.home}>
       <Hero />
@@ -52,6 +79,20 @@ const Home = () => {
       <section className={styles.popularSection}>
         <div className="container">
           <PopularRecipesCarousel selectedTag={selectedTag} />
+        </div>
+      </section>
+
+      {/* Feature Carousel Section */}
+      <section className={styles.featuresCarouselSection}>
+        <div className="container">
+          <FeatureCarousel
+            title="Discover TasteMate Features"
+            description="Explore our powerful features designed to enhance your cooking journey"
+            image={featureImages}
+            autoPlay={true}
+            autoPlayInterval={4000}
+            bgClass="bg-gradient-to-tr from-orange-500/10 to-green-500/10"
+          />
         </div>
       </section>
 
@@ -105,7 +146,7 @@ const Home = () => {
               </div>
 
               <div className={styles.recipesGrid}>
-                {filteredRecipes.map((recipe) => (
+                {filteredRecipes.slice(0, 6).map((recipe) => (
                   <RecipeCard key={recipe.id} recipe={recipe} />
                 ))}
               </div>
@@ -119,7 +160,7 @@ const Home = () => {
         <div className="container">
           <div className={styles.featuresGrid}>
             <div className={styles.featureCard}>
-              <div className={styles.featureIcon}>🔍</div>
+              <div className={styles.featureIcon}><FaSearch /></div>
               <h3 className={styles.featureTitle}>Explore the latest</h3>
               <p className={styles.featureDescription}>
                 Stay up to date and check out our recently added recipes. You
@@ -129,7 +170,7 @@ const Home = () => {
             </div>
 
             <div className={styles.featureCard}>
-              <div className={styles.featureIcon}>⚡</div>
+              <div className={styles.featureIcon}><FaBolt /></div>
               <h3 className={styles.featureTitle}>Quick and easy</h3>
               <p className={styles.featureDescription}>
                 Vegan recipes or low-carb diet? Here you find ideas for quick

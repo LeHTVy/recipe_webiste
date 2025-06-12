@@ -73,6 +73,11 @@
   box-shadow: 0 2px 8px var(--accent-shadow);
 }
 
+.avatarUploadBtn svg {
+  color: #3498db;
+  filter: drop-shadow(0 0 2px rgba(52, 152, 219, 0.3));
+}
+
 .avatarUploadBtn:hover {
   transform: scale(1.1);
   box-shadow: 0 4px 15px var(--accent-shadow);
@@ -366,6 +371,24 @@
   font-size: 4rem;
   margin-bottom: 1rem;
   opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+/* Color for edit icon (recipes) */
+.emptyIcon:has(svg[data-icon="edit"]),
+.emptyIcon:first-of-type {
+  color: #3498db;
+}
+
+/* Color for heart icon (favorites) */
+.emptyIcon:has(svg[data-icon="heart"]),
+.emptyIcon:last-of-type {
+  color: #e74c3c;
+}
+
+.emptyState:hover .emptyIcon {
+  opacity: 1;
+  transform: scale(1.05);
 }
 
 .emptyState h3 {

@@ -1,6 +1,7 @@
 // src/components/RecipeTagsCarousel/RecipeTagsCarousel.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import { getAllTags, getRecipesByTag } from '../../data/mockData';
+import { FaSearch } from 'react-icons/fa';
 import styles from './RecipeTagsCarousel.module.css';
 
 const RecipeTagsCarousel = ({ onTagSelect, selectedTag }) => {
@@ -91,7 +92,7 @@ const RecipeTagsCarousel = ({ onTagSelect, selectedTag }) => {
             onChange={handleSearchChange}
             className={styles.searchInput}
           />
-          {/* Search Icon : <div className={styles.searchIcon}>🔍</div> */}
+          <div className={styles.searchIcon}><FaSearch /></div>
           {searchKeyword && (
             <button 
               className={styles.clearSearchBtn}
