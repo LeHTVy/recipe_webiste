@@ -1,0 +1,606 @@
+/* src/components/Navbar/Navbar.module.css */
+
+/* ===========================================
+   1. NAVBAR BASE
+   =========================================== */
+.navbar {
+  background-color: var(--nav-bg);
+  border-bottom: 1px solid var(--nav-border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.navbar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--nav-bg);
+  opacity: 0.95;
+  z-index: -1;
+}
+
+.navContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+}
+
+/* ===========================================
+   2. LOGO SECTION
+   =========================================== */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  padding: 0.5rem;
+  border-radius: 8px;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+  background-color: var(--accent-alpha);
+}
+
+.logoGif {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+.logoText {
+  background: var(--gradient-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.3s ease;
+}
+
+/* ===========================================
+   3. NAVIGATION LINKS
+   =========================================== */
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navLink {
+  background: none;
+  border: none;
+  color: var(--nav-text);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.navLink:hover {
+  color: var(--nav-text-hover);
+  background-color: var(--accent-alpha);
+}
+
+.navLink::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: var(--gradient-primary);
+  transition: width 0.3s ease;
+}
+
+.navLink:hover::after,
+.navLink.active::after {
+  width: 60%;
+}
+
+.navLink.active {
+  color: var(--nav-text-active);
+  background-color: var(--accent-alpha);
+}
+
+/* ===========================================
+   4. LOGIN BUTTON (SPECIAL STYLING)
+   =========================================== */
+.loginBtn {
+  background: var(--gradient-primary);
+  color: var(--badge-text);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px var(--accent-shadow);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.loginBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px var(--accent-shadow);
+  filter: brightness(1.1);
+}
+
+.loginBtn:active {
+  transform: translateY(0);
+}
+
+.loginBtn.active {
+  background: var(--badge-text);
+  color: var(--accent);
+  border: 2px solid var(--accent);
+}
+
+/* ===========================================
+   5. PROFILE SECTION - UPDATED
+   =========================================== */
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.profileSection {
+  position: relative;
+}
+
+.profileBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 25px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.profileBtn:hover {
+  background-color: var(--accent-alpha);
+  border-color: var(--accent);
+}
+
+.profileAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent);
+}
+
+.profileName {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.chevronIcon {
+  width: 12px;
+  height: 12px;
+  color: var(--text-secondary);
+  transition: transform 0.3s ease;
+}
+
+.chevronIcon.rotated {
+  transform: rotate(180deg);
+}
+
+.profileMenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px var(--shadow);
+  min-width: 250px;
+  z-index: 1001;
+  animation: slideDown 0.3s ease-out;
+  overflow: hidden;
+}
+
+.profileMenuHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.menuAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.menuUserName {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.menuUsername {
+  color: var(--text-secondary);
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.profileMenuActions {
+  padding: 0.5rem;
+}
+
+.menuAction {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.menuAction::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--accent-alpha);
+  transition: left 0.3s ease;
+  z-index: 1;
+}
+
+.menuAction:hover::before {
+  left: 0;
+}
+
+.menuAction:hover {
+  color: var(--accent);
+  transform: translateX(4px);
+}
+
+.menuActionIcon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  z-index: 2;
+  position: relative;
+}
+
+.menuActionText {
+  font-weight: 500;
+  z-index: 2;
+  position: relative;
+}
+
+/* Specific icon colors */
+.menuAction:nth-child(1) .menuActionIcon {
+  color: #007AFF; /* Blue for profile */
+}
+
+.menuAction:nth-child(1):hover .menuActionIcon {
+  color: #5AC8FA;
+  transform: scale(1.1);
+}
+
+.menuAction:nth-child(2) .menuActionIcon {
+  color: #34C759; /* Green for create */
+}
+
+.menuAction:nth-child(2):hover .menuActionIcon {
+  color: #30D158;
+  transform: scale(1.1) rotate(90deg);
+}
+
+.logoutAction .menuActionIcon {
+  color: #FF3B30; /* Red for logout */
+}
+
+.logoutAction:hover .menuActionIcon {
+  color: #FF6961;
+  transform: scale(1.1);
+}
+
+.logoutAction:hover {
+  color: #FF3B30;
+}
+
+/* ===========================================
+   6. MOBILE MENU
+   =========================================== */
+.mobileMenuBtn {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.mobileMenuBtn:hover {
+  background-color: var(--accent-alpha);
+}
+
+.hamburger {
+  width: 20px;
+  height: 2px;
+  background-color: var(--text-primary);
+  transition: all 0.3s ease;
+  border-radius: 1px;
+}
+
+.mobileMenuBtn.open .hamburger:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.mobileMenuBtn.open .hamburger:nth-child(2) {
+  opacity: 0;
+}
+
+.mobileMenuBtn.open .hamburger:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+.mobileNav {
+  display: none;
+  flex-direction: column;
+  padding: 1rem 0;
+  border-top: 1px solid var(--nav-border);
+  background-color: var(--nav-bg);
+  animation: slideDown 0.3s ease-out;
+}
+
+.mobileNavLink {
+  background: none;
+  border: none;
+  color: var(--nav-text);
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  margin: 0.25rem 0;
+  cursor: pointer;
+  text-align: left;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mobileNavIcon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.mobileNavLink:hover {
+  color: var(--nav-text-hover);
+  background-color: var(--accent-alpha);
+  padding-left: 1.5rem;
+}
+
+.mobileNavLink.active {
+  color: var(--nav-text-active);
+  background-color: var(--accent-alpha);
+  border-left: 3px solid var(--accent);
+}
+
+.logoutMobile {
+  color: #FF3B30;
+  border-top: 1px solid var(--border);
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+}
+
+.logoutMobile:hover {
+  background-color: rgba(255, 59, 48, 0.1);
+  color: #FF6961;
+}
+
+/* ===========================================
+   7. ANIMATIONS
+   =========================================== */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===========================================
+   8. DARK MODE ENHANCEMENTS
+   =========================================== */
+[data-theme="dark"] .navbar {
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .profileMenu {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .menuAction:nth-child(1) .menuActionIcon {
+  color: #5AC8FA;
+}
+
+[data-theme="dark"] .menuAction:nth-child(2) .menuActionIcon {
+  color: #30D158;
+}
+
+[data-theme="dark"] .logoutAction .menuActionIcon {
+  color: #FF6961;
+}
+
+/* ===========================================
+   9. RESPONSIVE DESIGN
+   =========================================== */
+@media (max-width: 768px) {
+  .navLinks {
+    display: none;
+  }
+
+  .mobileMenuBtn {
+    display: flex;
+  }
+
+  .mobileNav {
+    display: flex;
+  }
+
+  .logo {
+    gap: 8px;
+  }
+
+  .logoGif {
+    width: 32px;
+    height: 32px;
+  }
+
+  .logoText {
+    font-size: 1.25rem;
+  }
+
+  .profileName {
+    display: none;
+  }
+
+  .chevronIcon {
+    width: 10px;
+    height: 10px;
+  }
+
+  .profileMenu {
+    right: -1rem;
+    min-width: 200px;
+  }
+
+  .menuAction {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.85rem;
+  }
+
+  .menuActionIcon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .mobileNavIcon {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navContent {
+    height: 60px;
+  }
+
+  .logoText {
+    font-size: 1.125rem;
+  }
+
+  .profileBtn {
+    padding: 0.375rem 0.75rem;
+  }
+
+  .profileAvatar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .chevronIcon {
+    width: 8px;
+    height: 8px;
+  }
+
+  .menuAction {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .menuActionIcon {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* ===========================================
+   10. ACCESSIBILITY
+   =========================================== */
+@media (prefers-reduced-motion: reduce) {
+  .menuAction,
+  .menuActionIcon,
+  .chevronIcon,
+  .profileMenu,
+  .navLink,
+  .loginBtn {
+    transition: none;
+    animation: none;
+  }
+}
+
+.navLink:focus,
+.loginBtn:focus,
+.profileBtn:focus,
+.mobileNavLink:focus,
+.logo:focus,
+.menuAction:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .menuAction,
+  .profileBtn,
+  .loginBtn {
+    border: 1px solid var(--border);
+  }
+  
+  .menuActionIcon {
+    filter: contrast(1.2);
+  }
+}

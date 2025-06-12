@@ -1,0 +1,643 @@
+/* src/components/Footer/Footer.module.css */
+
+/* ===========================================
+   1. FOOTER BASE
+   =========================================== */
+.footer {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+  position: relative;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 20%, var(--accent-alpha) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, var(--accent-alpha-light) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.footerContent {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+  gap: 3rem;
+  padding: 4rem 0 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* ===========================================
+   2. BRAND SECTION
+   =========================================== */
+.brandSection {
+  max-width: 350px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.logoGif {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.logoText {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brandDescription {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+
+/* ===========================================
+   SOCIAL ICONS STYLING - UPDATED
+   =========================================== */
+.socialLinks {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.socialLink {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.socialIcon {
+  width: 20px;
+  height: 20px;
+  transition: all 0.3s ease;
+  color: var(--text-secondary);
+  z-index: 2;
+  position: relative;
+}
+
+.socialLink::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--gradient-primary);
+  transition: left 0.3s ease;
+  z-index: 1;
+}
+
+.socialLink:hover::before {
+  left: 0;
+}
+
+.socialLink:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--accent-shadow);
+}
+
+.socialLink:hover .socialIcon {
+  color: var(--badge-text);
+  transform: scale(1.1);
+}
+
+/* Platform-specific hover colors */
+.socialLink:nth-child(1):hover {
+  background: #1877f2;
+  border-color: #1877f2;
+  box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3);
+}
+
+.socialLink:nth-child(2):hover {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  border-color: #e6683c;
+  box-shadow: 0 4px 12px rgba(230, 104, 60, 0.3);
+}
+
+.socialLink:nth-child(3):hover {
+  background: #000000;
+  border-color: #000000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.socialLink:nth-child(4):hover {
+  background: #0077b5;
+  border-color: #0077b5;
+  box-shadow: 0 4px 12px rgba(0, 119, 181, 0.3);
+}
+
+.socialLink:nth-child(5):hover {
+  background: #ff0000;
+  border-color: #ff0000;
+  box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+}
+
+/* ===========================================
+   3. LINKS SECTIONS
+   =========================================== */
+.linksSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.sectionTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 30px;
+  height: 2px;
+  background: var(--gradient-primary);
+  border-radius: 1px;
+}
+
+.linksList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.linksList li {
+  margin-bottom: 0.75rem;
+}
+
+.footerLink {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  position: relative;
+  padding-left: 0;
+}
+
+.footerLink::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.footerLink:hover {
+  color: var(--accent);
+  padding-left: 12px;
+}
+
+.footerLink:hover::before {
+  width: 6px;
+}
+
+/* ===========================================
+   4. NEWSLETTER SECTION
+   =========================================== */
+.newsletterSection {
+  max-width: 300px;
+}
+
+.newsletterDescription {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.newsletterForm {
+  margin-bottom: 2rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.emailInput {
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card-bg);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.emailInput:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-alpha);
+}
+
+.emailInput::placeholder {
+  color: var(--text-secondary);
+}
+
+.subscribeBtn {
+  background: var(--gradient-primary);
+  color: var(--badge-text);
+  border: none;
+  padding: 0.875rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.subscribeBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--accent-shadow);
+  filter: brightness(1.1);
+}
+
+/* ===========================================
+   FEATURE ICONS STYLING - UPDATED
+   =========================================== */
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+.feature:hover {
+  background: var(--accent-alpha);
+  border-color: var(--accent);
+  transform: translateX(4px);
+}
+
+.featureIcon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+/* Mobile App Icon - Blue gradient */
+.feature:nth-child(1) .featureIcon {
+  color: #007AFF;
+}
+
+.feature:nth-child(1):hover .featureIcon {
+  color: #5AC8FA;
+  transform: scale(1.2);
+  filter: drop-shadow(0 2px 4px rgba(0, 122, 255, 0.3));
+}
+
+/* Notification Bell Icon - Orange gradient */
+.feature:nth-child(2) .featureIcon {
+  color: #FF9500;
+}
+
+.feature:nth-child(2):hover .featureIcon {
+  color: #FFCC02;
+  transform: scale(1.2) rotate(15deg);
+  filter: drop-shadow(0 2px 4px rgba(255, 149, 0, 0.3));
+}
+
+.featureText {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.feature:hover .featureText {
+  color: var(--accent);
+}
+
+/* ===========================================
+   5. FOOTER BOTTOM
+   =========================================== */
+.footerBottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 0;
+  border-top: 1px solid var(--border);
+  position: relative;
+  z-index: 2;
+}
+
+.bottomLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.copyright {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.legalLinks {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.legalLink {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: color 0.3s ease;
+}
+
+.legalLink:hover {
+  color: var(--accent);
+}
+
+.bottomRight {
+  display: flex;
+  align-items: center;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.statusIndicator {
+  width: 8px;
+  height: 8px;
+  background: #28a745;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.statusText {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* ===========================================
+   6. RESPONSIVE DESIGN
+   =========================================== */
+@media (max-width: 1024px) {
+  .footerContent {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .brandSection {
+    grid-column: 1 / -1;
+    max-width: none;
+    margin-bottom: 1rem;
+  }
+
+  .newsletterSection {
+    grid-column: 1 / -1;
+    max-width: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .footerContent {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 3rem 0 2rem;
+  }
+
+  .brandSection {
+    grid-column: 1 / -1;
+  }
+
+  .newsletterSection {
+    grid-column: 1 / -1;
+  }
+
+  .footerBottom {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .bottomLeft {
+    align-items: center;
+  }
+
+  .legalLinks {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .socialLinks {
+    gap: 0.75rem;
+  }
+
+  .socialLink {
+    width: 40px;
+    height: 40px;
+  }
+
+  .socialIcon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .features {
+    gap: 0.75rem;
+  }
+
+  .feature {
+    padding: 0.625rem;
+  }
+
+  .featureIcon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .featureText {
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .footerContent {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem 0;
+  }
+
+  .socialLinks {
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .socialLink {
+    width: 36px;
+    height: 36px;
+  }
+
+  .socialIcon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .inputGroup {
+    gap: 0.5rem;
+  }
+
+  .legalLinks {
+    gap: 1rem;
+  }
+
+  .featureIcon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .featureText {
+    font-size: 0.75rem;
+  }
+}
+
+/* ===========================================
+   7. DARK MODE ENHANCEMENTS
+   =========================================== */
+[data-theme="dark"] .footer {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+}
+
+[data-theme="dark"] .socialLink {
+  background: linear-gradient(135deg, var(--card-bg) 0%, var(--bg-secondary) 100%);
+}
+
+[data-theme="dark"] .featureIcon {
+  filter: brightness(1.2);
+}
+
+[data-theme="dark"] .feature:nth-child(1) .featureIcon {
+  color: #5AC8FA;
+}
+
+[data-theme="dark"] .feature:nth-child(2) .featureIcon {
+  color: #FFCC02;
+}
+
+/* ===========================================
+   8. ACCESSIBILITY
+   =========================================== */
+@media (prefers-reduced-motion: reduce) {
+  .socialLink,
+  .socialIcon,
+  .footerLink,
+  .subscribeBtn,
+  .statusIndicator,
+  .feature,
+  .featureIcon {
+    transition: none;
+    animation: none;
+  }
+}
+
+.socialLink:focus,
+.footerLink:focus,
+.subscribeBtn:focus,
+.emailInput:focus,
+.legalLink:focus,
+.feature:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .socialLink,
+  .feature {
+    border-width: 2px;
+  }
+  
+  .socialIcon,
+  .featureIcon {
+    filter: contrast(1.2);
+  }
+}
+
+/* Loading state for icons */
+.socialIcon,
+.featureIcon {
+  opacity: 0;
+  animation: fadeInIcon 0.5s ease-out forwards;
+}
+
+.socialIcon:nth-child(1) { animation-delay: 0.1s; }
+.socialIcon:nth-child(2) { animation-delay: 0.2s; }
+.socialIcon:nth-child(3) { animation-delay: 0.3s; }
+.socialIcon:nth-child(4) { animation-delay: 0.4s; }
+.socialIcon:nth-child(5) { animation-delay: 0.5s; }
+
+.feature:nth-child(1) .featureIcon { animation-delay: 0.6s; }
+.feature:nth-child(2) .featureIcon { animation-delay: 0.7s; }
+
+@keyframes fadeInIcon {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

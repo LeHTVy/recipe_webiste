@@ -1,0 +1,430 @@
+.carouselContainer {
+  margin: 3rem 0;
+  position: relative;
+}
+
+.carouselHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 2rem;
+  gap: 2rem;
+}
+
+.headerContent {
+  flex: 1;
+}
+
+.carouselTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  background: var(--gradient-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+}
+
+.carouselTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: var(--gradient-primary);
+  border-radius: 2px;
+}
+
+.carouselSubtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  max-width: 600px;
+}
+
+.carouselControls {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.controlBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.controlBtn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--accent-alpha), transparent);
+  transition: left 0.5s ease;
+}
+
+.controlBtn:hover:not(.disabled)::before {
+  left: 100%;
+}
+
+.controlBtn:hover:not(.disabled) {
+  background-color: var(--carousel-nav);
+  color: var(--badge-text);
+  border-color: var(--carousel-nav);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px var(--accent-shadow);
+}
+
+.controlBtn.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.carouselWrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--gradient-secondary);
+  padding: 1rem;
+  border: 1px solid var(--border);
+}
+
+.carouselTrack {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: grab;
+  gap: 1.5rem;
+}
+
+.carouselTrack:active {
+  cursor: grabbing;
+}
+
+.carouselItem {
+  position: relative;
+  flex-shrink: 0;
+  padding: 0 0.75rem;
+  transition: transform 0.3s ease;
+}
+
+.carouselItem:hover {
+  transform: translateY(-2px);
+}
+
+.popularBadge,
+.topRatedBadge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--gradient-primary);
+  color: var(--badge-text);
+  padding: 0.375rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  z-index: 2;
+  box-shadow: 0 2px 8px var(--accent-shadow);
+  animation: pulse 2s infinite;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.topRatedBadge {
+  background: linear-gradient(135deg, var(--star-filled), #ffed4e);
+  color: #333;
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.dotsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--carousel-dot);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.dot::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background-color: var(--accent);
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+}
+
+.dot:hover {
+  background-color: var(--carousel-dot-hover);
+  transform: scale(1.2);
+}
+
+.dot:hover::before {
+  width: 8px;
+  height: 8px;
+}
+
+.activeDot {
+  background-color: var(--carousel-dot-active);
+  transform: scale(1.3);
+  box-shadow: 0 2px 8px var(--accent-shadow);
+}
+
+.activeDot::before {
+  width: 6px;
+  height: 6px;
+  background-color: var(--badge-text);
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 0;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading p {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+/* Skeleton loading for carousel items */
+.carouselItem.loading {
+  background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border) 50%, var(--bg-secondary) 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 16px;
+  height: 300px;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .carouselHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .carouselTitle {
+    font-size: 1.75rem;
+  }
+
+  .carouselControls {
+    align-self: flex-end;
+  }
+
+  .carouselTrack {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .carouselContainer {
+    margin: 2rem 0;
+  }
+
+  .carouselTitle {
+    font-size: 1.5rem;
+  }
+
+  .carouselSubtitle {
+    font-size: 0.875rem;
+  }
+
+  .controlBtn {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  .carouselWrapper {
+    padding: 0.75rem;
+  }
+
+  .carouselTrack {
+    gap: 0.75rem;
+  }
+
+  .carouselItem {
+    padding: 0 0.5rem;
+  }
+
+  .popularBadge,
+  .topRatedBadge {
+    font-size: 0.625rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .dotsContainer {
+    margin-top: 1.5rem;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .carouselHeader {
+    text-align: center;
+  }
+
+  .carouselControls {
+    align-self: center;
+  }
+
+  .carouselWrapper {
+    padding: 0.5rem;
+  }
+
+  .carouselTitle {
+    font-size: 1.25rem;
+  }
+
+  .carouselTitle::after {
+    width: 40px;
+    height: 2px;
+  }
+
+  .controlBtn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.875rem;
+  }
+
+  .dotsContainer {
+    margin-top: 1rem;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+/* Dark mode enhancements */
+[data-theme="dark"] .carouselWrapper {
+  background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .carouselItem:hover {
+  filter: brightness(1.1);
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .carouselTrack {
+    transition: none;
+  }
+  
+  .controlBtn,
+  .dot,
+  .carouselItem {
+    transition: none;
+  }
+  
+  .popularBadge,
+  .topRatedBadge {
+    animation: none;
+  }
+}
+
+/* Focus styles for accessibility */
+.controlBtn:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.dot:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .controlBtn {
+    border-width: 3px;
+  }
+  
+  .popularBadge,
+  .topRatedBadge {
+    border: 2px solid var(--text-primary);
+  }
+}
+
+/* Print styles */
+@media print {
+  .carouselControls,
+  .dotsContainer {
+    display: none;
+  }
+  
+  .carouselTrack {
+    flex-wrap: wrap;
+  }
+  
+  .carouselItem {
+    break-inside: avoid;
+  }
+}

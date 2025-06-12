@@ -1,13 +1,245 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+  /* Light theme colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e9ecef;
+  --text-primary: #1a1a1a;
+  --text-secondary: #6c757d;
+  --text-muted: #adb5bd;
+  --border: #e9ecef;
+  --border-light: #f8f9fa;
+  --card-bg: #ffffff;
+  --shadow: rgba(0, 0, 0, 0.1);
+  --shadow-light: rgba(0, 0, 0, 0.05);
+  --shadow-heavy: rgba(0, 0, 0, 0.15);
+  
+  /* Primary accent colors - Light Mode (Green #00bf63) */
+  --accent: #00bf63;
+  --accent-light: #00d470;
+  --accent-dark: #00a855;
+  --accent-alpha: rgba(0, 191, 99, 0.1);
+  --accent-alpha-light: rgba(0, 191, 99, 0.05);
+  --accent-shadow: rgba(0, 191, 99, 0.3);
+  
+  /* Button and interactive elements */
+  --button-primary: #00bf63;
+  --button-primary-hover: #00a855;
+  --button-primary-active: #009649;
+  --button-secondary: #f8f9fa;
+  --button-secondary-hover: #e9ecef;
+  --button-secondary-text: #6c757d;
+  
+  /* Navigation and UI elements */
+  --nav-bg: #ffffff;
+  --nav-border: #e9ecef;
+  --nav-text: #1a1a1a;
+  --nav-text-hover: #00bf63;
+  --nav-text-active: #00a855;
+  
+  /* Recipe card specific colors */
+  --card-border: #e9ecef;
+  --card-border-hover: #00bf63;
+  --card-hover-shadow: rgba(0, 191, 99, 0.15);
+  --badge-bg: #00bf63;
+  --badge-text: #ffffff;
+  --badge-secondary: #6c757d;
+  
+  /* Rating stars */
+  --star-filled: #ffc107;
+  --star-empty: #e9ecef;
+  --star-hover: #ffb300;
+  
+  /* Form elements */
+  --input-bg: #ffffff;
+  --input-border: #e9ecef;
+  --input-border-focus: #00bf63;
+  --input-text: #1a1a1a;
+  --input-placeholder: #6c757d;
+  
+  /* Carousel and interactive elements */
+  --carousel-nav: #00bf63;
+  --carousel-nav-hover: #00a855;
+  --carousel-nav-disabled: #e9ecef;
+  --carousel-dot: #e9ecef;
+  --carousel-dot-active: #00bf63;
+  --carousel-dot-hover: #6c757d;
+  
+  /* Status colors */
+  --success: #28a745;
+  --warning: #ffc107;
+  --error: #dc3545;
+  --info: #17a2b8;
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #00bf63, #00d470);
+  --gradient-secondary: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  --gradient-hero: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+[data-theme="dark"] {
+  /* Dark theme colors */
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2d2d2d;
+  --bg-tertiary: #404040;
+  --text-primary: #ffffff;
+  --text-secondary: #b0b0b0;
+  --text-muted: #6c757d;
+  --border: #404040;
+  --border-light: #2d2d2d;
+  --card-bg: #2d2d2d;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --shadow-light: rgba(0, 0, 0, 0.2);
+  --shadow-heavy: rgba(0, 0, 0, 0.4);
+  
+  /* Primary accent colors - Dark Mode (Orange #ffbd59) */
+  --accent: #ffbd59;
+  --accent-light: #ffc970;
+  --accent-dark: #e6a84a;
+  --accent-alpha: rgba(255, 189, 89, 0.1);
+  --accent-alpha-light: rgba(255, 189, 89, 0.05);
+  --accent-shadow: rgba(255, 189, 89, 0.3);
+  
+  /* Button and interactive elements */
+  --button-primary: #ffbd59;
+  --button-primary-hover: #e6a84a;
+  --button-primary-active: #cc9541;
+  --button-secondary: #2d2d2d;
+  --button-secondary-hover: #404040;
+  --button-secondary-text: #b0b0b0;
+  
+  /* Navigation and UI elements */
+  --nav-bg: #1a1a1a;
+  --nav-border: #404040;
+  --nav-text: #ffffff;
+  --nav-text-hover: #ffbd59;
+  --nav-text-active: #e6a84a;
+  
+  /* Recipe card specific colors */
+  --card-border: #404040;
+  --card-border-hover: #ffbd59;
+  --card-hover-shadow: rgba(255, 189, 89, 0.15);
+  --badge-bg: #ffbd59;
+  --badge-text: #1a1a1a;
+  --badge-secondary: #b0b0b0;
+  
+  /* Rating stars */
+  --star-filled: #ffbd59;
+  --star-empty: #404040;
+  --star-hover: #ffc970;
+  
+  /* Form elements */
+  --input-bg: #2d2d2d;
+  --input-border: #404040;
+  --input-border-focus: #ffbd59;
+  --input-text: #ffffff;
+  --input-placeholder: #b0b0b0;
+  
+  /* Carousel and interactive elements */
+  --carousel-nav: #ffbd59;
+  --carousel-nav-hover: #e6a84a;
+  --carousel-nav-disabled: #404040;
+  --carousel-dot: #404040;
+  --carousel-dot-active: #ffbd59;
+  --carousel-dot-hover: #b0b0b0;
+  
+  /* Status colors */
+  --success: #28a745;
+  --warning: #ffbd59;
+  --error: #dc3545;
+  --info: #17a2b8;
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #ffbd59, #ffc970);
+  --gradient-secondary: linear-gradient(135deg, #2d2d2d, #404040);
+  --gradient-hero: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-dark);
+}
+
+/* Focus styles for accessibility */
+button:focus,
+a:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Loading animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.fadeIn {
+  animation: fadeIn 0.6s ease-out;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+  
+  body {
+    font-size: 14px;
+  }
 }

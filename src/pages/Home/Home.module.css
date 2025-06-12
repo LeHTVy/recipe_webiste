@@ -1,0 +1,370 @@
+/* src/pages/Home/Home.module.css */
+
+/* ===========================================
+   1. BASE STYLES
+   =========================================== */
+.home {
+  min-height: 100vh;
+}
+
+/* ===========================================
+   2. POPULAR SECTION
+   =========================================== */
+.popularSection {
+  padding: 2rem 0;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  position: relative;
+}
+
+.popularSection::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+      circle at 20% 50%,
+      var(--accent-alpha) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 50%,
+      var(--accent-alpha-light) 0%,
+      transparent 50%
+    );
+  pointer-events: none;
+}
+
+/* ===========================================
+   3. RECIPES SECTION
+   =========================================== */
+.recipesSection {
+  padding: 4rem 0;
+  background-color: var(--bg-primary);
+}
+
+/* ===========================================
+   4. SECTION HEADERS (SHARED)
+   =========================================== */
+.sectionHeader {
+  text-align: left;
+  margin-bottom: 3rem;
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  background: var(--gradient-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  text-transform: capitalize;
+}
+
+.sectionTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: var(--gradient-primary);
+  border-radius: 2px;
+}
+
+.sectionSubtitle {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  max-width: 600px;
+}
+
+/* ===========================================
+   5. RESULTS INFO SECTION
+   =========================================== */
+.resultsInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding: 1rem 1.5rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px var(--shadow-light);
+  position: relative;
+  overflow: hidden;
+}
+
+.resultsInfo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, var(--accent-alpha) 0%, transparent 50%);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.resultsCount {
+  font-size: 1rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.resultsCount::before {
+  content: '🍽️';
+  font-size: 1.2rem;
+  opacity: 0.7;
+}
+
+.clearFilter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--gradient-primary);
+  color: var(--badge-text);
+  border: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 20px;
+  padding: 0.625rem 1.25rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px var(--accent-shadow);
+  position: relative;
+  z-index: 2;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.clearFilter:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--accent-shadow);
+  filter: brightness(1.1);
+}
+
+.clearFilter:active {
+  transform: translateY(0);
+}
+
+.clearIcon {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-left: 0.25rem;
+  transition: transform 0.3s ease;
+}
+
+.clearFilter:hover .clearIcon {
+  transform: rotate(90deg);
+}
+
+/* ===========================================
+   6. RECIPES GRID
+   =========================================== */
+.recipesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+/* ===========================================
+   7. LOADING STATES
+   =========================================== */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 0;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ===========================================
+   8. FEATURES SECTION
+   =========================================== */
+.featuresSection {
+  padding: 4rem 0;
+  background-color: var(--bg-secondary);
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.featureCard {
+  background-color: var(--card-bg);
+  padding: 2rem;
+  border-radius: 16px;
+  text-align: left;
+  box-shadow: 0 4px 20px var(--shadow);
+  transition: transform 0.3s ease;
+}
+
+.featureCard:hover {
+  transform: translateY(-5px);
+}
+
+.featureIcon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.featureTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.featureDescription {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.featureBtn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.featureBtn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ===========================================
+   9. BUTTONS (SHARED)
+   =========================================== */
+.seeMoreBtn {
+  background: none;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.seeMoreBtn:hover {
+  background-color: var(--accent);
+  color: var(--badge-text);
+  transform: translateY(-2px);
+}
+
+/* ===========================================
+   10. RESPONSIVE DESIGN
+   =========================================== */
+@media (max-width: 768px) {
+  /* Popular Section */
+  .popularSection {
+    padding: 1.5rem 0;
+  }
+
+  /* Recipes Section */
+  .recipesSection {
+    padding: 2rem 0;
+  }
+
+  /* Section Headers */
+  .sectionTitle {
+    font-size: 1.75rem;
+  }
+
+  /* Results Info */
+  .resultsInfo {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .resultsCount {
+    justify-content: center;
+    padding: 0.75rem;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+  }
+
+  .clearFilter {
+    align-self: center;
+    min-width: 140px;
+    justify-content: center;
+  }
+
+  /* Grids */
+  .recipesGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .featuresGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* Features Section */
+  .featuresSection {
+    padding: 2rem 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .resultsInfo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .resultsCount,
+  .clearFilter {
+    width: 100%;
+    justify-content: flex-start;
+    text-align: left;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+
+  .resultsInfo {
+    padding: 0.875rem;
+  }
+}
