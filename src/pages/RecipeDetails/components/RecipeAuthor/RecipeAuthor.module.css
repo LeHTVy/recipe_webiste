@@ -1,0 +1,680 @@
+/* RecipeAuthor.module.css */
+
+.authorContainer {
+  position: fixed;
+  top: 50%;
+  right: 2rem;
+  transform: translateY(-50%);
+  z-index: 1000;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.authorContainer.collapsed {
+  width: auto;
+  height: auto;
+}
+
+.authorContainer.expanded {
+  width: 350px;
+  height: auto;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* Collapsed State - Floating Trigger */
+.authorTrigger {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 189, 89, 0.3);
+  border-radius: 50px;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  animation: float 3s ease-in-out infinite;
+}
+
+.authorContainer.expanded .authorTrigger {
+  display: none;
+}
+
+.authorTrigger:hover {
+  background: rgba(255, 189, 89, 0.95);
+  border-color: #ffbd59;
+  transform: scale(1.05);
+  box-shadow: 0 12px 40px rgba(255, 189, 89, 0.3);
+}
+
+.authorAvatar {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--accent-color, #ffbd59);
+  transition: all 0.3s ease;
+}
+
+.avatarImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.authorTrigger:hover .avatarImage {
+  transform: scale(1.1);
+}
+
+.onlineIndicator {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  background: #27ae60;
+  border: 2px solid white;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.quickInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-primary, #113e21);
+  font-weight: 600;
+}
+
+.authorName {
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.expandIcon {
+  font-size: 0.8rem;
+  transition: transform 0.3s ease;
+}
+
+.authorTrigger:hover .expandIcon {
+  transform: translateY(2px);
+}
+
+/* Expanded State - Full Card */
+.authorCard {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 189, 89, 0.2);
+  border-radius: 24px;
+  padding: 1.5rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  animation: expandIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.authorCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-color, #ffbd59), var(--text-primary, #113e21), var(--accent-color, #ffbd59));
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.collapseBtn {
+  background: rgba(17, 62, 33, 0.1);
+  border: 1px solid rgba(17, 62, 33, 0.2);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-primary, #113e21);
+}
+
+.collapseBtn:hover {
+  background: var(--text-primary, #113e21);
+  color: white;
+  transform: scale(1.1);
+}
+
+.authorProfile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.profileImage {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.profileAvatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--accent-color, #ffbd59);
+  box-shadow: 0 8px 25px rgba(255, 189, 89, 0.3);
+  transition: all 0.3s ease;
+}
+
+.profileAvatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 35px rgba(255, 189, 89, 0.4);
+}
+
+.profileBadge {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #113e21, #27ae60);
+  border: 3px solid white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.8rem;
+  box-shadow: 0 4px 15px rgba(17, 62, 33, 0.3);
+}
+
+.badgeIcon {
+  animation: bounce 2s ease-in-out infinite;
+}
+
+.profileInfo {
+  text-align: center;
+  width: 100%;
+}
+
+.profileName {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #113e21;
+  margin-bottom: 0.25rem;
+}
+
+.profileTitle {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.profileStats {
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  background: rgba(255, 189, 89, 0.1);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  flex: 1;
+}
+
+.stat:hover {
+  background: rgba(255, 189, 89, 0.2);
+  transform: translateY(-2px);
+}
+
+.statIcon {
+  font-size: 1rem;
+  color: var(--accent-color, #ffbd59);
+}
+
+.statValue {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #113e21;
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.authorBio {
+  margin-bottom: 1.5rem;
+}
+
+.bioText {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #555;
+  text-align: center;
+  background: rgba(17, 62, 33, 0.05);
+  padding: 1rem;
+  border-radius: 12px;
+  border-left: 4px solid var(--accent-color, #ffbd59);
+}
+
+.authorActions {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.followBtn,
+.profileBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.followBtn {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+.followBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+}
+
+.profileBtn {
+  background: linear-gradient(135deg, #113e21, #27ae60);
+  color: white;
+  box-shadow: 0 4px 15px rgba(17, 62, 33, 0.3);
+}
+
+.profileBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(17, 62, 33, 0.4);
+}
+
+.actionIcon {
+  font-size: 0.8rem;
+}
+
+.specialties {
+  border-top: 1px solid rgba(255, 189, 89, 0.2);
+  padding-top: 1rem;
+}
+
+.specialtiesTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #113e21;
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+.specialtiesList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.specialtyTag {
+  background: rgba(255, 189, 89, 0.2);
+  color: #113e21;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1px solid rgba(255, 189, 89, 0.3);
+  transition: all 0.3s ease;
+}
+
+.specialtyTag:hover {
+  background: #ffbd59;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(-50%);
+  }
+  50% {
+    transform: translateY(-55%);
+  }
+}
+
+@keyframes expandIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-3px);
+  }
+  60% {
+    transform: translateY(-1px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .authorContainer {
+    right: 1rem;
+  }
+  
+  .authorContainer.expanded {
+    width: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .authorContainer {
+    position: static;
+    transform: none;
+    width: 100%;
+    margin: 1rem 0;
+  }
+  
+  .authorContainer.expanded {
+    width: 100%;
+    max-height: none;
+  }
+  
+  .authorTrigger {
+    justify-content: center;
+    padding: 1rem 1.5rem;
+  }
+  
+  .authorCard {
+    padding: 1.25rem;
+  }
+  
+  .profileStats {
+    gap: 0.5rem;
+  }
+  
+  .stat {
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .authorCard {
+    padding: 1rem;
+  }
+  
+  .profileAvatar {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .profileName {
+    font-size: 1.1rem;
+  }
+  
+  .authorActions {
+    flex-direction: column;
+  }
+  
+  .followBtn,
+  .profileBtn {
+    padding: 0.75rem;
+  }
+}
+
+/* Light mode styles */
+[data-theme="light"] .authorTrigger {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(17, 62, 33, 0.3);
+  color: #113e21;
+}
+
+[data-theme="light"] .authorTrigger:hover {
+  background: rgba(17, 62, 33, 0.95);
+  border-color: #113e21;
+}
+
+[data-theme="light"] .authorAvatar {
+  border-color: #113e21;
+}
+
+[data-theme="light"] .authorCard {
+  background: rgba(255, 255, 255, 0.98);
+  border-color: rgba(17, 62, 33, 0.2);
+}
+
+[data-theme="light"] .authorCard::before {
+  background: linear-gradient(90deg, #113e21, #ffbd59, #113e21);
+}
+
+[data-theme="light"] .collapseBtn {
+  background: rgba(17, 62, 33, 0.1);
+  border-color: rgba(17, 62, 33, 0.2);
+  color: #113e21;
+}
+
+[data-theme="light"] .collapseBtn:hover {
+  background: #113e21;
+  color: white;
+}
+
+[data-theme="light"] .profileAvatar {
+  border-color: #113e21;
+  box-shadow: 0 8px 25px rgba(17, 62, 33, 0.3);
+}
+
+[data-theme="light"] .profileAvatar:hover {
+  box-shadow: 0 12px 35px rgba(17, 62, 33, 0.4);
+}
+
+[data-theme="light"] .profileName {
+  color: #113e21;
+}
+
+[data-theme="light"] .profileTitle {
+  color: #666;
+}
+
+[data-theme="light"] .statValue {
+  color: #113e21;
+}
+
+[data-theme="light"] .statLabel {
+  color: #666;
+}
+
+[data-theme="light"] .bioText {
+  background: rgba(17, 62, 33, 0.05);
+  color: #555;
+}
+
+[data-theme="light"] .specialtiesTitle {
+  color: #113e21;
+}
+
+[data-theme="light"] .specialtyTag {
+  background: rgba(255, 189, 89, 0.2);
+  color: #113e21;
+  border-color: rgba(255, 189, 89, 0.3);
+}
+
+[data-theme="light"] .specialtyTag:hover {
+  background: #ffbd59;
+  color: white;
+}
+
+[data-theme="light"] .stat {
+  background: rgba(17, 62, 33, 0.1);
+}
+
+[data-theme="light"] .stat:hover {
+  background: rgba(17, 62, 33, 0.2);
+}
+
+[data-theme="light"] .statIcon {
+  color: #113e21;
+}
+
+[data-theme="light"] .bioText {
+  border-left-color: #113e21;
+}
+
+[data-theme="light"] .specialties {
+  border-top-color: rgba(17, 62, 33, 0.2);
+}
+
+/* Dark mode support */
+[data-theme="dark"] .authorTrigger {
+  background: rgba(42, 42, 42, 0.95);
+  border-color: rgba(255, 189, 89, 0.3);
+  color: #ffbd59;
+}
+
+[data-theme="dark"] .authorTrigge
+r:hover {
+  background: #ffbd59;
+}
+
+[data-theme="dark"] .authorCard {
+  background: rgba(42, 42, 42, 0.98);
+  border-color: rgba(255, 189, 89, 0.2);
+}
+
+[data-theme="dark"] .profileName {
+  color: #ffbd59;
+}
+
+[data-theme="dark"] .profileTitle {
+  color: #ccc;
+}
+
+[data-theme="dark"] .statValue {
+  color: #ffbd59;
+}
+
+[data-theme="dark"] .statLabel {
+  color: #aaa;
+}
+
+[data-theme="dark"] .bioText {
+  background: rgba(255, 189, 89, 0.1);
+  color: #ddd;
+}
+
+[data-theme="dark"] .specialtiesTitle {
+  color: #ffbd59;
+}
+
+[data-theme="dark"] .specialtyTag {
+  background: rgba(17, 62, 33, 0.3);
+  color: #ffbd59;
+  border-color: rgba(17, 62, 33, 0.5);
+}
+
+[data-theme="dark"] .specialtyTag:hover {
+  background: #113e21;
+  color: #ffbd59;
+}
+
+[data-theme="dark"] .authorAvatar {
+  border-color: #ffbd59;
+}
+
+[data-theme="dark"] .collapseBtn {
+  background: rgba(255, 189, 89, 0.1);
+  border-color: rgba(255, 189, 89, 0.2);
+  color: #ffbd59;
+}
+
+[data-theme="dark"] .collapseBtn:hover {
+  background: #ffbd59;
+  color: #113e21;
+}
+
+[data-theme="dark"] .profileAvatar {
+  border-color: #ffbd59;
+  box-shadow: 0 8px 25px rgba(255, 189, 89, 0.3);
+}
+
+[data-theme="dark"] .profileAvatar:hover {
+  box-shadow: 0 12px 35px rgba(255, 189, 89, 0.4);
+}
+
+[data-theme="dark"] .stat {
+  background: rgba(255, 189, 89, 0.1);
+}
+
+[data-theme="dark"] .stat:hover {
+  background: rgba(255, 189, 89, 0.2);
+}
+
+[data-theme="dark"] .statIcon {
+  color: #ffbd59;
+}
+
+[data-theme="dark"] .bioText {
+  border-left-color: #ffbd59;
+}
+
+[data-theme="dark"] .specialties {
+  border-top-color: rgba(255, 189, 89, 0.2);
+}

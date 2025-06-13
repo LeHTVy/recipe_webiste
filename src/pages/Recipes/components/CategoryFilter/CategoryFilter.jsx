@@ -1,6 +1,6 @@
 import React from 'react';
-import { useTheme } from '../../../context/ThemeContext';
-import { FOOD_CATEGORIES } from '../../../data/mockData';
+import { useTheme } from '../../../../context/ThemeContext';
+import { FOOD_CATEGORIES } from '../../../../data/mockData';
 import styles from './CategoryFilter.module.css';
 
 const CategoryFilter = ({ 

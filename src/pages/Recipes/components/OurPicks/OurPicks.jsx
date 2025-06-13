@@ -1,7 +1,7 @@
 // src/components/OurPicks/OurPicks.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../../context/ThemeContext';
 import styles from './OurPicks.module.css';
 
 const OurPicks = ({ 

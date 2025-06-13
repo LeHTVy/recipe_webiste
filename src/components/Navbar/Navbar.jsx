@@ -10,7 +10,8 @@ import {
   FaSignOutAlt,
   FaChevronDown,
   FaUsers,
-  FaCalendarAlt
+  FaCalendarAlt,
+  FaHeart
 } from 'react-icons/fa';
 import styles from './Navbar.module.css';
 
@@ -91,12 +92,6 @@ const Navbar = () => {
             >
               Recipes
             </button>
-            <button
-              onClick={() => handleNavigation('/favorites')}
-              className={`${styles.navLink} ${isActive('/favorites') ? styles.active : ''}`}
-            >
-              Favorites
-            </button>
 
             {/* Community và Meal Planner - Chỉ hiện khi đã login */}
             {isAuthenticated && (
@@ -170,6 +165,17 @@ const Navbar = () => {
                       >
                         <FaUser className={styles.menuActionIcon} />
                         <span className={styles.menuActionText}>View Profile</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          handleNavigation("/favorites");
+                          setIsProfileMenuOpen(false);
+                        }}
+                        className={styles.menuAction}
+                      >
+                        <FaHeart className={styles.menuActionIcon} />
+                        <span className={styles.menuActionText}>Favorites</span>
                       </button>
 
                       <button
@@ -249,12 +255,6 @@ const Navbar = () => {
             >
               Recipes
             </button>
-            <button
-              onClick={() => handleNavigation('/favorites')}
-              className={`${styles.mobileNavLink} ${isActive('/favorites') ? styles.active : ''}`}
-            >
-              Favorites
-            </button>
 
             {isAuthenticated ? (
               <>
@@ -274,6 +274,13 @@ const Navbar = () => {
                   Meal Planner
                 </button>
 
+                <button
+                  onClick={() => handleNavigation('/favorites')}
+                  className={`${styles.mobileNavLink} ${isActive('/favorites') ? styles.active : ''}`}
+                >
+                  <FaHeart className={styles.mobileNavIcon} />
+                  Favorites
+                </button>
                 <button
                   onClick={() => handleNavigation('/profile')}
                   className={`${styles.mobileNavLink} ${isActive('/profile') ? styles.active : ''}`}

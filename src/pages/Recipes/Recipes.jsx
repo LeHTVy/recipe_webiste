@@ -4,9 +4,9 @@ import { useTheme } from '../../context/ThemeContext';
 import { mockRecipes, searchRecipes, getRandomRecipes } from '../../data/mockData';
 import RecipeTagsCarousel from '../../components/RecipeTagsCarousel/RecipeTagsCarousel';
 import RecipeCard from '../../components/RecipeCard/RecipeCard';
-import CategoryFilter from '../../components/Recipe/CategoryFilter/CategoryFilter';
-import SearchBox from '../../components/Recipe/SearchBox/SearchBox';
-import OurPicks from '../../components/Recipe/OurPicks/OurPicks';
+import CategoryFilter from './components/CategoryFilter/CategoryFilter';
+import SearchBox from './components/SearchBox/SearchBox';
+import OurPicks from './components/OurPicks/OurPicks';
 import styles from './Recipes.module.css';
 
 const Recipes = () => {
