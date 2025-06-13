@@ -2,12 +2,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
+import { useFavorites } from '../../context/FavoritesContext';
 import { FaClock, FaUsers, FaChartBar, FaHeart, FaShare } from 'react-icons/fa';
 import styles from './RecipeCard.module.css';
 
 const RecipeCard = ({ recipe }) => {
   const navigate = useNavigate();
   const { isDarkMode } = useTheme();
+  const { toggleFavorite, isFavorite } = useFavorites();
 
   const renderStars = (rating) => {
     const stars = [];
@@ -98,14 +100,13 @@ const RecipeCard = ({ recipe }) => {
         
         <div className={styles.cardActions}>
           <button 
-            className={styles.favoriteBtn}
+            className={`${styles.favoriteBtn} ${isFavorite(recipe.id) ? styles.favorited : ''}`}
             onClick={(e) => {
               e.stopPropagation();
-              // Add favorite functionality here
-              console.log('Added to favorites:', recipe.id);
+              toggleFavorite(recipe);
             }}
           >
-            <FaHeart />
+            <FaHeart className={isFavorite(recipe.id) ? styles.heartFilled : styles.heartEmpty} />
           </button>
           <button 
             className={styles.shareBtn}

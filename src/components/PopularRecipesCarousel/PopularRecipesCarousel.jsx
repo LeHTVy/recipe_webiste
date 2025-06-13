@@ -1,27 +1,27 @@
 // src/components/PopularRecipesCarousel/PopularRecipesCarousel.jsx
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
+import { useFavorites } from '../../context/FavoritesContext';
 import { getPopularRecipes, getTopRatedRecipes } from '../../data/mockData';
-import { FaFire, FaComments, FaTrophy, FaStar, FaShare } from 'react-icons/fa';
+import { FaFire, FaComments, FaTrophy, FaStar, FaShare, FaHeart } from 'react-icons/fa';
 import styles from './PopularRecipesCarousel.module.css';
 
 const PopularRecipesCarousel = ({ selectedTag }) => {
   const { isDarkMode } = useTheme();
+  const { toggleFavorite, isFavorite } = useFavorites();
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [viewMode, setViewMode] = useState('popular'); // 'popular' or 'toprated'
 
-  // Get recipes based on view mode
-  const getRecipes = () => {
+  // Get recipes based on view mode with memoization
+  const recipes = useMemo(() => {
     if (viewMode === 'popular') {
       return getPopularRecipes(6);
     } else {
       return getTopRatedRecipes(6);
     }
-  };
-
-  const recipes = getRecipes();
+  }, [viewMode]);
 
   const scrollLeft = () => {
     if (currentIndex > 0) {
@@ -196,13 +196,13 @@ const PopularRecipesCarousel = ({ selectedTag }) => {
                   {/* Actions */}
                   <div className={styles.actions}>
                     <button 
-                      className={styles.favoriteBtn}
+                      className={`${styles.favoriteBtn} ${isFavorite(recipe.id) ? styles.favorited : ''}`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        console.log('Added to favorites:', recipe.id);
+                        toggleFavorite(recipe);
                       }}
                     >
-                      ♡
+                      <FaHeart className={isFavorite(recipe.id) ? styles.heartFilled : styles.heartEmpty} />
                     </button>
                     <button 
                       className={styles.shareBtn}

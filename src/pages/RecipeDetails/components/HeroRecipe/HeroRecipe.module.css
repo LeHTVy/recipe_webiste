@@ -45,27 +45,260 @@
   justify-content: flex-start;
   padding: 2rem;
   padding-top: 5rem;
+  transition: all 0.3s ease;
+}
+
+.topRightTags {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: flex-end;
+  z-index: 5;
+  animation: fadeInScale 0.8s ease-out;
+}
+
+.categoryTags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  animation: slideInFromRight 0.6s ease-out;
+}
+
+.categoryTag {
+  background: rgba(17, 62, 33, 0.95);
+  color: #ffbd59;
+  padding: 0.375rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 189, 89, 0.4);
+  animation: slideInRight 0.6s ease-out;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(17, 62, 33, 0.3);
+  cursor: pointer;
+}
+
+.categoryTag:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(17, 62, 33, 0.4);
+  border-color: rgba(255, 189, 89, 0.6);
+}
+
+.foodTypeTag {
+  background: rgba(255, 189, 89, 0.95);
+  color: #113e21;
+  padding: 0.375rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(17, 62, 33, 0.4);
+  animation: slideInRight 0.6s ease-out 0.1s both;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 189, 89, 0.3);
+  cursor: pointer;
+}
+
+.foodTypeTag:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(255, 189, 89, 0.4);
+  border-color: rgba(17, 62, 33, 0.6);
+}
+
+.mostPopularBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: slideInRight 0.6s ease-out 0.2s both;
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.mostPopularBadge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.mostPopularBadge:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(255, 107, 107, 0.5);
+}
+
+.mostPopularBadge:hover::before {
+  left: 100%;
+}
+
+.trendingBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #ffa726 0%, #ff9800 100%);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: slideInRight 0.6s ease-out 0.2s both;
+  box-shadow: 0 6px 20px rgba(255, 167, 38, 0.4);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.trendingBadge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.trendingBadge:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(255, 167, 38, 0.5);
+}
+
+.trendingBadge:hover::before {
+  left: 100%;
+}
+
+.topRatedBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%);
+  color: #113e21;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: slideInRight 0.6s ease-out 0.2s both;
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.topRatedBadge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.topRatedBadge:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
+}
+
+.topRatedBadge:hover::before {
+  left: 100%;
+}
+
+.excellentBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: slideInRight 0.6s ease-out 0.2s both;
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.excellentBadge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.excellentBadge:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(76, 175, 80, 0.5);
+}
+
+.excellentBadge:hover::before {
+  left: 100%;
 }
 
 .badges {
   display: flex;
   gap: 0.75rem;
   align-self: flex-start;
+  animation: slideInFromLeft 0.8s ease-out 0.3s both;
 }
 
 .badge {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(255, 189, 89, 0.9);
+  background: rgba(255, 189, 89, 0.95);
   color: #113e21;
   padding: 0.5rem 1rem;
-  border-radius: 20px;
+  border-radius: 25px;
   font-size: 0.875rem;
   font-weight: 600;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   animation: slideInDown 0.6s ease-out;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(255, 189, 89, 0.3);
+}
+
+.badge:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(255, 189, 89, 0.4);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .badgeIcon {
@@ -162,7 +395,7 @@
 
 .actionButtons {
   position: absolute;
-  bottom: 2rem;
+  bottom: 4rem;
   right: 2rem;
   display: flex;
   gap: 1rem;
@@ -252,6 +485,48 @@
   }
 }
 
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .heroContainer {
@@ -279,6 +554,16 @@
     padding: 1.5rem;
   }
   
+  .topRightTags {
+    top: 1.5rem;
+    right: 1.5rem;
+  }
+  
+  .categoryTags {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  
   .title {
     font-size: 2rem;
     margin-bottom: 1rem;
@@ -295,7 +580,7 @@
   }
   
   .actionButtons {
-    bottom: 1.5rem;
+    bottom: 3rem;
     right: 1.5rem;
     flex-direction: column;
     gap: 0.75rem;
@@ -315,6 +600,25 @@
   
   .overlay {
     padding: 1rem;
+  }
+  
+  .topRightTags {
+    top: 1rem;
+    right: 1rem;
+  }
+  
+  .categoryTag,
+  .foodTypeTag {
+    font-size: 0.625rem;
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .mostPopularBadge,
+  .trendingBadge,
+  .topRatedBadge,
+  .excellentBadge {
+    font-size: 0.625rem;
+    padding: 0.375rem 0.75rem;
   }
   
   .title {
@@ -339,9 +643,31 @@
 }
 
 /* Light mode support */
+[data-theme="light"] .overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+}
+
 [data-theme="light"] .badge {
-  background: rgba(255, 189, 89, 0.9);
+  background: rgba(255, 189, 89, 0.95);
   color: #113e21;
+  box-shadow: 0 4px 15px rgba(255, 189, 89, 0.4);
+}
+
+[data-theme="light"] .categoryTag {
+  background: rgba(17, 62, 33, 0.95);
+  color: #ffbd59;
+  box-shadow: 0 4px 15px rgba(17, 62, 33, 0.4);
+}
+
+[data-theme="light"] .foodTypeTag {
+  background: rgba(255, 189, 89, 0.95);
+  color: #113e21;
+  box-shadow: 0 4px 15px rgba(255, 189, 89, 0.4);
 }
 
 [data-theme="light"] .metaIcon {
@@ -353,9 +679,31 @@
 }
 
 /* Dark mode support */
+[data-theme="dark"] .overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.4) 50%,
+    rgba(0, 0, 0, 0.9) 100%
+  );
+}
+
 [data-theme="dark"] .badge {
-  background: rgba(17, 62, 33, 0.9);
+  background: rgba(17, 62, 33, 0.95);
   color: #ffbd59;
+  box-shadow: 0 4px 15px rgba(17, 62, 33, 0.4);
+}
+
+[data-theme="dark"] .categoryTag {
+  background: rgba(255, 189, 89, 0.95);
+  color: #113e21;
+  box-shadow: 0 4px 15px rgba(255, 189, 89, 0.4);
+}
+
+[data-theme="dark"] .foodTypeTag {
+  background: rgba(17, 62, 33, 0.95);
+  color: #ffbd59;
+  box-shadow: 0 4px 15px rgba(17, 62, 33, 0.4);
 }
 
 [data-theme="dark"] .metaIcon {
@@ -367,12 +715,13 @@
 }
 
 [data-theme="dark"] .metaItem {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 189, 89, 0.2);
 }
 
 [data-theme="dark"] .actionBtn {
-  background: rgba(0, 0, 0, 0.3);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 [data-theme="dark"] .likeBtn:hover {

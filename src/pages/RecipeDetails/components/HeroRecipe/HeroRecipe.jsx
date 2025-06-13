@@ -1,9 +1,24 @@
 import React, { useState } from 'react';
-import { FaHeart, FaShare, FaComment, FaStar, FaClock, FaSignal } from 'react-icons/fa';
+import { FaHeart, FaShare, FaComment, FaStar, FaClock, FaSignal, FaFire, FaComments, FaTrophy } from 'react-icons/fa';
+import { useFavorites } from '../../../../context/FavoritesContext';
 import styles from './HeroRecipe.module.css';
 
 const HeroRecipe = ({ recipe, onLike, onShare, isLiked = false }) => {
   const [liked, setLiked] = useState(isLiked);
+  const { toggleFavorite, isFavorite } = useFavorites();
+
+  const getBadgeInfo = (recipe) => {
+    if (recipe.isPopular) {
+      return { text: 'MOST POPULAR', class: styles.mostPopularBadge, icon: <FaFire /> };
+    } else if (recipe.commentCount > 10) {
+      return { text: 'TRENDING', class: styles.trendingBadge, icon: <FaComments /> };
+    } else if (recipe.isTopRated) {
+      return { text: 'TOP RATED', class: styles.topRatedBadge, icon: <FaTrophy /> };
+    } else if (recipe.rating >= 4.8) {
+      return { text: 'EXCELLENT', class: styles.excellentBadge, icon: <FaStar /> };
+    }
+    return null;
+  };
 
   const handleLike = () => {
     setLiked(!liked);
@@ -34,6 +49,30 @@ const HeroRecipe = ({ recipe, onLike, onShare, isLiked = false }) => {
         
         {/* Overlay with recipe info */}
         <div className={styles.overlay}>
+          {/* Top Right Tags */}
+          <div className={styles.topRightTags}>
+            {/* Category and Food Type Tags */}
+            <div className={styles.categoryTags}>
+              {recipe.category && (
+                <span className={styles.categoryTag}>
+                  {recipe.category}
+                </span>
+              )}
+              {recipe.foodType && (
+                <span className={styles.foodTypeTag}>
+                  {recipe.foodType}
+                </span>
+              )}
+            </div>
+            
+            {/* Dynamic Badge */}
+            {getBadgeInfo(recipe) && (
+              <div className={getBadgeInfo(recipe).class}>
+                {getBadgeInfo(recipe).icon} {getBadgeInfo(recipe).text}
+              </div>
+            )}
+          </div>
+
           <div className={styles.badges}>
             {recipe.isPopular && (
               <span className={styles.badge}>
@@ -91,11 +130,15 @@ const HeroRecipe = ({ recipe, onLike, onShare, isLiked = false }) => {
       {/* Action Buttons */}
       <div className={styles.actionButtons}>
         <button 
-          className={`${styles.actionBtn} ${styles.likeBtn} ${liked ? styles.liked : ''}`}
-          onClick={handleLike}
+          className={`${styles.actionBtn} ${styles.likeBtn} ${isFavorite(recipe.id) ? styles.liked : ''}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleFavorite(recipe);
+            handleLike();
+          }}
         >
           <FaHeart className={styles.actionIcon} />
-          {liked ? 'Liked' : 'Like'}
+          {isFavorite(recipe.id) ? 'Favorited' : 'Add to Favorites'}
         </button>
         
         <button 
