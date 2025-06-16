@@ -103,8 +103,8 @@ const Navbar = () => {
                   Community
                 </button>
                 <button
-                  onClick={() => handleNavigation('/meal-planner')}
-                  className={`${styles.navLink} ${styles.authenticatedLink} ${isActive('/meal-planner') ? styles.active : ''}`}
+                  onClick={() => handleNavigation('/mealplanner')}
+                  className={`${styles.navLink} ${styles.authenticatedLink} ${isActive('/mealplanner') ? styles.active : ''}`}
                 >
                   Meal Planner
                 </button>
@@ -203,7 +203,7 @@ const Navbar = () => {
 
                       <button
                         onClick={() => {
-                          handleNavigation("/meal-planner");
+                          handleNavigation("/mealplanner");
                           setIsProfileMenuOpen(false);
                         }}
                         className={styles.menuAction}
@@ -267,8 +267,8 @@ const Navbar = () => {
                   Community
                 </button>
                 <button
-                  onClick={() => handleNavigation('/meal-planner')}
-                  className={`${styles.mobileNavLink} ${isActive('/meal-planner') ? styles.active : ''}`}
+                  onClick={() => handleNavigation('/mealplanner')}
+                  className={`${styles.mobileNavLink} ${isActive('/mealplanner') ? styles.active : ''}`}
                 >
                   <FaCalendarAlt className={styles.mobileNavIcon} />
                   Meal Planner

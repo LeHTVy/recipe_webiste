@@ -15,6 +15,7 @@ import { FavoritesProvider } from "./context/FavoritesContext";
 import { NotificationProvider } from "./context/NotificationContext";
 import Favorites from "./pages/Favorites/Favorites";
 import Community from "./pages/Community/Community";
+import CreatePost from "./pages/CreatePost/CreatePost";
 import MealPlanner from "./pages/MealPlanner/MealPlanner";
 import ConfirmationModal from "./components/ConfirmationModal/ConfirmationModal";
 import { useState, createContext, useContext } from "react";
@@ -98,6 +99,7 @@ const AppContent = () => {
             <Route path="/create-recipe" element={<CreateRecipe />} />
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/community" element={<Community />} />
+            <Route path="/create-post" element={<CreatePost />} />
             <Route path="/mealplanner" element={<MealPlanner />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/profile" element={<Profile />} />

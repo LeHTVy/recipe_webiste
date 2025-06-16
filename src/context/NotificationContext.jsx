@@ -80,6 +80,21 @@ export const NotificationProvider = ({ children }) => {
     return addNotification(config);
   }, [addNotification]);
 
+  // General showNotification function that accepts message and type
+  const showNotification = useCallback((message, type = 'info', options = {}) => {
+    switch (type) {
+      case 'success':
+        return showSuccess(message, options);
+      case 'error':
+        return showError(message, options);
+      case 'warning':
+        return showWarning(message, options);
+      case 'info':
+      default:
+        return showInfo(message, options);
+    }
+  }, [showSuccess, showError, showWarning, showInfo]);
+
   const value = {
     notifications,
     addNotification,
@@ -96,7 +111,8 @@ export const NotificationProvider = ({ children }) => {
     showUpdateSuccess,
     showShareSuccess,
     showBookmarkSuccess,
-    showCustom
+    showCustom,
+    showNotification
   };
 
   return (
