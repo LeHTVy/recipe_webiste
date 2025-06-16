@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 import { useFavorites } from '../../context/FavoritesContext';
 import { getPopularRecipes, getTopRatedRecipes } from '../../data/mockData';
-import { FaFire, FaComments, FaTrophy, FaStar, FaShare, FaHeart } from 'react-icons/fa';
+import { FaFire, FaComments, FaStar, FaShare, FaHeart } from 'react-icons/fa';
+import RecipeBadge from '../RecipeBadge/RecipeBadge';
 import styles from './PopularRecipesCarousel.module.css';
 
 const PopularRecipesCarousel = ({ selectedTag }) => {
@@ -12,7 +13,16 @@ const PopularRecipesCarousel = ({ selectedTag }) => {
   const { toggleFavorite, isFavorite } = useFavorites();
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [viewMode, setViewMode] = useState('popular'); // 'popular' or 'toprated'
+  const [viewMode, setViewMode] = useState('popular'); 
+
+  // Function to get display image - randomly select from images array if multiple exist
+  const getDisplayImage = (recipe) => {
+    if (recipe.images && recipe.images.length > 1) {
+      const randomIndex = Math.floor(Math.random() * recipe.images.length);
+      return recipe.images[randomIndex];
+    }
+    return recipe.image; // Fallback to single image
+  };
 
   // Get recipes based on view mode with memoization
   const recipes = useMemo(() => {
@@ -53,29 +63,13 @@ const PopularRecipesCarousel = ({ selectedTag }) => {
     navigate(`/recipes/${recipeId}`);
   };
 
-  const getBadgeInfo = (recipe, index) => {
-    if (viewMode === 'popular') {
-      if (index === 0) {
-        return { text: 'MOST POPULAR', class: styles.mostPopularBadge, icon: <FaFire /> };
-      } else if (recipe.commentCount > 10) {
-        return { text: 'TRENDING', class: styles.trendingBadge, icon: <FaComments /> };
-      }
-    } else {
-      if (index === 0) {
-        return { text: 'TOP RATED', class: styles.topRatedBadge, icon: <FaTrophy /> };
-      } else if (recipe.rating >= 4.8) {
-        return { text: 'EXCELLENT', class: styles.excellentBadge, icon: <FaStar /> };
-      }
-    }
-    return null;
-  };
+
 
   return (
     <div className={`${styles.popularSection} ${isDarkMode ? styles.darkMode : ''}`}>
       {/* Header với Title Style Cũ và View Toggle */}
       <div className={styles.header}>
         <div className={styles.headerLeft}>
-          {/* Title với Underline như code cũ */}
           <h3 className={styles.carouselTitle}>
             {viewMode === 'popular' 
               ? (selectedTag ? `Popular ${selectedTag.replace('-', ' ')} recipes` : 'Popular recipes')
@@ -140,21 +134,14 @@ const PopularRecipesCarousel = ({ selectedTag }) => {
           style={{ transform: `translateX(-${currentIndex * 33.333}%)` }}
         >
           {recipes.map((recipe, index) => {
-            const badgeInfo = getBadgeInfo(recipe, index);
-            
             return (
               <div key={recipe.id} className={styles.recipeCard}>
-                {/* Dynamic Badge */}
-                {badgeInfo && (
-                  <div className={badgeInfo.class}>
-                    {badgeInfo.icon} {badgeInfo.text}
-                  </div>
-                )}
-                
                 {/* Image */}
                 <div className={styles.imageContainer}>
+                  {/* Dynamic Badge */}
+                  <RecipeBadge recipe={recipe} index={index} viewMode={viewMode} />
                   <img 
-                    src={recipe.image} 
+                    src={getDisplayImage(recipe)} 
                     alt={recipe.title}
                     className={styles.recipeImage}
                   />

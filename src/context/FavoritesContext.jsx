@@ -1,8 +1,11 @@
 // src/context/FavoritesContext.jsx
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useAuth } from './AuthContext';
+import { useNotification } from './NotificationContext';
 
 const FavoritesContext = createContext();
+
+export { FavoritesContext };
 
 export const useFavorites = () => {
   const context = useContext(FavoritesContext);
@@ -14,6 +17,7 @@ export const useFavorites = () => {
 
 export const FavoritesProvider = ({ children }) => {
   const { user, isAuthenticated } = useAuth();
+  const { showFavoriteAdded } = useNotification();
   const [favorites, setFavorites] = useState([]);
 
   // Get localStorage key for specific user
@@ -64,6 +68,8 @@ export const FavoritesProvider = ({ children }) => {
       const updatedFavorites = [...favorites, recipe];
       setFavorites(updatedFavorites);
       saveFavoritesToStorage(updatedFavorites);
+      // Show notification when recipe is added to favorites
+      showFavoriteAdded(recipe.title || recipe.name || 'Recipe');
       return true;
     }
     return false;
@@ -89,8 +95,8 @@ export const FavoritesProvider = ({ children }) => {
       removeFromFavorites(recipe.id);
       return false;
     } else {
-      addToFavorites(recipe);
-      return true;
+      const success = addToFavorites(recipe);
+      return success;
     }
   };
 

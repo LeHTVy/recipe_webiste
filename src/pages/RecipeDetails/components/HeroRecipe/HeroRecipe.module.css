@@ -17,6 +17,77 @@
   height: 100%;
 }
 
+.imageCarousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.carouselBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #333;
+  transition: all 0.3s ease;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.carouselBtn:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.prevBtn {
+  left: 20px;
+}
+
+.nextBtn {
+  right: 20px;
+}
+
+.imageIndicators {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.indicator.active {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+.indicator:hover {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(255, 255, 255, 0.8);
+  transform: scale(1.2);
+}
+
 .recipeImage {
   width: 100%;
   height: 100%;
@@ -58,6 +129,14 @@
   align-items: flex-end;
   z-index: 5;
   animation: fadeInScale 0.8s ease-out;
+}
+
+.badgeContainer {
+  position: absolute;
+  top: 4rem;
+  right: 11rem;
+  z-index: 5;
+  animation: fadeInScale 0.8s ease-out 0.3s both;
 }
 
 .categoryTags {
@@ -308,7 +387,7 @@
 .recipeInfo {
   color: white;
   text-align: left;
-  margin-top: 15rem;
+  margin-top: 17rem;
 }
 
 .title {

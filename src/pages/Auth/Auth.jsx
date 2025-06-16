@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
+import { useNotification } from "../../context/NotificationContext";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaUtensils, FaLeaf } from 'react-icons/fa';
 import Stack from "../../components/Stack/Stack";
@@ -14,6 +15,7 @@ import authGifDark from "../../assets/auth/auth-dark.gif";
 const Auth = () => {
   const { isDarkMode } = useTheme();
   const { login } = useAuth();
+  const { showSignupSuccess, showError } = useNotification();
   const navigate = useNavigate();
   const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState({
@@ -120,9 +122,20 @@ const Auth = () => {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       if (isSignUp) {
-        const existingUsers = JSON.parse(
-          localStorage.getItem("tastemate_users") || "[]"
-        );
+        let existingUsers;
+        try {
+          const storedData = localStorage.getItem("tastemate_users");
+          existingUsers = storedData ? JSON.parse(storedData) : [];
+          // Ensure existingUsers is an array
+          if (!Array.isArray(existingUsers)) {
+            existingUsers = [];
+          }
+        } catch (error) {
+          console.warn("Invalid localStorage data, resetting to empty array");
+          existingUsers = [];
+          localStorage.setItem("tastemate_users", JSON.stringify([]));
+        }
+        
         const userExists = existingUsers.find(
           (user) =>
             user.email === formData.email || user.username === formData.username
@@ -145,6 +158,7 @@ const Auth = () => {
           id: Date.now(),
           username: formData.username,
           email: formData.email,
+          password: formData.password, // Store password (in real app, this would be hashed)
           firstName: formData.firstName,
           lastName: formData.lastName,
           profilePicture:
@@ -155,17 +169,29 @@ const Auth = () => {
           totalRatings: 0,
           favoriteRecipes: [],
           dietaryPreferences: [],
+          bio: [],
         };
 
         existingUsers.push(newUser);
         localStorage.setItem("tastemate_users", JSON.stringify(existingUsers));
 
         login(newUser);
+        showSignupSuccess(formData.firstName);
         navigate("/profile");
       } else {
-        const existingUsers = JSON.parse(
-          localStorage.getItem("tastemate_users") || "[]"
-        );
+        let existingUsers;
+        try {
+          const storedData = localStorage.getItem("tastemate_users");
+          existingUsers = storedData ? JSON.parse(storedData) : [];
+          // Ensure existingUsers is an array
+          if (!Array.isArray(existingUsers)) {
+            existingUsers = [];
+          }
+        } catch (error) {
+          console.warn("Invalid localStorage data, resetting to empty array");
+          existingUsers = [];
+          localStorage.setItem("tastemate_users", JSON.stringify([]));
+        }
         const user = existingUsers.find(
           (user) => user.email === formData.email
         );
@@ -176,12 +202,20 @@ const Auth = () => {
           return;
         }
 
+        // Check if password matches (in a real app, this would be hashed)
+        if (user.password && user.password !== formData.password) {
+          setErrors({ password: "Incorrect password" });
+          setIsLoading(false);
+          return;
+        }
+
         login(user);
         navigate("/");
       }
     } catch (error) {
       console.error("Auth error:", error);
       setErrors({ general: "Something went wrong. Please try again." });
+      showError("Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
     }

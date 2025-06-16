@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { FaUser, FaEye, FaHeart, FaUtensils, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { useAuth } from '../../../../context/AuthContext';
 import styles from './RecipeAuthor.module.css';
 
 const RecipeAuthor = ({ author, onViewProfile }) => {
+  const { isAuthenticated } = useAuth();
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpanded = () => {
@@ -88,17 +90,19 @@ const RecipeAuthor = ({ author, onViewProfile }) => {
             </p>
           </div>
 
-          <div className={styles.authorActions}>
-            <button className={styles.followBtn}>
-              <FaHeart className={styles.actionIcon} />
-              Follow
-            </button>
-            
-            <button className={styles.profileBtn} onClick={handleViewProfile}>
-              <FaUser className={styles.actionIcon} />
-              View Profile
-            </button>
-          </div>
+          {isAuthenticated && (
+            <div className={styles.authorActions}>
+              <button className={styles.followBtn}>
+                <FaHeart className={styles.actionIcon} />
+                Follow
+              </button>
+              
+              <button className={styles.profileBtn} onClick={handleViewProfile}>
+                <FaUser className={styles.actionIcon} />
+                View Profile
+              </button>
+            </div>
+          )}
 
           {/* Author's Specialties */}
           {author.specialties && author.specialties.length > 0 && (

@@ -2,6 +2,8 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
 
+export { AuthContext };
+
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -16,16 +18,28 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing user in localStorage
-    const savedUser = localStorage.getItem('tastemate_user');
-    if (savedUser) {
+    // Check for existing user session in localStorage
+    const savedUserId = localStorage.getItem('tastemate_current_user_id');
+    if (savedUserId) {
       try {
-        const userData = JSON.parse(savedUser);
-        setUser(userData);
-        setIsAuthenticated(true);
+        // Get all users and find the current user
+        const allUsersData = localStorage.getItem('tastemate_users');
+        if (allUsersData) {
+          const allUsers = JSON.parse(allUsersData);
+          if (Array.isArray(allUsers)) {
+            const currentUser = allUsers.find(user => user.id === parseInt(savedUserId));
+            if (currentUser) {
+              setUser(currentUser);
+              setIsAuthenticated(true);
+            } else {
+              // User not found, clear session
+              localStorage.removeItem('tastemate_current_user_id');
+            }
+          }
+        }
       } catch (error) {
         console.error('Error parsing user data:', error);
-        localStorage.removeItem('tastemate_user');
+        localStorage.removeItem('tastemate_current_user_id');
       }
     }
     setLoading(false);
@@ -34,21 +48,37 @@ export const AuthProvider = ({ children }) => {
   const login = (userData) => {
     setUser(userData);
     setIsAuthenticated(true);
-    localStorage.setItem('tastemate_user', JSON.stringify(userData));
+    // Store the current user's ID in session
+    localStorage.setItem('tastemate_current_user_id', userData.id.toString());
   };
 
   const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
-    localStorage.removeItem('tastemate_user');
-    localStorage.removeItem('user_recipes');
-    localStorage.removeItem('user_favorites');
+    // Clear the current user session
+    localStorage.removeItem('tastemate_current_user_id');
   };
 
   const updateProfile = (updatedData) => {
     const newUserData = { ...user, ...updatedData };
     setUser(newUserData);
-    localStorage.setItem('tastemate_user', JSON.stringify(newUserData));
+    
+    // Update the user in the users array
+    try {
+      const allUsersData = localStorage.getItem('tastemate_users');
+      if (allUsersData) {
+        const allUsers = JSON.parse(allUsersData);
+        if (Array.isArray(allUsers)) {
+          const userIndex = allUsers.findIndex(u => u.id === user.id);
+          if (userIndex !== -1) {
+            allUsers[userIndex] = newUserData;
+            localStorage.setItem('tastemate_users', JSON.stringify(allUsers));
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error updating user profile:', error);
+    }
   };
 
   const value = {

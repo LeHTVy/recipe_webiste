@@ -4,14 +4,18 @@ import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 import { useFavorites } from '../../context/FavoritesContext';
 import { useAuth } from '../../context/AuthContext';
+import { useNotification } from '../../context/NotificationContext';
+import { useModal } from '../../App';
 import RecipeCard from '../../components/RecipeCard/RecipeCard';
 import { FaHeart, FaArrowLeft, FaFilter, FaTh, FaList, FaSearch, FaTrash } from 'react-icons/fa';
 import styles from './Favorites.module.css';
 
 const Favorites = () => {
   const { isDarkMode } = useTheme();
-  const { favorites, getFavoritesCount, clearFavorites, removeFavorite } = useFavorites();
+  const { favorites, getFavoritesCount, clearFavorites, removeFromFavorites } = useFavorites();
   const { isAuthenticated, user } = useAuth();
+  const { showDeleteSuccess } = useNotification();
+  const { openModal } = useModal();
   const navigate = useNavigate();
   
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -83,14 +87,23 @@ const Favorites = () => {
             <button 
               className={styles.clearAllBtn}
               onClick={() => {
-                if (window.confirm('Are you sure you want to remove all favorites?')) {
-                  clearFavorites();
-                }
+                openModal({
+                  type: 'danger',
+                  title: 'Clear All Favorites',
+                  message: 'Are you sure you want to remove all favorites? This action cannot be undone.',
+                  confirmText: 'Clear All',
+                  cancelText: 'Cancel',
+                  onConfirm: () => {
+                    clearFavorites();
+                    showDeleteSuccess('All favorites cleared successfully!');
+                  }
+                });
               }}
             >
               Clear All
             </button>
           )}
+
         </div>
 
         {/* Filters and Controls */}
@@ -196,9 +209,17 @@ const Favorites = () => {
                   className={styles.removeBtn}
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (window.confirm(`Remove "${recipe.title}" from favorites?`)) {
-                      removeFavorite(recipe.id);
-                    }
+                    openModal({
+                      type: 'danger',
+                      title: 'Remove Recipe',
+                      message: `Remove "${recipe.title}" from your favorites?`,
+                      confirmText: 'Remove',
+                      cancelText: 'Cancel',
+                      onConfirm: () => {
+                        removeFromFavorites(recipe.id);
+                        showDeleteSuccess(`"${recipe.title}" removed from favorites!`);
+                      }
+                    });
                   }}
                   title="Remove from favorites"
                 >

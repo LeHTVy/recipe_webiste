@@ -1,23 +1,30 @@
 import React, { useState } from 'react';
-import { FaHeart, FaShare, FaComment, FaStar, FaClock, FaSignal, FaFire, FaComments, FaTrophy } from 'react-icons/fa';
+import { FaHeart, FaShare, FaComment, FaStar, FaClock, FaSignal, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { useFavorites } from '../../../../context/FavoritesContext';
+import { useAuth } from '../../../../context/AuthContext';
+import RecipeBadge from '../../../../components/RecipeBadge/RecipeBadge';
 import styles from './HeroRecipe.module.css';
 
 const HeroRecipe = ({ recipe, onLike, onShare, isLiked = false }) => {
   const [liked, setLiked] = useState(isLiked);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { isAuthenticated } = useAuth();
 
-  const getBadgeInfo = (recipe) => {
-    if (recipe.isPopular) {
-      return { text: 'MOST POPULAR', class: styles.mostPopularBadge, icon: <FaFire /> };
-    } else if (recipe.commentCount > 10) {
-      return { text: 'TRENDING', class: styles.trendingBadge, icon: <FaComments /> };
-    } else if (recipe.isTopRated) {
-      return { text: 'TOP RATED', class: styles.topRatedBadge, icon: <FaTrophy /> };
-    } else if (recipe.rating >= 4.8) {
-      return { text: 'EXCELLENT', class: styles.excellentBadge, icon: <FaStar /> };
-    }
-    return null;
+  // Get all images (fallback to single image if images array doesn't exist)
+  const recipeImages = recipe.images && recipe.images.length > 0 ? recipe.images : [recipe.image];
+  const hasMultipleImages = recipeImages.length > 1;
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % recipeImages.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + recipeImages.length) % recipeImages.length);
+  };
+
+  const goToImage = (index) => {
+    setCurrentImageIndex(index);
   };
 
   const handleLike = () => {
@@ -41,11 +48,45 @@ const HeroRecipe = ({ recipe, onLike, onShare, isLiked = false }) => {
   return (
     <div className={styles.heroContainer}>
       <div className={styles.imageSection}>
-        <img 
-          src={recipe.image} 
-          alt={recipe.title}
-          className={styles.recipeImage}
-        />
+        <div className={styles.imageCarousel}>
+          <img 
+            src={recipeImages[currentImageIndex]} 
+            alt={`${recipe.title} - ${currentImageIndex + 1}`}
+            className={styles.recipeImage}
+          />
+          
+          {/* Navigation arrows for multiple images */}
+          {hasMultipleImages && (
+            <>
+              <button 
+                className={`${styles.carouselBtn} ${styles.prevBtn}`}
+                onClick={prevImage}
+                aria-label="Previous image"
+              >
+                <FaChevronLeft />
+              </button>
+              <button 
+                className={`${styles.carouselBtn} ${styles.nextBtn}`}
+                onClick={nextImage}
+                aria-label="Next image"
+              >
+                <FaChevronRight />
+              </button>
+              
+              {/* Image indicators */}
+              <div className={styles.imageIndicators}>
+                {recipeImages.map((_, index) => (
+                  <button
+                    key={index}
+                    className={`${styles.indicator} ${index === currentImageIndex ? styles.active : ''}`}
+                    onClick={() => goToImage(index)}
+                    aria-label={`Go to image ${index + 1}`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
         
         {/* Overlay with recipe info */}
         <div className={styles.overlay}>
@@ -64,13 +105,11 @@ const HeroRecipe = ({ recipe, onLike, onShare, isLiked = false }) => {
                 </span>
               )}
             </div>
-            
-            {/* Dynamic Badge */}
-            {getBadgeInfo(recipe) && (
-              <div className={getBadgeInfo(recipe).class}>
-                {getBadgeInfo(recipe).icon} {getBadgeInfo(recipe).text}
-              </div>
-            )}
+          </div>
+          
+          {/* Dynamic Badge - Moved to separate container */}
+          <div className={styles.badgeContainer}>
+            <RecipeBadge recipe={recipe} />
           </div>
 
           <div className={styles.badges}>
@@ -129,17 +168,19 @@ const HeroRecipe = ({ recipe, onLike, onShare, isLiked = false }) => {
 
       {/* Action Buttons */}
       <div className={styles.actionButtons}>
-        <button 
-          className={`${styles.actionBtn} ${styles.likeBtn} ${isFavorite(recipe.id) ? styles.liked : ''}`}
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleFavorite(recipe);
-            handleLike();
-          }}
-        >
-          <FaHeart className={styles.actionIcon} />
-          {isFavorite(recipe.id) ? 'Favorited' : 'Add to Favorites'}
-        </button>
+        {isAuthenticated && (
+          <button 
+            className={`${styles.actionBtn} ${styles.likeBtn} ${isFavorite(recipe.id) ? styles.liked : ''}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleFavorite(recipe);
+              handleLike();
+            }}
+          >
+            <FaHeart className={styles.actionIcon} />
+            {isFavorite(recipe.id) ? 'Favorited' : 'Add to Favorites'}
+          </button>
+        )}
         
         <button 
           className={`${styles.actionBtn} ${styles.shareBtn}`}

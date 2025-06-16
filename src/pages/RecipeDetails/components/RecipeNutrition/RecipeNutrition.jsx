@@ -1,15 +1,24 @@
 // eslint-disable-next-line
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaPlus, FaMinus, FaUtensils, FaLeaf, FaComments, FaStar, FaUser, FaThumbsUp, FaPaperPlane } from 'react-icons/fa';
+import { useAuth } from '../../../../context/AuthContext';
 import styles from './RecipeNutrition.module.css';
 
 const RecipeNutrition = ({ recipe }) => {
+  const { isAuthenticated } = useAuth();
   const [activeTab, setActiveTab] = useState('nutrition');
   const [servings, setServings] = useState(recipe.servings || 1);
   const [comments, setComments] = useState(recipe.comments || []);
   const [newComment, setNewComment] = useState('');
   const [newRating, setNewRating] = useState(0);
   const [sortBy, setSortBy] = useState('newest');
+
+  // Redirect to nutrition tab if user is not authenticated and comments tab is selected
+  useEffect(() => {
+    if (!isAuthenticated && activeTab === 'comments') {
+      setActiveTab('nutrition');
+    }
+  }, [isAuthenticated, activeTab]);
 
 
   const handleServingsChange = (newServings) => {
@@ -163,13 +172,15 @@ const RecipeNutrition = ({ recipe }) => {
           <FaUtensils className={styles.tabIcon} />
           Method
         </button>
-        <button 
-          className={`${styles.tabBtn} ${activeTab === 'comments' ? styles.active : ''}`}
-          onClick={() => setActiveTab('comments')}
-        >
-          <FaComments className={styles.tabIcon} />
-          Comments
-        </button>
+        {isAuthenticated && (
+          <button 
+            className={`${styles.tabBtn} ${activeTab === 'comments' ? styles.active : ''}`}
+            onClick={() => setActiveTab('comments')}
+          >
+            <FaComments className={styles.tabIcon} />
+            Comments
+          </button>
+        )}
       </div>
 
       {/* Servings Controller */}
@@ -270,7 +281,7 @@ const RecipeNutrition = ({ recipe }) => {
           </div>
         )}
 
-        {activeTab === 'comments' && (
+        {activeTab === 'comments' && isAuthenticated && (
           <div className={styles.commentsTab}>
             <div className={styles.commentsHeader}>
               <h3 className={styles.sectionTitle}>

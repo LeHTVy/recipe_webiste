@@ -16,6 +16,16 @@ main {
   width: 100%;
 }
 
+/* Modal blur effect */
+.App.modal-open {
+  filter: blur(3px);
+  transition: filter 0.3s ease;
+}
+
+.App.modal-open > * {
+  pointer-events: none;
+}
+
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;

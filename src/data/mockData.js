@@ -1434,7 +1434,13 @@ export const getRecipesByCategory = (category) => {
 };
 
 export const getRecipeById = (id) => {
-  return mockRecipes.find(recipe => recipe.id === parseInt(id));
+  // First check in mockRecipes
+  const mockRecipe = mockRecipes.find(recipe => recipe.id === parseInt(id));
+  if (mockRecipe) return mockRecipe;
+  
+  // Then check in user-created recipes from localStorage
+  const userRecipes = JSON.parse(localStorage.getItem('recipes') || '[]');
+  return userRecipes.find(recipe => recipe.id === parseInt(id));
 };
 
 export const getRelatedRecipes = (recipeId, limit = 3) => {

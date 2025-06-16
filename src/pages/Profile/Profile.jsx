@@ -1,21 +1,27 @@
 // src/pages/Profile/Profile.jsx - Thêm avatar upload functionality
 import React, { useState, useEffect, useRef } from 'react';
-import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { useFavorites } from '../../context/FavoritesContext';
+import { useNotification } from '../../context/NotificationContext';
 import RecipeCard from '../../components/RecipeCard/RecipeCard';
-import { mockRecipes } from '../../data/mockData';
+import ProfileRecipeCard from '../../components/ProfileRecipeCard/ProfileRecipeCard';
+import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 import { FaCamera, FaEdit, FaHeart } from 'react-icons/fa';
 import styles from './Profile.module.css';
 
 const Profile = () => {
   const { user, updateProfile, logout } = useAuth();
+  const { favorites } = useFavorites();
+  const { showDeleteSuccess, showError } = useNotification();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
   const [activeTab, setActiveTab] = useState('overview');
   const [userRecipes, setUserRecipes] = useState([]);
-  const [favoriteRecipes, setFavoriteRecipes] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [recipeToDelete, setRecipeToDelete] = useState(null);
   const [editForm, setEditForm] = useState({
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
@@ -30,20 +36,56 @@ const Profile = () => {
       return;
     }
 
-    const savedRecipes = JSON.parse(localStorage.getItem(`user_recipes_${user.id}`) || '[]');
-    setUserRecipes(savedRecipes);
-
-    const savedFavorites = JSON.parse(localStorage.getItem(`user_favorites_${user.id}`) || '[]');
-    const favoriteRecipeData = mockRecipes.filter(recipe => 
-      savedFavorites.includes(recipe.id)
-    );
-    setFavoriteRecipes(favoriteRecipeData);
+    // Load user's created recipes from localStorage
+    const savedRecipes = JSON.parse(localStorage.getItem('recipes') || '[]');
+    const userCreatedRecipes = savedRecipes.filter(recipe => recipe.createdBy === user.id);
+    setUserRecipes(userCreatedRecipes);
   }, [user, navigate]);
 
   const handleEditSubmit = (e) => {
     e.preventDefault();
     updateProfile(editForm);
     setIsEditing(false);
+  };
+
+  const handleRecipeEdit = (recipe) => {
+    navigate(`/create-recipe?edit=${recipe.id}`);
+  };
+
+  const handleRecipeDelete = (recipe) => {
+    setRecipeToDelete(recipe);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDeleteRecipe = () => {
+    if (recipeToDelete) {
+      const savedRecipes = JSON.parse(localStorage.getItem('recipes') || '[]');
+      const updatedRecipes = savedRecipes.filter(r => r.id !== recipeToDelete.id);
+      localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
+      
+      // Update the state
+      const userCreatedRecipes = updatedRecipes.filter(r => r.createdBy === user.id);
+      setUserRecipes(userCreatedRecipes);
+      
+      showDeleteSuccess(recipeToDelete.title || 'Recipe');
+      setRecipeToDelete(null);
+    }
+  };
+
+  const handleRecipePublish = (recipe) => {
+    const savedRecipes = JSON.parse(localStorage.getItem('recipes') || '[]');
+    const updatedRecipes = savedRecipes.map(r => 
+      r.id === recipe.id ? { ...r, status: 'published' } : r
+    );
+    localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
+    
+    // Update the state
+    const userCreatedRecipes = updatedRecipes.filter(r => r.createdBy === user.id);
+    setUserRecipes(userCreatedRecipes);
+  };
+
+  const handleRecipeView = (recipe) => {
+    navigate(`/recipes/${recipe.id}`);
   };
 
   const handleInputChange = (e) => {
@@ -73,13 +115,13 @@ const Profile = () => {
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      alert('Please select an image file');
+      showError('Please select an image file');
       return;
     }
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      alert('File size must be less than 5MB');
+      showError('File size must be less than 5MB');
       return;
     }
 
@@ -97,14 +139,14 @@ const Profile = () => {
       };
       
       reader.onerror = () => {
-        alert('Error reading file');
+        showError('Error reading file');
         setIsUploadingAvatar(false);
       };
       
       reader.readAsDataURL(file);
     } catch (error) {
       console.error('Error uploading avatar:', error);
-      alert('Error uploading image');
+      showError('Error uploading image');
       setIsUploadingAvatar(false);
     }
   };
@@ -182,7 +224,7 @@ const Profile = () => {
                   <span className={styles.statLabel}>Recipes</span>
                 </div>
                 <div className={styles.stat}>
-                  <span className={styles.statNumber}>{favoriteRecipes.length}</span>
+                  <span className={styles.statNumber}>{favorites.length}</span>
                   <span className={styles.statLabel}>Favorites</span>
                 </div>
                 <div className={styles.stat}>
@@ -240,7 +282,7 @@ const Profile = () => {
                 className={`${styles.tabBtn} ${activeTab === 'favorites' ? styles.active : ''}`}
                 onClick={() => setActiveTab('favorites')}
               >
-                Favorites ({favoriteRecipes.length})
+                Favorites ({favorites.length})
               </button>
             </div>
 
@@ -259,7 +301,7 @@ const Profile = () => {
                   <div className={styles.quickStats}>
                     <div className={styles.quickStatCard}>
                       <h4>Recent Activity</h4>
-                      <p>You've created {userRecipes.length} recipes and saved {favoriteRecipes.length} favorites</p>
+                      <p>You've created {userRecipes.length} recipes and saved {favorites.length} favorites</p>
                     </div>
                     <div className={styles.quickStatCard}>
                       <h4>Community Impact</h4>
@@ -274,7 +316,14 @@ const Profile = () => {
                   {userRecipes.length > 0 ? (
                     <div className={styles.recipesGrid}>
                       {userRecipes.map(recipe => (
-                        <RecipeCard key={recipe.id} recipe={recipe} />
+                        <ProfileRecipeCard 
+                          key={recipe.id} 
+                          recipe={recipe}
+                          onEdit={handleRecipeEdit}
+                          onDelete={handleRecipeDelete}
+                          onPublish={handleRecipePublish}
+                          onView={handleRecipeView}
+                        />
                       ))}
                     </div>
                   ) : (
@@ -282,7 +331,10 @@ const Profile = () => {
                       <div className={styles.emptyIcon}><FaEdit /></div>
                       <h3>No recipes yet</h3>
                       <p>Start sharing your favorite recipes with the community!</p>
-                      <button className={styles.createBtn}>
+                      <button 
+                        className={styles.createBtn}
+                        onClick={() => navigate('/create-recipe')}
+                      >
                         Create Your First Recipe
                       </button>
                     </div>
@@ -292,9 +344,9 @@ const Profile = () => {
 
               {activeTab === 'favorites' && (
                 <div className={styles.favoritesContent}>
-                  {favoriteRecipes.length > 0 ? (
+                  {favorites.length > 0 ? (
                     <div className={styles.recipesGrid}>
-                      {favoriteRecipes.map(recipe => (
+                      {favorites.map(recipe => (
                         <RecipeCard key={recipe.id} recipe={recipe} />
                       ))}
                     </div>
@@ -415,6 +467,17 @@ const Profile = () => {
           </div>
         </div>
       )}
+      
+      <ConfirmationModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={confirmDeleteRecipe}
+        title="Delete Recipe"
+        message={`Are you sure you want to delete "${recipeToDelete?.title || 'this recipe'}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        type="danger"
+      />
     </div>
   );
 };

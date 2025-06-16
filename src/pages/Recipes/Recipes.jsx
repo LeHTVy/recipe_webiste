@@ -23,7 +23,16 @@ const Recipes = () => {
       setLoading(true);
       try {
         await new Promise(resolve => setTimeout(resolve, 1000));
-        const sortedRecipes = [...mockRecipes].sort((a, b) => b.rating - a.rating);
+        
+        // Get user-created recipes from localStorage
+        const userRecipes = JSON.parse(localStorage.getItem('recipes') || '[]');
+        // Only include published recipes in the main recipes page
+        const publishedUserRecipes = userRecipes.filter(recipe => recipe.status === 'published');
+        
+        // Combine mock recipes with published user recipes
+        const allRecipes = [...mockRecipes, ...publishedUserRecipes];
+        const sortedRecipes = allRecipes.sort((a, b) => b.rating - a.rating);
+        
         setRecipes(sortedRecipes);
         setFilteredRecipes(sortedRecipes);
       } catch (error) {

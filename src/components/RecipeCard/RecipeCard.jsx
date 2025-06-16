@@ -11,6 +11,15 @@ const RecipeCard = ({ recipe }) => {
   const { isDarkMode } = useTheme();
   const { toggleFavorite, isFavorite } = useFavorites();
 
+  // Function to get display image - randomly select from images array if multiple exist
+  const getDisplayImage = () => {
+    if (recipe.images && recipe.images.length > 1) {
+      const randomIndex = Math.floor(Math.random() * recipe.images.length);
+      return recipe.images[randomIndex];
+    }
+    return recipe.image; // Fallback to single image
+  };
+
   const renderStars = (rating) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -52,7 +61,7 @@ const RecipeCard = ({ recipe }) => {
     >
       <div className={styles.imageContainer}>
         <img 
-          src={recipe.image} 
+          src={getDisplayImage()} 
           alt={recipe.title}
           className={styles.recipeImage}
         />
