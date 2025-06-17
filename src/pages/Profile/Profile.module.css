@@ -1,86 +1,98 @@
-/* src/pages/Profile/Profile.module.css - Thêm avatar upload styles */
+/* ===========================================
+   INSTAGRAM-LIKE PROFILE PAGE STYLES
+   Light Mode: #113e21 | Dark Mode: #ffbd59
+   =========================================== */
 
 /* ===========================================
-   1. PROFILE CONTAINER
+   1. PROFILE CONTAINER & LAYOUT
    =========================================== */
 .profileContainer {
   min-height: 100vh;
-  background: var(--bg-primary);
+  background: linear-gradient(135deg, #f8fffe 0%, #e8f5f0 100%);
   padding: 2rem 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .profileContent {
-  display: grid;
-  grid-template-columns: 350px 1fr;
-  gap: 3rem;
-  max-width: 1400px;
+  max-width: 935px;
   margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 /* ===========================================
-   2. SIDEBAR - USER INFO
+   2. PROFILE HEADER (Instagram-like)
    =========================================== */
-.sidebar {
-  position: sticky;
-  top: 2rem;
-  height: fit-content;
-}
-
-.userCard {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
+.profileHeader {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(17, 62, 33, 0.1);
   border-radius: 20px;
-  padding: 2rem;
-  box-shadow: 0 4px 20px var(--shadow-light);
+  padding: 2.5rem;
+  box-shadow: 0 8px 32px rgba(17, 62, 33, 0.1);
+  transition: all 0.3s ease;
 }
 
-.avatarSection {
-  text-align: center;
+.profileHeader:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(17, 62, 33, 0.15);
+}
+
+.userInfoSection {
+  display: flex;
+  align-items: flex-start;
+  gap: 3rem;
   margin-bottom: 2rem;
 }
 
+/* ===========================================
+   3. AVATAR SECTION
+   =========================================== */
 .avatarContainer {
   position: relative;
-  display: inline-block;
-  margin-bottom: 1rem;
+  flex-shrink: 0;
 }
 
 .avatar {
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid var(--accent);
+  border: 4px solid #113e21;
+  box-shadow: 0 8px 24px rgba(17, 62, 33, 0.3);
   transition: all 0.3s ease;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 32px rgba(17, 62, 33, 0.4);
 }
 
 .avatarUploadBtn {
   position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 36px;
-  height: 36px;
+  bottom: 8px;
+  right: 8px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: var(--gradient-primary);
-  color: var(--badge-text);
-  border: 2px solid var(--card-bg);
+  background: linear-gradient(135deg, #113e21 0%, #1a5a33 100%);
+  color: white;
+  border: 3px solid white;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1rem;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px var(--accent-shadow);
-}
-
-.avatarUploadBtn svg {
-  color: #3498db;
-  filter: drop-shadow(0 0 2px rgba(52, 152, 219, 0.3));
+  box-shadow: 0 4px 12px rgba(17, 62, 33, 0.4);
 }
 
 .avatarUploadBtn:hover {
   transform: scale(1.1);
-  box-shadow: 0 4px 15px var(--accent-shadow);
+  box-shadow: 0 6px 20px rgba(17, 62, 33, 0.6);
+  background: linear-gradient(135deg, #1a5a33 0%, #113e21 100%);
 }
 
 .avatarUploadBtn:disabled {
@@ -93,95 +105,172 @@
   width: 16px;
   height: 16px;
   border: 2px solid transparent;
-  border-top: 2px solid var(--badge-text);
+  border-top: 2px solid white;
   border-radius: 50%;
   animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .hiddenFileInput {
   display: none;
 }
 
+/* ===========================================
+   4. USER DETAILS
+   =========================================== */
+.userDetails {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
 .userBasicInfo {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .userName {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 0.25rem;
+  font-size: 2rem;
+  font-weight: 300;
+  color: #113e21;
+  margin: 0;
+  letter-spacing: -0.5px;
 }
 
 .username {
-  color: var(--accent);
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+  color: #113e21;
+  font-weight: 400;
+  font-size: 1.125rem;
+  margin: 0;
+}
+
+.location {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .joinDate {
-  color: var(--text-secondary);
+  color: #6b7280;
   font-size: 0.875rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.bioSection {
-  margin-bottom: 2rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.bio {
-  color: var(--text-secondary);
-  line-height: 1.6;
-  text-align: center;
-  font-style: italic;
-}
-
+/* ===========================================
+   5. STATS SECTION (Instagram-like)
+   =========================================== */
 .statsSection {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin-bottom: 2rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 2rem;
+  align-items: center;
 }
 
 .stat {
-  text-align: center;
-  padding: 1rem;
-  background: var(--bg-secondary);
-  border-radius: 12px;
+  text-align: left;
+  cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .stat:hover {
-  background: var(--accent-alpha);
   transform: translateY(-2px);
 }
 
 .statNumber {
   display: block;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--accent);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #113e21;
+  margin-bottom: 0.25rem;
 }
 
 .statLabel {
   font-size: 0.875rem;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: #6b7280;
+  font-weight: 400;
+}
+
+/* ===========================================
+   6. ACTION BUTTONS
+   =========================================== */
+.actionButtons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.editBtn {
+  background: #113e21;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(17, 62, 33, 0.2);
+}
+
+.editBtn:hover {
+  background: #1a5a33;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(17, 62, 33, 0.3);
+}
+
+.logoutBtn {
+  background: transparent;
+  color: #dc2626;
+  border: 1px solid #dc2626;
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logoutBtn:hover {
+  background: #dc2626;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+/* ===========================================
+   7. BIO & DIETARY PREFERENCES
+   =========================================== */
+.bioSection {
+  margin-bottom: 1rem;
+}
+
+.bio {
+  color: #374151;
+  line-height: 1.6;
+  margin: 0;
+  font-size: 0.875rem;
 }
 
 .dietarySection {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .sectionTitle {
-  font-size: 1rem;
+  font-size: 0.875rem;
   font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 1rem;
+  color: #113e21;
+  margin-bottom: 0.75rem;
 }
 
 .dietaryTags {
@@ -191,91 +280,74 @@
 }
 
 .dietaryTag {
-  background: var(--accent-alpha);
-  color: var(--accent);
+  background: rgba(17, 62, 33, 0.1);
+  color: #113e21;
   padding: 0.25rem 0.75rem;
-  border-radius: 20px;
+  border-radius: 12px;
   font-size: 0.75rem;
   font-weight: 500;
-  border: 1px solid var(--accent);
-}
-
-.actionButtons {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.editBtn {
-  background: var(--gradient-primary);
-  color: var(--badge-text);
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 12px;
-  font-weight: 600;
-  cursor: pointer;
+  border: 1px solid rgba(17, 62, 33, 0.2);
   transition: all 0.3s ease;
 }
 
-.editBtn:hover {
+.dietaryTag:hover {
+  background: rgba(17, 62, 33, 0.2);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px var(--accent-shadow);
-}
-
-.logoutBtn {
-  background: none;
-  color: var(--error);
-  border: 1px solid var(--error);
-  padding: 0.75rem 1.5rem;
-  border-radius: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.logoutBtn:hover {
-  background: var(--error);
-  color: white;
 }
 
 /* ===========================================
-   3. MAIN CONTENT
+   8. MAIN CONTENT AREA
    =========================================== */
 .mainContent {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(17, 62, 33, 0.1);
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 4px 20px var(--shadow-light);
-  min-height: 600px;
+  box-shadow: 0 8px 32px rgba(17, 62, 33, 0.1);
+  transition: all 0.3s ease;
 }
 
+.mainContent:hover {
+  box-shadow: 0 12px 40px rgba(17, 62, 33, 0.15);
+}
+
+/* ===========================================
+   9. TAB NAVIGATION
+   =========================================== */
 .tabNavigation {
   display: flex;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg-secondary);
+  background: rgba(17, 62, 33, 0.05);
+  border-bottom: 1px solid rgba(17, 62, 33, 0.1);
+  overflow-x: auto;
 }
 
 .tabBtn {
   flex: 1;
-  padding: 1.25rem 2rem;
-  background: none;
+  background: transparent;
   border: none;
-  color: var(--text-secondary);
+  padding: 1rem 1.5rem;
   font-weight: 600;
+  color: #6b7280;
   cursor: pointer;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   position: relative;
+  min-width: 140px;
+  font-size: 0.875rem;
 }
 
 .tabBtn:hover {
-  color: var(--accent);
-  background: var(--accent-alpha);
+  background: rgba(17, 62, 33, 0.1);
+  color: #113e21;
 }
 
 .tabBtn.active {
-  color: var(--accent);
-  background: var(--card-bg);
+  color: #113e21;
+  background: rgba(17, 62, 33, 0.1);
 }
 
 .tabBtn.active::after {
@@ -284,144 +356,437 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 3px;
-  background: var(--gradient-primary);
+  height: 2px;
+  background: #113e21;
 }
 
-.tabContent {
-  padding: 2rem;
-  min-height: 500px;
+.tabIcon {
+  font-size: 0.875rem;
+}
+
+.tabCount {
+  background: #113e21;
+  color: white;
+  padding: 0.125rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: 0.25rem;
 }
 
 /* ===========================================
-   4. TAB CONTENT
+   10. TAB CONTENT
    =========================================== */
-.overviewContent {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.welcomeSection {
-  text-align: center;
+.tabContent {
   padding: 2rem;
-  background: var(--gradient-secondary);
-  border-radius: 16px;
-  border: 1px solid var(--border);
+  min-height: 400px;
 }
 
-.welcomeTitle {
+.sectionHeader {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.sectionTitle {
   font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text-primary);
+  font-weight: 600;
+  color: #113e21;
   margin-bottom: 0.5rem;
 }
 
-.welcomeText {
-  color: var(--text-secondary);
-  font-size: 1rem;
+.sectionSubtitle {
+  color: #6b7280;
+  font-size: 0.875rem;
 }
 
-.quickStats {
+/* ===========================================
+   11. RECIPES GRID
+   =========================================== */
+.recipesGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 4rem;
+  margin-bottom: 3rem;
 }
 
-.quickStatCard {
-  padding: 1.5rem;
-  background: var(--bg-secondary);
-  border-radius: 12px;
-  border: 1px solid var(--border);
+.recipeCardWrapper {
+  position: relative;
   transition: all 0.3s ease;
 }
 
-.quickStatCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px var(--shadow);
+.recipeCardWrapper:hover {
+  transform: translateY(-4px);
 }
 
-.quickStatCard h4 {
-  color: var(--text-primary);
-  margin-bottom: 0.5rem;
+.recipeStats {
+  display: flex;
+  justify-content: space-around;
+  padding: 1rem;
+  background: rgba(17, 62, 33, 0.05);
+  border-radius: 0 0 12px 12px;
+  margin-top: -12px;
+}
+
+.recipeStat {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.favoriteCardWrapper {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.favoriteCardWrapper:hover {
+  transform: translateY(-4px);
+}
+
+.favoriteInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(17, 62, 33, 0.05);
+  border-radius: 0 0 12px 12px;
+  margin-top: -12px;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #f59e0b;
   font-weight: 600;
 }
 
-.quickStatCard p {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  line-height: 1.5;
+.starIcon {
+  color: #f59e0b;
 }
 
-.recipesGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
+.difficulty {
+  background: #113e21;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
-.emptyState {
-  text-align: center;
-  padding: 4rem 2rem;
-  background: var(--bg-secondary);
-  border-radius: 16px;
-  border: 1px solid var(--border);
+/* ===========================================
+   12. ACTIVITY TIMELINE
+   =========================================== */
+.activityTimeline {
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-.emptyIcon {
-  font-size: 4rem;
+.activityItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: rgba(17, 62, 33, 0.05);
+  border-radius: 12px;
   margin-bottom: 1rem;
-  opacity: 0.7;
+  transition: all 0.3s ease;
+  border-left: 4px solid #113e21;
+}
+
+.activityItem:hover {
+  background: rgba(17, 62, 33, 0.1);
+  transform: translateX(4px);
+}
+
+.activityIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #113e21;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.activityContent h4 {
+  color: #113e21;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.activityContent p {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* ===========================================
+   13. COMMUNITY SECTION
+   =========================================== */
+.communityContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.communitySection {
+  margin-bottom: 3rem;
+}
+
+.subsectionTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #113e21;
+  margin-bottom: 1.5rem;
+}
+
+.groupsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.groupCard {
+  background: rgba(17, 62, 33, 0.05);
+  border: 1px solid rgba(17, 62, 33, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.groupCard:hover {
+  background: rgba(17, 62, 33, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(17, 62, 33, 0.2);
+}
+
+.groupIcon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.groupCard h4 {
+  color: #113e21;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.groupCard p {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.achievementsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.achievementCard {
+  background: rgba(17, 62, 33, 0.05);
+  border: 1px solid rgba(17, 62, 33, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
   transition: all 0.3s ease;
 }
 
-/* Color for edit icon (recipes) */
-.emptyIcon:has(svg[data-icon="edit"]),
-.emptyIcon:first-of-type {
-  color: #3498db;
+.achievementCard:hover {
+  background: rgba(17, 62, 33, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(17, 62, 33, 0.2);
 }
 
-/* Color for heart icon (favorites) */
-.emptyIcon:has(svg[data-icon="heart"]),
-.emptyIcon:last-of-type {
-  color: #e74c3c;
+.achievementIcon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #113e21;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  font-size: 1.25rem;
 }
 
-.emptyState:hover .emptyIcon {
-  opacity: 1;
-  transform: scale(1.05);
+.achievementCard h4 {
+  color: #113e21;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.achievementCard p {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* Community Posts Grid */
+.communityPostsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.communityPostCard {
+  background: rgba(17, 62, 33, 0.05);
+  border: 1px solid rgba(17, 62, 33, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.communityPostCard:hover {
+  background: rgba(17, 62, 33, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(17, 62, 33, 0.2);
+}
+
+.postHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.postTitle {
+  color: #113e21;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+  margin-right: 1rem;
+}
+
+.postDate {
+  color: #6b7280;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.postContent {
+  color: #374151;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.postImages {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.postPreviewImage {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.moreImages {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.postStats {
+  display: flex;
+  gap: 1rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.postStats span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.createPostBtn {
+  background: #113e21;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.createPostBtn:hover {
+  background: #0f3a1e;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(17, 62, 33, 0.3);
+}
+
+/* ===========================================
+   14. EMPTY STATES
+   =========================================== */
+.emptyState {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #6b7280;
+}
+
+.emptyIcon {
+  font-size: 3rem;
+  color: #113e21;
+  margin-bottom: 1rem;
+  opacity: 0.5;
 }
 
 .emptyState h3 {
-  color: var(--text-primary);
+  color: #113e21;
+  font-size: 1.25rem;
+  font-weight: 600;
   margin-bottom: 0.5rem;
-  font-size: 1.5rem;
 }
 
 .emptyState p {
-  color: var(--text-secondary);
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
 }
 
 .createBtn,
 .exploreBtn {
-  background: var(--gradient-primary);
-  color: var(--badge-text);
+  background: #113e21;
+  color: white;
   border: none;
-  padding: 1rem 2rem;
-  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(17, 62, 33, 0.3);
 }
 
 .createBtn:hover,
 .exploreBtn:hover {
+  background: #1a5a33;
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px var(--accent-shadow);
+  box-shadow: 0 6px 20px rgba(17, 62, 33, 0.4);
 }
 
 /* ===========================================
-   5. EDIT MODAL
+   15. MODAL STYLES
    =========================================== */
 .modalOverlay {
   position: fixed;
@@ -434,89 +799,101 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  padding: 2rem;
+  backdrop-filter: blur(4px);
 }
 
 .modal {
-  background: var(--card-bg);
-  border-radius: 20px;
-  max-width: 600px;
-  width: 100%;
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 60px var(--shadow-heavy);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .modalHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2rem 2rem 1rem;
-  border-bottom: 1px solid var(--border);
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(17, 62, 33, 0.1);
 }
 
 .modalHeader h3 {
-  color: var(--text-primary);
-  font-size: 1.5rem;
-  font-weight: 700;
+  color: #113e21;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
 }
 
 .closeBtn {
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: var(--text-secondary);
+  color: #6b7280;
   cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 50%;
+  padding: 0.25rem;
+  border-radius: 4px;
   transition: all 0.3s ease;
 }
 
 .closeBtn:hover {
-  background: var(--bg-secondary);
-  color: var(--text-primary);
+  background: rgba(17, 62, 33, 0.1);
+  color: #113e21;
 }
 
 .editForm {
-  padding: 2rem;
+  padding: 1.5rem;
 }
 
 .formRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .inputGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .inputGroup label {
-  color: var(--text-primary);
+  display: block;
+  color: #113e21;
   font-weight: 600;
-  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
 }
 
 .input,
 .textarea {
-  padding: 0.875rem;
-  border: 1px solid var(--border);
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid rgba(17, 62, 33, 0.2);
   border-radius: 8px;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-size: 1rem;
+  font-size: 0.875rem;
   transition: all 0.3s ease;
+  background: white;
 }
 
 .input:focus,
 .textarea:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-alpha);
   outline: none;
+  border-color: #113e21;
+  box-shadow: 0 0 0 3px rgba(17, 62, 33, 0.1);
 }
 
 .textarea {
@@ -527,37 +904,42 @@
 .checkboxGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .checkboxLabel {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--text-primary);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
+  color: #374151;
   cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.checkboxLabel:hover {
+  background: rgba(17, 62, 33, 0.05);
 }
 
 .checkbox {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--accent);
+  accent-color: #113e21;
 }
 
 .modalActions {
   display: flex;
-  gap: 1rem;
   justify-content: flex-end;
+  gap: 1rem;
   margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+  border-top: 1px solid rgba(17, 62, 33, 0.1);
 }
 
 .cancelBtn {
-  background: none;
-  color: var(--text-secondary);
-  border: 1px solid var(--border);
+  background: transparent;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   font-weight: 600;
@@ -566,49 +948,345 @@
 }
 
 .cancelBtn:hover {
-  background: var(--bg-secondary);
-  color: var(--text-primary);
+  background: #f3f4f6;
+  color: #374151;
 }
 
 .saveBtn {
-  background: var(--gradient-primary);
-  color: var(--badge-text);
+  background: #113e21;
+  color: white;
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(17, 62, 33, 0.3);
 }
 
 .saveBtn:hover {
+  background: #1a5a33;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px var(--accent-shadow);
+  box-shadow: 0 4px 12px rgba(17, 62, 33, 0.4);
 }
 
 /* ===========================================
-   6. ANIMATIONS
+   16. DARK MODE STYLES
    =========================================== */
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.darkMode {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+}
+
+.darkMode .profileHeader,
+.darkMode .mainContent {
+  background: rgba(40, 40, 40, 0.95);
+  border-color: rgba(255, 189, 89, 0.2);
+  color: #ffffff;
+}
+
+.darkMode .userName,
+.darkMode .sectionTitle,
+.darkMode .subsectionTitle {
+  color: #ffbd59;
+}
+
+.darkMode .username,
+.darkMode .statNumber {
+  color: #ffbd59;
+}
+
+.darkMode .location,
+.darkMode .joinDate,
+.darkMode .statLabel,
+.darkMode .sectionSubtitle {
+  color: #a1a1aa;
+}
+
+.darkMode .bio {
+  color: #d1d5db;
+}
+
+.darkMode .avatar {
+  border-color: #ffbd59;
+  box-shadow: 0 8px 24px rgba(255, 189, 89, 0.3);
+}
+
+.darkMode .avatarUploadBtn {
+  background: linear-gradient(135deg, #ffbd59 0%, #f59e0b 100%);
+}
+
+.darkMode .avatarUploadBtn:hover {
+  background: linear-gradient(135deg, #f59e0b 0%, #ffbd59 100%);
+}
+
+.darkMode .editBtn,
+.darkMode .createBtn,
+.darkMode .exploreBtn,
+.darkMode .saveBtn {
+  background: #ffbd59;
+  color: #1a1a1a;
+}
+
+.darkMode .editBtn:hover,
+.darkMode .createBtn:hover,
+.darkMode .exploreBtn:hover,
+.darkMode .saveBtn:hover {
+  background: #f59e0b;
+}
+
+.darkMode .tabNavigation {
+  background: rgba(255, 189, 89, 0.1);
+  border-bottom-color: rgba(255, 189, 89, 0.2);
+}
+
+.darkMode .tabBtn {
+  color: #a1a1aa;
+}
+
+.darkMode .tabBtn:hover,
+.darkMode .tabBtn.active {
+  color: #ffbd59;
+  background: rgba(255, 189, 89, 0.1);
+}
+
+.darkMode .tabBtn.active::after {
+  background: #ffbd59;
+}
+
+.darkMode .tabCount {
+  background: #ffbd59;
+  color: #1a1a1a;
+}
+
+.darkMode .dietaryTag {
+  background: rgba(255, 189, 89, 0.1);
+  color: #ffbd59;
+  border-color: rgba(255, 189, 89, 0.3);
+}
+
+.darkMode .dietaryTag:hover {
+  background: rgba(255, 189, 89, 0.2);
+}
+
+.darkMode .recipeStats,
+.darkMode .favoriteInfo {
+  background: rgba(255, 189, 89, 0.1);
+}
+
+.darkMode .difficulty {
+  background: #ffbd59;
+  color: #1a1a1a;
+}
+
+.darkMode .activityItem {
+  background: rgba(255, 189, 89, 0.1);
+  border-left-color: #ffbd59;
+}
+
+.darkMode .activityItem:hover {
+  background: rgba(255, 189, 89, 0.15);
+}
+
+.darkMode .activityIcon,
+.darkMode .achievementIcon {
+  background: #ffbd59;
+  color: #1a1a1a;
+}
+
+.darkMode .activityContent h4,
+.darkMode .groupCard h4,
+.darkMode .achievementCard h4,
+.darkMode .emptyState h3 {
+  color: #ffbd59;
+}
+
+.darkMode .groupCard,
+.darkMode .achievementCard,
+.darkMode .communityPostCard {
+  background: rgba(255, 189, 89, 0.1);
+  border-color: rgba(255, 189, 89, 0.2);
+}
+
+.darkMode .groupCard:hover,
+.darkMode .achievementCard:hover,
+.darkMode .communityPostCard:hover {
+  background: rgba(255, 189, 89, 0.15);
+}
+
+.darkMode .postTitle {
+  color: #ffbd59;
+}
+
+.darkMode .postContent {
+  color: #d1d5db;
+}
+
+.darkMode .postDate,
+.darkMode .postStats {
+  color: #a1a1aa;
+}
+
+.darkMode .createPostBtn {
+  background: #ffbd59;
+  color: #1a1a1a;
+}
+
+.darkMode .createPostBtn:hover {
+  background: #f59e0b;
+}
+
+.darkMode .emptyIcon {
+  color: #ffbd59;
+}
+
+.darkMode .modal {
+  background: #2d2d2d;
+  color: #ffffff;
+}
+
+.darkMode .modalHeader {
+  border-bottom-color: rgba(255, 189, 89, 0.2);
+}
+
+.darkMode .modalHeader h3 {
+  color: #ffbd59;
+}
+
+.darkMode .closeBtn {
+  color: #a1a1aa;
+}
+
+.darkMode .closeBtn:hover {
+  background: rgba(255, 189, 89, 0.1);
+  color: #ffbd59;
+}
+
+.darkMode .inputGroup label {
+  color: #ffbd59;
+}
+
+.darkMode .input,
+.darkMode .textarea {
+  background: #1a1a1a;
+  border-color: rgba(255, 189, 89, 0.3);
+  color: #ffffff;
+}
+
+.darkMode .input:focus,
+.darkMode .textarea:focus {
+  border-color: #ffbd59;
+  box-shadow: 0 0 0 3px rgba(255, 189, 89, 0.2);
+}
+
+.darkMode .checkboxLabel {
+  color: #d1d5db;
+}
+
+.darkMode .checkboxLabel:hover {
+  background: rgba(255, 189, 89, 0.1);
+}
+
+.darkMode .checkbox {
+  accent-color: #ffbd59;
+}
+
+.darkMode .modalActions {
+  border-top-color: rgba(255, 189, 89, 0.2);
+}
+
+.darkMode .cancelBtn {
+  color: #a1a1aa;
+  border-color: #4b5563;
+}
+
+.darkMode .cancelBtn:hover {
+  background: #374151;
+  color: #d1d5db;
 }
 
 /* ===========================================
-   7. RESPONSIVE DESIGN
+   17. RESPONSIVE DESIGN
    =========================================== */
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   .profileContent {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    padding: 0 0.5rem;
   }
 
-  .sidebar {
-    position: static;
-  }
-
-  .userCard {
+  .profileHeader {
     padding: 1.5rem;
+  }
+
+  .userInfoSection {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .userDetails {
+    align-items: center;
+  }
+
+  .statsSection {
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .actionButtons {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .avatar {
+    width: 120px;
+    height: 120px;
+  }
+
+  .userName {
+    font-size: 1.5rem;
+  }
+
+  .tabNavigation {
+    overflow-x: auto;
+  }
+
+  .tabBtn {
+    min-width: 120px;
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .tabContent {
+    padding: 1rem;
+  }
+
+  .recipesGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+  .modal {
+    width: 95%;
+    margin: 1rem;
+  }
+
+  .groupsGrid,
+  .achievementsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .profileContainer {
+    padding: 1rem 0;
+  }
+
+  .profileHeader {
+    padding: 1rem;
   }
 
   .avatar {
@@ -616,80 +1294,32 @@
     height: 100px;
   }
 
-  .avatarUploadBtn {
-    width: 32px;
-    height: 32px;
-    font-size: 0.875rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .profileContainer {
-    padding: 1rem 0;
-  }
-
-  .tabNavigation {
-    flex-direction: column;
-  }
-
-  .tabBtn {
-    padding: 1rem;
-    text-align: left;
-  }
-
-  .tabContent {
-    padding: 1.5rem;
-  }
-
-  .recipesGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .statsSection {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .formRow {
-    grid-template-columns: 1fr;
-  }
-
-  .checkboxGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .modalActions {
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 480px) {
-  .userCard {
-    padding: 1rem;
-  }
-
-  .avatar {
-    width: 80px;
-    height: 80px;
-  }
-
-  .avatarUploadBtn {
-    width: 28px;
-    height: 28px;
-    font-size: 0.75rem;
-  }
-
   .userName {
     font-size: 1.25rem;
   }
 
-  .modal {
-    margin: 1rem;
-    max-height: calc(100vh - 2rem);
+  .statsSection {
+    gap: 1rem;
   }
 
-  .modalHeader,
-  .editForm {
-    padding: 1.5rem;
+  .actionButtons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .editBtn,
+  .logoutBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .tabBtn {
+    min-width: 100px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .tabCount {
+    display: none;
   }
 }

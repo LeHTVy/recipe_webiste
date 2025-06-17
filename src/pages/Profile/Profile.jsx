@@ -4,20 +4,23 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useFavorites } from '../../context/FavoritesContext';
 import { useNotification } from '../../context/NotificationContext';
+import { useTheme } from '../../context/ThemeContext';
 import RecipeCard from '../../components/RecipeCard/RecipeCard';
 import ProfileRecipeCard from '../../components/ProfileRecipeCard/ProfileRecipeCard';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
-import { FaCamera, FaEdit, FaHeart } from 'react-icons/fa';
+import { FaCamera, FaEdit, FaHeart, FaClock, FaUsers, FaTrophy, FaMapMarkerAlt, FaCalendarAlt, FaStar, FaEye, FaComment } from 'react-icons/fa';
 import styles from './Profile.module.css';
 
 const Profile = () => {
   const { user, updateProfile, logout } = useAuth();
   const { favorites } = useFavorites();
   const { showDeleteSuccess, showError } = useNotification();
+  const { isDarkMode } = useTheme();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('recipes');
   const [userRecipes, setUserRecipes] = useState([]);
+  const [userCommunityPosts, setUserCommunityPosts] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -27,6 +30,7 @@ const Profile = () => {
     lastName: user?.lastName || '',
     email: user?.email || '',
     bio: user?.bio || '',
+    location: user?.location || '',
     dietaryPreferences: user?.dietaryPreferences || []
   });
 
@@ -40,6 +44,11 @@ const Profile = () => {
     const savedRecipes = JSON.parse(localStorage.getItem('recipes') || '[]');
     const userCreatedRecipes = savedRecipes.filter(recipe => recipe.createdBy === user.id);
     setUserRecipes(userCreatedRecipes);
+
+    // Load user's community posts from localStorage
+    const savedCommunityPosts = JSON.parse(localStorage.getItem('tastemate_community_posts') || '[]');
+    const userCreatedPosts = savedCommunityPosts.filter(post => post.userId === user.id);
+    setUserCommunityPosts(userCreatedPosts);
   }, [user, navigate]);
 
   const handleEditSubmit = (e) => {
@@ -166,58 +175,56 @@ const Profile = () => {
   ];
 
   return (
-    <div className={styles.profileContainer}>
-      <div className="container">
-        <div className={styles.profileContent}>
-          {/* Left Sidebar - User Info */}
-          <div className={styles.sidebar}>
-            <div className={styles.userCard}>
-              <div className={styles.avatarSection}>
-                <div className={styles.avatarContainer}>
-                  <img 
-                    src={user.profilePicture} 
-                    alt={`${user.firstName} ${user.lastName}`}
-                    className={styles.avatar}
-                  />
-                  <button 
-                    className={styles.avatarUploadBtn}
-                    onClick={handleAvatarClick}
-                    disabled={isUploadingAvatar}
-                  >
-                    {isUploadingAvatar ? (
-                      <div className={styles.uploadSpinner}></div>
-                    ) : (
-                      <FaCamera />
-                    )}
-                  </button>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleAvatarChange}
-                    className={styles.hiddenFileInput}
-                  />
-                </div>
-                <div className={styles.userBasicInfo}>
-                  <h2 className={styles.userName}>
-                    {user.firstName} {user.lastName}
-                  </h2>
-                  <p className={styles.username}>@{user.username}</p>
-                  <p className={styles.joinDate}>
-                    Joined {new Date(user.createdAt).toLocaleDateString('en-US', {
-                      month: 'long',
-                      year: 'numeric'
-                    })}
+    <div className={`${styles.profileContainer} ${isDarkMode ? styles.darkMode : ''}`}>
+      <div className={styles.profileContent}>
+        {/* Instagram-like Header - User Info at Top */}
+        <div className={styles.profileHeader}>
+          <div className={styles.userInfoSection}>
+            <div className={styles.avatarContainer}>
+              <img 
+                src={user.profilePicture} 
+                alt={`${user.firstName} ${user.lastName}`}
+                className={styles.avatar}
+              />
+              <button 
+                className={styles.avatarUploadBtn}
+                onClick={handleAvatarClick}
+                disabled={isUploadingAvatar}
+              >
+                {isUploadingAvatar ? (
+                  <div className={styles.uploadSpinner}></div>
+                ) : (
+                  <FaCamera />
+                )}
+              </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarChange}
+                className={styles.hiddenFileInput}
+              />
+            </div>
+            
+            <div className={styles.userDetails}>
+              <div className={styles.userBasicInfo}>
+                <h1 className={styles.userName}>
+                  {user.firstName} {user.lastName}
+                </h1>
+                <p className={styles.username}>@{user.username}</p>
+                {user.location && (
+                  <p className={styles.location}>
+                    <FaMapMarkerAlt /> {user.location}
                   </p>
-                </div>
+                )}
+                <p className={styles.joinDate}>
+                  <FaCalendarAlt /> Joined {new Date(user.createdAt).toLocaleDateString('en-US', {
+                    month: 'long',
+                    year: 'numeric'
+                  })}
+                </p>
               </div>
-
-              {user.bio && (
-                <div className={styles.bioSection}>
-                  <p className={styles.bio}>{user.bio}</p>
-                </div>
-              )}
-
+              
               <div className={styles.statsSection}>
                 <div className={styles.stat}>
                   <span className={styles.statNumber}>{userRecipes.length}</span>
@@ -228,24 +235,15 @@ const Profile = () => {
                   <span className={styles.statLabel}>Favorites</span>
                 </div>
                 <div className={styles.stat}>
-                  <span className={styles.statNumber}>{user.totalRatings || 0}</span>
-                  <span className={styles.statLabel}>Reviews</span>
+                  <span className={styles.statNumber}>{user.followers || 0}</span>
+                  <span className={styles.statLabel}>Followers</span>
+                </div>
+                <div className={styles.stat}>
+                  <span className={styles.statNumber}>{user.following || 0}</span>
+                  <span className={styles.statLabel}>Following</span>
                 </div>
               </div>
-
-              {user.dietaryPreferences?.length > 0 && (
-                <div className={styles.dietarySection}>
-                  <h4 className={styles.sectionTitle}>Dietary Preferences</h4>
-                  <div className={styles.dietaryTags}>
-                    {user.dietaryPreferences.map(pref => (
-                      <span key={pref} className={styles.dietaryTag}>
-                        {pref}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
+              
               <div className={styles.actionButtons}>
                 <button 
                   onClick={() => setIsEditing(true)}
@@ -262,68 +260,93 @@ const Profile = () => {
               </div>
             </div>
           </div>
-
-          {/* Right Content - Tabs and Content */}
-          <div className={styles.mainContent}>
-            <div className={styles.tabNavigation}>
-              <button 
-                className={`${styles.tabBtn} ${activeTab === 'overview' ? styles.active : ''}`}
-                onClick={() => setActiveTab('overview')}
-              >
-                Overview
-              </button>
-              <button 
-                className={`${styles.tabBtn} ${activeTab === 'recipes' ? styles.active : ''}`}
-                onClick={() => setActiveTab('recipes')}
-              >
-                My Recipes ({userRecipes.length})
-              </button>
-              <button 
-                className={`${styles.tabBtn} ${activeTab === 'favorites' ? styles.active : ''}`}
-                onClick={() => setActiveTab('favorites')}
-              >
-                Favorites ({favorites.length})
-              </button>
+          
+          {user.bio && (
+            <div className={styles.bioSection}>
+              <p className={styles.bio}>{user.bio}</p>
             </div>
+          )}
+          
+          {user.dietaryPreferences?.length > 0 && (
+            <div className={styles.dietarySection}>
+              <h4 className={styles.sectionTitle}>Dietary Preferences</h4>
+              <div className={styles.dietaryTags}>
+                {user.dietaryPreferences.map(pref => (
+                  <span key={pref} className={styles.dietaryTag}>
+                    {pref}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Tabs and Content Below */}
+        <div className={styles.mainContent}>
+          <div className={styles.tabNavigation}>
+            <button 
+              className={`${styles.tabBtn} ${activeTab === 'recipes' ? styles.active : ''}`}
+              onClick={() => setActiveTab('recipes')}
+            >
+              <FaEdit className={styles.tabIcon} />
+              My Recipes
+              <span className={styles.tabCount}>({userRecipes.length})</span>
+            </button>
+            <button 
+              className={`${styles.tabBtn} ${activeTab === 'favorites' ? styles.active : ''}`}
+              onClick={() => setActiveTab('favorites')}
+            >
+              <FaHeart className={styles.tabIcon} />
+              Favourites
+              <span className={styles.tabCount}>({favorites.length})</span>
+            </button>
+            <button 
+              className={`${styles.tabBtn} ${activeTab === 'activity' ? styles.active : ''}`}
+              onClick={() => setActiveTab('activity')}
+            >
+              <FaClock className={styles.tabIcon} />
+              Recent Activity
+            </button>
+            <button 
+              className={`${styles.tabBtn} ${activeTab === 'community' ? styles.active : ''}`}
+              onClick={() => setActiveTab('community')}
+            >
+              <FaUsers className={styles.tabIcon} />
+              Community
+            </button>
+          </div>
 
             <div className={styles.tabContent}>
-              {activeTab === 'overview' && (
-                <div className={styles.overviewContent}>
-                  <div className={styles.welcomeSection}>
-                    <h3 className={styles.welcomeTitle}>
-                      Welcome back, {user.firstName}! 👋
-                    </h3>
-                    <p className={styles.welcomeText}>
-                      Ready to share some delicious recipes with the TasteMate community?
-                    </p>
-                  </div>
-
-                  <div className={styles.quickStats}>
-                    <div className={styles.quickStatCard}>
-                      <h4>Recent Activity</h4>
-                      <p>You've created {userRecipes.length} recipes and saved {favorites.length} favorites</p>
-                    </div>
-                    <div className={styles.quickStatCard}>
-                      <h4>Community Impact</h4>
-                      <p>Your recipes have been viewed and loved by the community</p>
-                    </div>
-                  </div>
-                </div>
-              )}
 
               {activeTab === 'recipes' && (
                 <div className={styles.recipesContent}>
+                  <div className={styles.sectionHeader}>
+                    <h2 className={styles.sectionTitle}>My Recipe Collection</h2>
+                    <p className={styles.sectionSubtitle}>Manage and share your culinary creations</p>
+                  </div>
                   {userRecipes.length > 0 ? (
                     <div className={styles.recipesGrid}>
                       {userRecipes.map(recipe => (
-                        <ProfileRecipeCard 
-                          key={recipe.id} 
-                          recipe={recipe}
-                          onEdit={handleRecipeEdit}
-                          onDelete={handleRecipeDelete}
-                          onPublish={handleRecipePublish}
-                          onView={handleRecipeView}
-                        />
+                        <div key={recipe.id} className={styles.recipeCardWrapper}>
+                          <ProfileRecipeCard 
+                            recipe={recipe}
+                            onEdit={handleRecipeEdit}
+                            onDelete={handleRecipeDelete}
+                            onPublish={handleRecipePublish}
+                            onView={handleRecipeView}
+                          />
+                          <div className={styles.recipeStats}>
+                            <span className={styles.recipeStat}>
+                              <FaEye /> {recipe.views || 0}
+                            </span>
+                            <span className={styles.recipeStat}>
+                              <FaHeart /> {recipe.likes || 0}
+                            </span>
+                            <span className={styles.recipeStat}>
+                              <FaComment /> {recipe.comments || 0}
+                            </span>
+                          </div>
+                        </div>
                       ))}
                     </div>
                   ) : (
@@ -344,10 +367,25 @@ const Profile = () => {
 
               {activeTab === 'favorites' && (
                 <div className={styles.favoritesContent}>
+                  <div className={styles.sectionHeader}>
+                    <h2 className={styles.sectionTitle}>Favourite Recipes</h2>
+                    <p className={styles.sectionSubtitle}>Your saved recipes from the community</p>
+                  </div>
                   {favorites.length > 0 ? (
                     <div className={styles.recipesGrid}>
                       {favorites.map(recipe => (
-                        <RecipeCard key={recipe.id} recipe={recipe} />
+                        <div key={recipe.id} className={styles.favoriteCardWrapper}>
+                          <RecipeCard recipe={recipe} />
+                          <div className={styles.favoriteInfo}>
+                            <div className={styles.rating}>
+                              <FaStar className={styles.starIcon} />
+                              <span>{recipe.rating || 4.5}</span>
+                            </div>
+                            <span className={styles.difficulty}>
+                              {recipe.difficulty || 'Medium'}
+                            </span>
+                          </div>
+                        </div>
                       ))}
                     </div>
                   ) : (
@@ -365,10 +403,166 @@ const Profile = () => {
                   )}
                 </div>
               )}
+
+              {activeTab === 'activity' && (
+                <div className={styles.activityContent}>
+                  <div className={styles.sectionHeader}>
+                    <h2 className={styles.sectionTitle}>Recent Activity</h2>
+                    <p className={styles.sectionSubtitle}>Your latest interactions and updates</p>
+                  </div>
+                  <div className={styles.activityTimeline}>
+                    <div className={styles.activityItem}>
+                      <div className={styles.activityIcon}>
+                        <FaEdit />
+                      </div>
+                      <div className={styles.activityContent}>
+                        <h4>Created a new recipe</h4>
+                        <p>"Delicious Pasta Carbonara" - 2 days ago</p>
+                      </div>
+                    </div>
+                    <div className={styles.activityItem}>
+                      <div className={styles.activityIcon}>
+                        <FaHeart />
+                      </div>
+                      <div className={styles.activityContent}>
+                        <h4>Liked a recipe</h4>
+                        <p>"Chocolate Chip Cookies" by Sarah Johnson - 3 days ago</p>
+                      </div>
+                    </div>
+                    <div className={styles.activityItem}>
+                      <div className={styles.activityIcon}>
+                        <FaComment />
+                      </div>
+                      <div className={styles.activityContent}>
+                        <h4>Commented on a recipe</h4>
+                        <p>"Amazing flavors!" on "Thai Green Curry" - 5 days ago</p>
+                      </div>
+                    </div>
+                    <div className={styles.activityItem}>
+                      <div className={styles.activityIcon}>
+                        <FaUsers />
+                      </div>
+                      <div className={styles.activityContent}>
+                        <h4>Joined TasteMate community</h4>
+                        <p>Welcome to our cooking community! - 1 week ago</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'community' && (
+                <div className={styles.communityContent}>
+                  <div className={styles.sectionHeader}>
+                    <h2 className={styles.sectionTitle}>Community & Achievements</h2>
+                    <p className={styles.sectionSubtitle}>Your groups and accomplishments</p>
+                  </div>
+                  
+                  <div className={styles.communitySection}>
+                    <h3 className={styles.subsectionTitle}>Groups Joined</h3>
+                    <div className={styles.groupsGrid}>
+                      <div className={styles.groupCard}>
+                        <div className={styles.groupIcon}>🍝</div>
+                        <h4>Italian Cuisine Lovers</h4>
+                        <p>1.2k members</p>
+                      </div>
+                      <div className={styles.groupCard}>
+                        <div className={styles.groupIcon}>🥗</div>
+                        <h4>Healthy Eating</h4>
+                        <p>856 members</p>
+                      </div>
+                      <div className={styles.groupCard}>
+                        <div className={styles.groupIcon}>🍰</div>
+                        <h4>Baking Masters</h4>
+                        <p>2.1k members</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={styles.communitySection}>
+                    <h3 className={styles.subsectionTitle}>Achievements</h3>
+                    <div className={styles.achievementsGrid}>
+                      <div className={styles.achievementCard}>
+                        <div className={styles.achievementIcon}>
+                          <FaTrophy />
+                        </div>
+                        <h4>First Recipe</h4>
+                        <p>Created your first recipe</p>
+                      </div>
+                      <div className={styles.achievementCard}>
+                        <div className={styles.achievementIcon}>
+                          <FaHeart />
+                        </div>
+                        <h4>Recipe Lover</h4>
+                        <p>Saved 10 favorite recipes</p>
+                      </div>
+                      <div className={styles.achievementCard}>
+                        <div className={styles.achievementIcon}>
+                          <FaUsers />
+                        </div>
+                        <h4>Community Member</h4>
+                        <p>Active for 30 days</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={styles.communitySection}>
+                    <h3 className={styles.subsectionTitle}>My Community Posts</h3>
+                    {userCommunityPosts.length > 0 ? (
+                      <div className={styles.communityPostsGrid}>
+                        {userCommunityPosts.map((post) => (
+                          <div key={post.id} className={styles.communityPostCard}>
+                            <div className={styles.postHeader}>
+                              <h4 className={styles.postTitle}>{post.title || 'Untitled Post'}</h4>
+                              <span className={styles.postDate}>
+                                {new Date(post.createdAt).toLocaleDateString()}
+                              </span>
+                            </div>
+                            <p className={styles.postContent}>
+                              {post.content.length > 100 
+                                ? `${post.content.substring(0, 100)}...` 
+                                : post.content
+                              }
+                            </p>
+                            {post.images && post.images.length > 0 && (
+                              <div className={styles.postImages}>
+                                <img 
+                                  src={post.images[0]} 
+                                  alt="Post preview" 
+                                  className={styles.postPreviewImage}
+                                />
+                                {post.images.length > 1 && (
+                                  <span className={styles.moreImages}>
+                                    +{post.images.length - 1} more
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                            <div className={styles.postStats}>
+                              <span><FaHeart /> {post.likes || 0}</span>
+                              <span><FaComment /> {post.comments || 0}</span>
+                              <span><FaEye /> {post.views || 0}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className={styles.emptyState}>
+                        <p>No community posts yet. Share your culinary journey with the community!</p>
+                        <button 
+                          className={styles.createPostBtn}
+                          onClick={() => navigate('/create-post')}
+                        >
+                          Create Your First Post
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
-      </div>
 
       {/* Edit Profile Modal */}
       {isEditing && (
@@ -416,6 +610,18 @@ const Profile = () => {
                   value={editForm.email}
                   onChange={handleInputChange}
                   className={styles.input}
+                />
+              </div>
+
+              <div className={styles.inputGroup}>
+                <label>Location</label>
+                <input
+                  type="text"
+                  name="location"
+                  value={editForm.location}
+                  onChange={handleInputChange}
+                  className={styles.input}
+                  placeholder="City, Country"
                 />
               </div>
 

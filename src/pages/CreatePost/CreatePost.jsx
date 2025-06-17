@@ -9,9 +9,6 @@ import {
   FaSmile,
   FaTimes,
   FaArrowLeft,
-  FaGlobeAmericas,
-  FaUsers,
-  FaLock,
   FaMapMarkerAlt,
   FaTag
 } from 'react-icons/fa';
@@ -25,6 +22,7 @@ const CreatePost = () => {
   const [searchParams] = useSearchParams();
   
   const [postData, setPostData] = useState({
+    title: '',
     content: '',
     images: [],
     video: null,
@@ -55,24 +53,32 @@ const CreatePost = () => {
   
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-    const imageUrls = files.map(file => {
-      return URL.createObjectURL(file);
-    });
     
-    setPostData(prev => ({
-      ...prev,
-      images: [...prev.images, ...imageUrls]
-    }));
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64Url = event.target.result;
+        setPostData(prev => ({
+          ...prev,
+          images: [...prev.images, base64Url]
+        }));
+      };
+      reader.readAsDataURL(file);
+    });
   };
   
   const handleVideoUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const videoUrl = URL.createObjectURL(file);
-      setPostData(prev => ({
-        ...prev,
-        video: videoUrl
-      }));
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64Url = event.target.result;
+        setPostData(prev => ({
+          ...prev,
+          video: base64Url
+        }));
+      };
+      reader.readAsDataURL(file);
     }
   };
   
@@ -176,7 +182,7 @@ const CreatePost = () => {
   ];
   
   if (!isAuthenticated) {
-    return null; // Will redirect in useEffect
+    return null; 
   }
   
   return (
@@ -215,9 +221,9 @@ const CreatePost = () => {
                 onChange={(e) => setPostData(prev => ({ ...prev, privacy: e.target.value }))}
                 className={styles.privacySelect}
               >
-                <option value="public"><FaGlobeAmericas /> Public</option>
-                <option value="friends"><FaUsers /> Friends</option>
-                <option value="private"><FaLock /> Only me</option>
+                <option value="public">🌍 Public</option>
+                <option value="friends">👥 Friends</option>
+                <option value="private">🔒 Only me</option>
               </select>
             </div>
           </div>
@@ -253,6 +259,15 @@ const CreatePost = () => {
         
         {/* Content Area */}
         <div className={styles.contentArea}>
+          {/* Title Input */}
+          <input
+            type="text"
+            className={styles.titleInput}
+            placeholder="Post title"
+            value={postData.title}
+            onChange={(e) => setPostData(prev => ({ ...prev, title: e.target.value }))}
+          />
+          
           {/* Text Content */}
           <textarea
             className={styles.contentTextarea}
