@@ -451,6 +451,18 @@
   gap: 0.5rem;
 }
 
+.mealSlot:hover {
+  border-color: var(--accent);
+  background: var(--accent-alpha);
+}
+
+.mealSlot[data-drag-over="true"] {
+  border-color: var(--accent);
+  background: var(--accent-alpha);
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
 .mealSlot:last-child {
   border-right: none;
 }
@@ -462,6 +474,35 @@
   border: 1px solid var(--border-color);
   position: relative;
   transition: all 0.3s ease;
+}
+
+.mealCard.draggableMeal {
+  cursor: move;
+  user-select: none;
+}
+
+.mealCard.draggableMeal:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.mealCard .dragHandle {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  cursor: grab;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  margin-right: 0.5rem;
+}
+
+.mealCard .dragHandle:hover {
+  color: var(--accent);
+  background: var(--bg-primary);
+}
+
+.mealCard .dragHandle:active {
+  cursor: grabbing;
 }
 
 .mealCard:hover {

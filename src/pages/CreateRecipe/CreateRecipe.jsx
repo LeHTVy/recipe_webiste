@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 import { useAuth } from "../../context/AuthContext";
 import { useNotification } from "../../context/NotificationContext";
+import useDragAndDrop from "../../hooks/useDragAndDrop";
 import {
   FaPlus,
   FaTimes,
@@ -54,6 +55,17 @@ const CreateRecipe = () => {
   const [currentTag, setCurrentTag] = useState("");
   const [imagePreview, setImagePreview] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Drag and drop for ingredients
+  const { getDragProps: getIngredientDragProps } = useDragAndDrop(
+    formData.ingredients,
+    (reorderedIngredients) => {
+      setFormData(prev => ({
+        ...prev,
+        ingredients: reorderedIngredients
+      }));
+    }
+  );
 
   const foodTypes = [
     "Breakfast",
@@ -676,7 +688,12 @@ const CreateRecipe = () => {
               <h2 className={styles.sectionTitle}>Ingredients</h2>
 
               {formData.ingredients.map((ingredient, index) => (
-                <div key={index} className={styles.ingredientRow}>
+                <div 
+                  key={index} 
+                  className={`${styles.ingredientRow} ${styles.draggable}`}
+                  {...getIngredientDragProps(index)}
+                >
+                  <div className={styles.dragHandle}>⋮⋮</div>
                   <input
                     type="text"
                     placeholder="Category (e.g., Sauce, Broth, Spices)"

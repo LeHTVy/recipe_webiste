@@ -535,10 +535,52 @@
 /* Ingredient Styles */
 .ingredientRow {
   display: grid;
-  grid-template-columns: 1fr 2fr auto;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
+  grid-template-columns: auto 1fr 1fr 2fr auto;
+  gap: 1rem;
   align-items: center;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: move;
+}
+
+.ingredientRow.draggable {
+  user-select: none;
+}
+
+.ingredientRow[data-dragging="true"] {
+  opacity: 0.5;
+  transform: rotate(5deg);
+  z-index: 1000;
+}
+
+.ingredientRow[data-drag-over="true"] {
+  border-color: var(--accent);
+  background: var(--accent-alpha);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dragHandle {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  cursor: grab;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.dragHandle:hover {
+  color: var(--accent);
+  background: var(--bg-secondary);
+}
+
+.dragHandle:active {
+  cursor: grabbing;
 }
 
 .ingredientInput {

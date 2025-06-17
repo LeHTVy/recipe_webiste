@@ -33,6 +33,7 @@ const MealPlanner = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [filteredRecipes, setFilteredRecipes] = useState(mockRecipes);
   const [shoppingList, setShoppingList] = useState([]);
+  const [draggedMeal, setDraggedMeal] = useState(null);
   
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const mealTypes = ['breakfast', 'lunch', 'dinner', 'snacks'];
@@ -150,6 +151,55 @@ const MealPlanner = () => {
     setShowRecipeModal(false);
     setSelectedMealSlot(null);
     showNotification('Meal added to your plan!', 'success');
+  };
+  
+  // Drag and drop handlers for meals
+  const handleMealDragStart = (e, meal, sourceDate, sourceMealType) => {
+    setDraggedMeal({ meal, sourceDate, sourceMealType });
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleMealDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleMealDrop = (e, targetDate, targetMealType) => {
+    e.preventDefault();
+    
+    if (!draggedMeal) return;
+    
+    const { meal, sourceDate, sourceMealType } = draggedMeal;
+    const sourceDateKey = sourceDate.toISOString().split('T')[0];
+    const targetDateKey = targetDate.toISOString().split('T')[0];
+    
+    // Don't do anything if dropped in the same slot
+    if (sourceDateKey === targetDateKey && sourceMealType === targetMealType) {
+      setDraggedMeal(null);
+      return;
+    }
+    
+    const newMealPlan = { ...mealPlan };
+    
+    // Remove from source
+    if (newMealPlan[sourceDateKey] && newMealPlan[sourceDateKey][sourceMealType]) {
+      newMealPlan[sourceDateKey][sourceMealType] = newMealPlan[sourceDateKey][sourceMealType].filter(
+        m => m.id !== meal.id
+      );
+    }
+    
+    // Add to target
+    if (!newMealPlan[targetDateKey]) {
+      newMealPlan[targetDateKey] = {};
+    }
+    if (!newMealPlan[targetDateKey][targetMealType]) {
+      newMealPlan[targetDateKey][targetMealType] = [];
+    }
+    newMealPlan[targetDateKey][targetMealType].push(meal);
+    
+    saveMealPlan(newMealPlan);
+    setDraggedMeal(null);
+    showNotification(`${meal.title} moved to ${targetMealType}!`, 'success');
   };
   
   // Remove meal from plan
@@ -376,9 +426,20 @@ const MealPlanner = () => {
                     const meals = mealPlan[dateKey]?.[mealType] || [];
                     
                     return (
-                      <div key={`${dateKey}-${mealType}`} className={styles.mealSlot}>
+                      <div 
+                        key={`${dateKey}-${mealType}`} 
+                        className={styles.mealSlot}
+                        onDragOver={handleMealDragOver}
+                        onDrop={(e) => handleMealDrop(e, date, mealType)}
+                      >
                         {meals.map(meal => (
-                          <div key={meal.id} className={styles.mealCard}>
+                          <div 
+                            key={meal.id} 
+                            className={`${styles.mealCard} ${styles.draggableMeal}`}
+                            draggable
+                            onDragStart={(e) => handleMealDragStart(e, meal, date, mealType)}
+                          >
+                            <div className={styles.dragHandle}>⋮⋮</div>
                             <img src={meal.image} alt={meal.title} className={styles.mealImage} />
                             <div className={styles.mealInfo}>
                               <h4 className={styles.mealTitle}>{meal.title}</h4>

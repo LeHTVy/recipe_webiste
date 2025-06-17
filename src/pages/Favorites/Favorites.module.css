@@ -239,7 +239,8 @@
   border-color: #4b5563;
 }
 
-.viewBtn {
+.viewBtn,
+.dragBtn {
   padding: 0.75rem;
   background: transparent;
   border: none;
@@ -252,19 +253,29 @@
 }
 
 .viewBtn:hover,
-.viewBtn.active {
+.viewBtn.active,
+.dragBtn:hover,
+.dragBtn.active {
   background: #113e21;
   color: white;
 }
 
-.darkMode .viewBtn {
+.darkMode .viewBtn,
+.darkMode .dragBtn {
   color: #9ca3af;
 }
 
 .darkMode .viewBtn:hover,
-.darkMode .viewBtn.active {
+.darkMode .viewBtn.active,
+.darkMode .dragBtn:hover,
+.darkMode .dragBtn.active {
   background: #ffbd59;
   color: white;
+}
+
+.dragBtn {
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 
 /* Filters Panel */
@@ -392,6 +403,75 @@
 
 .recipeWrapper:hover {
   transform: translateY(-4px);
+}
+
+.recipeWrapper.draggable {
+  cursor: move;
+  user-select: none;
+}
+
+.recipeWrapper[data-dragging="true"] {
+  opacity: 0.5;
+  transform: rotate(2deg) scale(0.95);
+  z-index: 1000;
+}
+
+.recipeWrapper[data-drag-over="true"] {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.dragMode .recipeWrapper {
+  border: 2px dashed transparent;
+  border-radius: 12px;
+  padding: 0.5rem;
+}
+
+.dragMode .recipeWrapper[data-drag-over="true"] {
+  border-color: #113e21;
+  background: rgba(17, 62, 33, 0.1);
+}
+
+.darkMode .dragMode .recipeWrapper[data-drag-over="true"] {
+  border-color: #ffbd59;
+  background: rgba(255, 189, 89, 0.1);
+}
+
+.dragHandle {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  background: white;
+  color: #6b7280;
+  padding: 0.5rem;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: grab;
+  z-index: 10;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dragHandle:hover {
+  color: #113e21;
+  background: #f3f4f6;
+  transform: scale(1.1);
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}
+
+.darkMode .dragHandle {
+  background: #374151;
+  color: #9ca3af;
+  border-color: #4b5563;
+}
+
+.darkMode .dragHandle:hover {
+  color: #ffbd59;
+  background: #4b5563;
 }
 
 .recipeWrapper:hover .removeBtn {

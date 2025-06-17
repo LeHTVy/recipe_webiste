@@ -7,6 +7,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useNotification } from '../../context/NotificationContext';
 import { useModal } from '../../App';
 import RecipeCard from '../../components/RecipeCard/RecipeCard';
+import useDragAndDrop from '../../hooks/useDragAndDrop';
 import { FaHeart, FaArrowLeft, FaFilter, FaTh, FaList, FaSearch, FaTrash } from 'react-icons/fa';
 import styles from './Favorites.module.css';
 
@@ -22,6 +23,7 @@ const Favorites = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
   const [showFilters, setShowFilters] = useState(false);
+  const [isDragMode, setIsDragMode] = useState(false);
   
   // Get unique categories from favorites
   const categories = useMemo(() => {
@@ -39,6 +41,21 @@ const Favorites = () => {
       return matchesCategory && matchesSearch;
     });
   }, [favorites, selectedCategory, searchTerm]);
+
+  // Drag and drop for favorites reordering
+  const { getDragProps: getFavoriteDragProps } = useDragAndDrop(
+    filteredFavorites,
+    (reorderedFavorites) => {
+      // Update the favorites order in localStorage
+      const allFavorites = JSON.parse(localStorage.getItem('tastemate_favorites') || '[]');
+      const updatedFavorites = allFavorites.map(fav => {
+        const reorderedIndex = reorderedFavorites.findIndex(rf => rf.id === fav.id);
+        return reorderedIndex !== -1 ? { ...fav, order: reorderedIndex } : fav;
+      });
+      localStorage.setItem('tastemate_favorites', JSON.stringify(updatedFavorites));
+      window.dispatchEvent(new Event('favoritesUpdated'));
+    }
+  );
 
   if (!isAuthenticated) {
     return (
@@ -142,6 +159,13 @@ const Favorites = () => {
                 >
                   <FaList />
                 </button>
+                <button
+                  className={`${styles.dragBtn} ${isDragMode ? styles.active : ''}`}
+                  onClick={() => setIsDragMode(!isDragMode)}
+                  title="Drag to reorder"
+                >
+                  ⋮⋮
+                </button>
               </div>
             </div>
             
@@ -201,9 +225,14 @@ const Favorites = () => {
             </button>
           </div>
         ) : (
-          <div className={`${styles.favoritesContainer} ${styles[viewMode]}`}>
-            {filteredFavorites.map(recipe => (
-              <div key={recipe.id} className={styles.recipeWrapper}>
+          <div className={`${styles.favoritesContainer} ${styles[viewMode]} ${isDragMode ? styles.dragMode : ''}`}>
+            {filteredFavorites.map((recipe, index) => (
+              <div 
+                key={recipe.id} 
+                className={`${styles.recipeWrapper} ${isDragMode ? styles.draggable : ''}`}
+                {...(isDragMode ? getFavoriteDragProps(index) : {})}
+              >
+                {isDragMode && <div className={styles.dragHandle}>⋮⋮</div>}
                 <RecipeCard recipe={recipe} />
                 <button 
                   className={styles.removeBtn}
