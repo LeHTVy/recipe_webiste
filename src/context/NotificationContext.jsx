@@ -1,5 +1,17 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import Notification, { createNotification } from '../components/Notification/Notification';
+import NotificationModal from '../components/NotificationModal/NotificationModal';
+
+// Helper function to create notification objects
+const createNotification = (type, message, title, options = {}) => {
+  return {
+    id: Date.now() + Math.random(),
+    type,
+    message,
+    title,
+    isVisible: true,
+    ...options
+  };
+};
 
 const NotificationContext = createContext();
 
@@ -35,44 +47,44 @@ export const NotificationProvider = ({ children }) => {
   }, []);
 
   // Convenience methods for common notification types
-  const showSuccess = useCallback((message, options = {}) => {
-    return addNotification(createNotification.success(message, options));
+  const showSuccess = useCallback((message, title, options = {}) => {
+    return addNotification(createNotification('success', message, title, options));
   }, [addNotification]);
 
-  const showError = useCallback((message, options = {}) => {
-    return addNotification(createNotification.error(message, options));
+  const showError = useCallback((message, title, options = {}) => {
+    return addNotification(createNotification('error', message, title, options));
   }, [addNotification]);
 
-  const showWarning = useCallback((message, options = {}) => {
-    return addNotification(createNotification.warning(message, options));
+  const showWarning = useCallback((message, title, options = {}) => {
+    return addNotification(createNotification('warning', message, title, options));
   }, [addNotification]);
 
-  const showInfo = useCallback((message, options = {}) => {
-    return addNotification(createNotification.info(message, options));
+  const showInfo = useCallback((message, title, options = {}) => {
+    return addNotification(createNotification('info', message, title, options));
   }, [addNotification]);
 
   const showFavoriteAdded = useCallback((recipeName, options = {}) => {
-    return addNotification(createNotification.addedToFavorites(recipeName, options));
+    return addNotification(createNotification('success', `${recipeName} added to favorites!`, 'Added to Favorites', options));
   }, [addNotification]);
 
   const showSignupSuccess = useCallback((username, options = {}) => {
-    return addNotification(createNotification.signupSuccess(username, options));
+    return addNotification(createNotification('success', `Welcome ${username}! Your account has been created successfully.`, 'Welcome!', options));
   }, [addNotification]);
 
   const showDeleteSuccess = useCallback((itemName, options = {}) => {
-    return addNotification(createNotification.deleteSuccess(itemName, options));
+    return addNotification(createNotification('success', `${itemName} has been deleted successfully.`, 'Deleted', options));
   }, [addNotification]);
 
   const showUpdateSuccess = useCallback((itemName, options = {}) => {
-    return addNotification(createNotification.updateSuccess(itemName, options));
+    return addNotification(createNotification('success', `${itemName} has been updated successfully.`, 'Updated', options));
   }, [addNotification]);
 
   const showShareSuccess = useCallback((options = {}) => {
-    return addNotification(createNotification.shareSuccess(options));
+    return addNotification(createNotification('share', 'Recipe link copied to clipboard!', 'Shared!', options));
   }, [addNotification]);
 
   const showBookmarkSuccess = useCallback((recipeName, options = {}) => {
-    return addNotification(createNotification.bookmarkSuccess(recipeName, options));
+    return addNotification(createNotification('success', `${recipeName} bookmarked successfully!`, 'Bookmarked', options));
   }, [addNotification]);
 
   // Custom notification with full control
@@ -81,17 +93,17 @@ export const NotificationProvider = ({ children }) => {
   }, [addNotification]);
 
   // General showNotification function that accepts message and type
-  const showNotification = useCallback((message, type = 'info', options = {}) => {
+  const showNotification = useCallback((message, type = 'info', title = '', options = {}) => {
     switch (type) {
       case 'success':
-        return showSuccess(message, options);
+        return showSuccess(message, title, options);
       case 'error':
-        return showError(message, options);
+        return showError(message, title, options);
       case 'warning':
-        return showWarning(message, options);
+        return showWarning(message, title, options);
       case 'info':
       default:
-        return showInfo(message, options);
+        return showInfo(message, title, options);
     }
   }, [showSuccess, showError, showWarning, showInfo]);
 
@@ -118,16 +130,14 @@ export const NotificationProvider = ({ children }) => {
   return (
     <NotificationContext.Provider value={value}>
       {children}
-      {/* Render all notifications */}
-      <div id="notification-container">
-        {notifications.map((notification) => (
-          <Notification
-            key={notification.id}
-            {...notification}
-            onClose={() => removeNotification(notification.id)}
-          />
-        ))}
-      </div>
+      {/* Render notifications as modals */}
+      {notifications.map((notification) => (
+        <NotificationModal
+          key={notification.id}
+          {...notification}
+          onClose={() => removeNotification(notification.id)}
+        />
+      ))}
     </NotificationContext.Provider>
   );
 };

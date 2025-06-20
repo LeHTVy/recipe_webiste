@@ -5,7 +5,7 @@ import { useAuth } from '../../../../context/AuthContext';
 import styles from './RecipeNutrition.module.css';
 
 const RecipeNutrition = ({ recipe }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [activeTab, setActiveTab] = useState('nutrition');
   const [servings, setServings] = useState(recipe.servings || 1);
   const [comments, setComments] = useState(recipe.comments || []);
@@ -86,8 +86,8 @@ const RecipeNutrition = ({ recipe }) => {
 
     const comment = {
       id: Date.now(),
-      username: 'Current User',
-      avatar: '/default-avatar.png',
+      username: user?.username || user?.name || 'Anonymous User',
+      avatar: user?.avatar || user?.profilePicture || '/default-avatar.png',
       comment: newComment,
       rating: newRating,
       timestamp: new Date().toISOString(),
@@ -96,17 +96,64 @@ const RecipeNutrition = ({ recipe }) => {
       replies: []
     };
 
-    setComments([comment, ...comments]);
+    const updatedComments = [comment, ...comments];
+    setComments(updatedComments);
+
+    // Save comment to localStorage for both user-created and existing recipes
+    try {
+      // Update user-created recipes
+      const userRecipes = JSON.parse(localStorage.getItem('recipes') || '[]');
+      const recipeIndex = userRecipes.findIndex(r => r.id === recipe.id);
+      
+      if (recipeIndex !== -1) {
+        userRecipes[recipeIndex] = {
+          ...userRecipes[recipeIndex],
+          comments: updatedComments,
+          commentCount: updatedComments.length
+        };
+        localStorage.setItem('recipes', JSON.stringify(userRecipes));
+      }
+      
+      // Also save comments for existing recipes (from mockData)
+      const recipeComments = JSON.parse(localStorage.getItem('recipeComments') || '{}');
+      recipeComments[recipe.id] = updatedComments;
+      localStorage.setItem('recipeComments', JSON.stringify(recipeComments));
+      
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new Event('localStorageUpdate'));
+    } catch (error) {
+      console.error('Error saving comment to localStorage:', error);
+    }
+
     setNewComment('');
     setNewRating(0);
   };
 
   const handleLike = (commentId) => {
-    setComments(comments.map(comment => 
+    const updatedComments = comments.map(comment => 
       comment.id === commentId 
         ? { ...comment, likes: (comment.likes || 0) + 1 }
         : comment
-    ));
+    );
+    setComments(updatedComments);
+
+    // Save updated likes to localStorage if this is a user-created recipe
+    try {
+      const userRecipes = JSON.parse(localStorage.getItem('recipes') || '[]');
+      const recipeIndex = userRecipes.findIndex(r => r.id === recipe.id);
+      
+      if (recipeIndex !== -1) {
+        userRecipes[recipeIndex] = {
+          ...userRecipes[recipeIndex],
+          comments: updatedComments
+        };
+        localStorage.setItem('recipes', JSON.stringify(userRecipes));
+        // Dispatch custom event to notify other components
+        window.dispatchEvent(new Event('localStorageUpdate'));
+      }
+    } catch (error) {
+      console.error('Error saving comment likes to localStorage:', error);
+    }
   };
 
   const formatDate = (dateString) => {

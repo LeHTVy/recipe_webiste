@@ -17,6 +17,7 @@ import Favorites from "./pages/Favorites/Favorites";
 import Community from "./pages/Community/Community";
 import CreatePost from "./pages/CreatePost/CreatePost";
 import MealPlanner from "./pages/MealPlanner/MealPlanner";
+import AuthorProfile from "./pages/AuthorProfile/AuthorProfile";
 import ConfirmationModal from "./components/ConfirmationModal/ConfirmationModal";
 import { useState, createContext, useContext } from "react";
 import "./App.css";
@@ -103,6 +104,7 @@ const AppContent = () => {
             <Route path="/mealplanner" element={<MealPlanner />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/author/:authorId" element={<AuthorProfile />} />
           </Routes>
         </main>
         <Footer />

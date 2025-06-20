@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-// eslint-disable-next-line
-import { useTheme } from '../../context/ThemeContext';
+import { useNavigate } from 'react-router-dom';
 import Hero from '../../components/Hero/Hero';
 import RecipeCard from '../../components/RecipeCard/RecipeCard';
 import RecipeTagsCarousel from '../../components/RecipeTagsCarousel/RecipeTagsCarousel';
@@ -21,6 +20,7 @@ const Home = () => {
   const [filteredRecipes, setFilteredRecipes] = useState([]);
   const [selectedTag, setSelectedTag] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -69,6 +69,10 @@ const Home = () => {
     step4light: shareyourFlavors,
     
     alt: "TasteMate Features Showcase"
+  };
+
+  const handleViewRecipe = () => {
+    navigate('/recipes');
   };
 
   return (
@@ -170,13 +174,13 @@ const Home = () => {
             </div>
 
             <div className={styles.featureCard}>
-              <div className={styles.featureIcon}><FaBolt /></div>
+              <div className={styles.featureIcon} onClick={handleViewRecipe}><FaBolt /></div>
               <h3 className={styles.featureTitle}>Quick and easy</h3>
               <p className={styles.featureDescription}>
                 Vegan recipes or low-carb diet? Here you find ideas for quick
                 meals.
               </p>
-              <button className={styles.featureBtn}>See recipes</button>
+              <button className={styles.featureBtn} onClick={handleViewRecipe}>See recipes</button>
             </div>
           </div>
         </div>

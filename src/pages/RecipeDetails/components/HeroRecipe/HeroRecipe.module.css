@@ -453,6 +453,77 @@
   color: rgba(255, 255, 255, 0.9);
 }
 
+
+
+/* Rating Distribution Section */
+.ratingBreakdownSection {
+  margin-top: 1rem;
+  animation: slideInUp 0.8s ease-out 0.5s both;
+}
+
+.ratingDistribution {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.distributionTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+.distributionRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.distributionRow:last-child {
+  margin-bottom: 0;
+}
+
+.distributionStars {
+  font-size: 0.8rem;
+  color: #FFD700;
+  min-width: 30px;
+  text-align: right;
+}
+
+.distributionBar {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.distributionFill {
+  height: 100%;
+  background: linear-gradient(90deg, #FFD700, #FFA500);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.distributionPercent {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+  min-width: 35px;
+  text-align: right;
+}
+
+.distributionCount {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  min-width: 25px;
+  text-align: right;
+}
+
 .statsSection {
   display: flex;
   gap: 1.5rem;

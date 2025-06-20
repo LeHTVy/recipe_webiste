@@ -18,31 +18,51 @@ const Recipes = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
+  const fetchRecipes = async () => {
+    setLoading(true);
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Get user-created recipes from localStorage
+      const userRecipes = JSON.parse(localStorage.getItem('recipes') || '[]');
+      // Only include published recipes in the main recipes page
+      const publishedUserRecipes = userRecipes.filter(recipe => recipe.status === 'published');
+      
+      // Combine mock recipes with published user recipes
+      const allRecipes = [...mockRecipes, ...publishedUserRecipes];
+      const sortedRecipes = allRecipes.sort((a, b) => b.rating - a.rating);
+      
+      setRecipes(sortedRecipes);
+      setFilteredRecipes(sortedRecipes);
+    } catch (error) {
+      console.error('Failed to fetch recipes:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchRecipes = async () => {
-      setLoading(true);
-      try {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Get user-created recipes from localStorage
-        const userRecipes = JSON.parse(localStorage.getItem('recipes') || '[]');
-        // Only include published recipes in the main recipes page
-        const publishedUserRecipes = userRecipes.filter(recipe => recipe.status === 'published');
-        
-        // Combine mock recipes with published user recipes
-        const allRecipes = [...mockRecipes, ...publishedUserRecipes];
-        const sortedRecipes = allRecipes.sort((a, b) => b.rating - a.rating);
-        
-        setRecipes(sortedRecipes);
-        setFilteredRecipes(sortedRecipes);
-      } catch (error) {
-        console.error('Failed to fetch recipes:', error);
-      } finally {
-        setLoading(false);
+    fetchRecipes();
+
+    // Listen for localStorage changes to update recipe data
+    const handleStorageChange = (e) => {
+      if (e.key === 'recipes') {
+        fetchRecipes();
       }
     };
 
-    fetchRecipes();
+    // Listen for custom storage events (for same-tab updates)
+    const handleCustomStorageChange = () => {
+      fetchRecipes();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('localStorageUpdate', handleCustomStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('localStorageUpdate', handleCustomStorageChange);
+    };
   }, []);
 
   const handleTagSelect = (tag) => {

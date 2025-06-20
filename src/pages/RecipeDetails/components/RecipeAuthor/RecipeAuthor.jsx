@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaUser, FaEye, FaHeart, FaUtensils, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { useAuth } from '../../../../context/AuthContext';
 import styles from './RecipeAuthor.module.css';
 
 const RecipeAuthor = ({ author, onViewProfile }) => {
   const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpanded = () => {
@@ -12,6 +14,9 @@ const RecipeAuthor = ({ author, onViewProfile }) => {
   };
 
   const handleViewProfile = () => {
+    // Use author.id if available, otherwise fallback to author.name formatted as ID
+    const authorId = author.id || author.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    navigate(`/author/${authorId}`);
     onViewProfile && onViewProfile(author);
   };
 

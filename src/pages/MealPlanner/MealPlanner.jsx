@@ -604,7 +604,7 @@ const MealPlanner = () => {
                       <div className={styles.recipeMeta}>
                         <span><FaClock /> {recipe.cookingTime}m</span>
                         <span><FaUsers /> {recipe.servings} servings</span>
-                        <span><FaStar /> {recipe.rating}</span>
+                        <span><FaStar /> {recipe.rating || 0}</span>
                         <span><FaFire /> {recipe.nutrition?.kcal || 0} kcal</span>
                       </div>
                       <div className={styles.recipeTags}>

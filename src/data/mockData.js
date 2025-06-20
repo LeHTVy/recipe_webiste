@@ -16,6 +16,7 @@ export const mockRecipes = [
     commentCount: 15, // Số lượng comments
     topRate: 1146.6, // rating * totalRatings
     popularityScore: 1161.6, // topRate + commentCount
+    recipeaward: 'TOP_RATED', // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
     
     ingredients: [
       "dark chocolate",
@@ -84,9 +85,15 @@ export const mockRecipes = [
     },
     
     author: {
+      id: "chef-maria-rodriguez",
       name: "Chef Maria Rodriguez",
       avatar: "https://ui-avatars.com/api/?name=Chef+Maria&background=00bf63&color=fff",
-      bio: "Professional pastry chef with 15 years of experience in fine dining restaurants"
+      bio: "Professional pastry chef with 15 years of experience in fine dining restaurants",
+      location: "Barcelona, Spain",
+      joinDate: "2020-03-15T00:00:00Z",
+      totalRecipes: 45,
+      followers: 1250,
+      following: 320
     },
     
     comments: [
@@ -130,6 +137,7 @@ export const mockRecipes = [
     commentCount: 8,
     topRate: 907.2,
     popularityScore: 915.2,
+    recipeaward: 'POPULAR', // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
     
     ingredients: [
       "spaghetti",
@@ -192,9 +200,15 @@ export const mockRecipes = [
     },
     
     author: {
+      id: "giuseppe-romano",
       name: "Giuseppe Romano",
       avatar: "https://ui-avatars.com/api/?name=Giuseppe+Romano&background=34C759&color=fff",
-      bio: "Traditional Italian chef from Rome, specializing in authentic pasta dishes"
+      bio: "Traditional Italian chef from Rome, specializing in authentic pasta dishes",
+      location: "Rome, Italy",
+      joinDate: "2019-08-22T00:00:00Z",
+      totalRecipes: 38,
+      followers: 890,
+      following: 245
     },
     
     comments: [
@@ -230,6 +244,7 @@ export const mockRecipes = [
      commentCount: 12,
      topRate: 717.6,
      popularityScore: 729.6,
+    recipeaward: 'TOP_RATED', // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
      
      ingredients: [
        "sourdough bread",
@@ -332,6 +347,7 @@ export const mockRecipes = [
      commentCount: 6,
      topRate: 930.6,
      popularityScore: 936.6,
+    recipeaward: 'POPULAR', // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
      
      ingredients: [
        "coconut milk",
@@ -438,6 +454,7 @@ export const mockRecipes = [
      commentCount: 9,
      topRate: 639.0,
      popularityScore: 648.0,
+    recipeaward: 'TOP_RATED', // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
      
      ingredients: [
        "quinoa",
@@ -542,6 +559,7 @@ export const mockRecipes = [
      commentCount: 11,
      topRate: 801.6,
      popularityScore: 812.6,
+    recipeaward: 'POPULAR', // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
      
      ingredients: [
        "chicken wings",
@@ -610,6 +628,7 @@ export const mockRecipes = [
      commentCount: 8,
      topRate: 616.4,
      popularityScore: 624.4,
+    recipeaward: '', // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
      
      ingredients: [
        "beef bulgogi",
@@ -692,6 +711,7 @@ export const mockRecipes = [
      commentCount: 5,
      topRate: 391.6,
      popularityScore: 396.6,
+    recipeaward: '', // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
      
      ingredients: [
        "romaine lettuce",
@@ -774,6 +794,7 @@ export const mockRecipes = [
      commentCount: 12,
      topRate: 733.2,
      popularityScore: 745.2,
+    recipeaward: '', // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
      
      ingredients: [
        "ground beef",
@@ -856,6 +877,7 @@ export const mockRecipes = [
      commentCount: 15,
      topRate: 974.4,
      popularityScore: 989.4,
+    recipeaward: '', // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
      
      ingredients: [
        "flour",
@@ -938,6 +960,7 @@ export const mockRecipes = [
      commentCount: 7,
      topRate: 801.0,
      popularityScore: 808.0,
+    recipeaward: '', // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
      
      ingredients: [
        "white fish fillets",
@@ -1020,6 +1043,7 @@ export const mockRecipes = [
      commentCount: 8,
      topRate: 570.4,
      popularityScore: 578.4,
+    recipeaward: '', // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
      
      ingredients: [
        "Greek yogurt",
@@ -1100,6 +1124,7 @@ export const mockRecipes = [
      commentCount: 9,
      topRate: 681.5,
      popularityScore: 690.5,
+    recipeaward: '', // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
      
      ingredients: [
        "flour tortillas",
@@ -1180,6 +1205,7 @@ export const mockRecipes = [
      commentCount: 6,
      topRate: 431.2,
      popularityScore: 437.2,
+    recipeaward: '', // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
      
      ingredients: [
        "mixed vegetables",
@@ -1260,6 +1286,7 @@ export const mockRecipes = [
      commentCount: 18,
      topRate: 1308.3,
      popularityScore: 1326.3,
+    recipeaward: '', // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
      
      ingredients: [
        "flour",
@@ -1342,6 +1369,7 @@ export const mockRecipes = [
      commentCount: 7,
      topRate: 504.0,
      popularityScore: 511.0,
+    recipeaward: '', // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
      
      ingredients: [
        "chicken breast",

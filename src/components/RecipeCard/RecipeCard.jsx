@@ -1,15 +1,75 @@
 // src/components/RecipeCard/RecipeCard.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 import { useFavorites } from '../../context/FavoritesContext';
-import { FaClock, FaUsers, FaChartBar, FaHeart, FaShare } from 'react-icons/fa';
+import { useNotification } from '../../context/NotificationContext';
+import { FaClock, FaUsers, FaChartBar, FaHeart, FaShare, FaComments } from 'react-icons/fa';
 import styles from './RecipeCard.module.css';
 
 const RecipeCard = ({ recipe }) => {
   const navigate = useNavigate();
   const { isDarkMode } = useTheme();
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { showNotification } = useNotification();
+
+  const [calculatedRating, setCalculatedRating] = useState({ averageRating: recipe.rating || 0, totalRatings: recipe.totalRatings || 0 });
+
+  // Load comments from localStorage and calculate ratings
+  useEffect(() => {
+    const loadCommentsAndCalculateRating = () => {
+      try {
+        // First check if this is a user-created recipe
+        const userRecipes = JSON.parse(localStorage.getItem('recipes') || '[]');
+        const userRecipe = userRecipes.find(r => r.id === recipe.id);
+        
+        let comments = [];
+        if (userRecipe && userRecipe.comments) {
+          comments = userRecipe.comments;
+        } else {
+          // Check for comments in recipeComments storage
+          const recipeComments = JSON.parse(localStorage.getItem('recipeComments') || '{}');
+          comments = recipeComments[recipe.id] || recipe.comments || [];
+        }
+        
+        // Calculate rating from comments
+        const ratingsFromComments = comments.filter(comment => comment.rating && comment.rating > 0);
+        
+        if (ratingsFromComments.length === 0) {
+          setCalculatedRating({
+            averageRating: recipe.rating || 0,
+            totalRatings: recipe.totalRatings || 0
+          });
+        } else {
+          const totalRating = ratingsFromComments.reduce((sum, comment) => sum + comment.rating, 0);
+          const averageRating = totalRating / ratingsFromComments.length;
+          
+          setCalculatedRating({
+            averageRating: Math.round(averageRating * 10) / 10,
+            totalRatings: ratingsFromComments.length
+          });
+        }
+      } catch (error) {
+        console.error('Error loading comments:', error);
+        setCalculatedRating({
+          averageRating: recipe.rating || 0,
+          totalRatings: recipe.totalRatings || 0
+        });
+      }
+    };
+
+    loadCommentsAndCalculateRating();
+
+    // Listen for localStorage updates
+    const handleStorageUpdate = () => {
+      loadCommentsAndCalculateRating();
+    };
+
+    window.addEventListener('localStorageUpdate', handleStorageUpdate);
+    return () => {
+      window.removeEventListener('localStorageUpdate', handleStorageUpdate);
+    };
+  }, [recipe.id, recipe.comments, recipe.rating, recipe.totalRatings]);
 
   // Function to get display image - randomly select from images array if multiple exist
   const getDisplayImage = () => {
@@ -27,11 +87,11 @@ const RecipeCard = ({ recipe }) => {
 
     for (let i = 0; i < 5; i++) {
       if (i < fullStars) {
-        stars.push('★');
+        stars.push(<span key={i} className={styles.star}>★</span>);
       } else if (i === fullStars && hasHalfStar) {
-        stars.push('★');
+        stars.push(<span key={i} className={styles.star}>★</span>);
       } else {
-        stars.push('☆');
+        stars.push(<span key={i} className={styles.star}>☆</span>);
       }
     }
     return stars;
@@ -95,16 +155,18 @@ const RecipeCard = ({ recipe }) => {
             <FaChartBar className={styles.infoIcon} />
             <span className={styles.infoText}>{recipe.difficulty}</span>
           </div>
+          <div className={styles.infoItem}>
+            <FaComments className={styles.infoIcon} />
+            <span className={styles.infoText}>{recipe.commentCount || 0} comments</span>
+          </div>
         </div>
         
         <div className={styles.ratingSection}>
           <div className={styles.stars}>
-            {renderStars(recipe.rating).map((star, index) => (
-              <span key={index} className={styles.star}>{star}</span>
-            ))}
+            {renderStars(calculatedRating.averageRating)}
           </div>
-          <span className={styles.ratingValue}>{recipe.rating}</span>
-          <span className={styles.ratingCount}>({recipe.totalRatings || 0})</span>
+          <span className={styles.ratingValue}>{calculatedRating.averageRating}</span>
+          <span className={styles.ratingCount}>({calculatedRating.totalRatings})</span>
         </div>
         
         <div className={styles.cardActions}>
@@ -121,8 +183,15 @@ const RecipeCard = ({ recipe }) => {
             className={styles.shareBtn}
             onClick={(e) => {
               e.stopPropagation();
-              // Add share functionality here
-              console.log('Share recipe:', recipe.id);
+              const recipeUrl = `${window.location.origin}/recipes/${recipe.id}`;
+              navigator.clipboard.writeText(recipeUrl)
+                .then(() => {
+                  showNotification('Recipe link copied to clipboard!', 'success');
+                })
+                .catch(err => {
+                  console.error('Failed to copy recipe link:', err);
+                  showNotification('Could not copy link. Please try again.', 'error');
+                });
             }}
           >
             <FaShare />

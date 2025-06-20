@@ -35,6 +35,7 @@ const CreateRecipe = () => {
     cookingTime: "",
     servings: "",
     difficulty: "Easy",
+    recipeaward: "",
     tags: [],
     specialDescription: "",
     ingredients: [{ item: "", amount: "", name: "", category: "" }],
@@ -86,6 +87,7 @@ const CreateRecipe = () => {
     "Sauce",
   ];
   const difficulties = ["Easy", "Medium", "Hard"];
+  //const recipeAwards = ["", "POPULAR", "TOP_RATED"];
   const dietaryOptions = [
     "Vegetarian",
     "Vegan",
@@ -114,6 +116,7 @@ const CreateRecipe = () => {
           cookingTime: recipeToEdit.cookingTime || "",
           servings: recipeToEdit.servings || "",
           difficulty: recipeToEdit.difficulty || "Easy",
+          recipeaward: recipeToEdit.recipeaward || "",
           tags: recipeToEdit.tags || [],
           specialDescription: recipeToEdit.specialDescription || "",
           ingredients: recipeToEdit.detailedIngredients?.length > 0 
@@ -345,14 +348,13 @@ const CreateRecipe = () => {
           })),
           status,
           createdBy: user?.id,
-          rating: 0,
-          totalRatings: 0,
           commentCount: 0,
           topRate: 0,
           popularityScore: 0,
           isPopular: false,
           isTopRated: false,
           author: {
+            id: user?.id ? `tastemate-user-${user.id}` : null,
             name: user ? `${user.firstName} ${user.lastName}` : "Anonymous",
             avatar:
               user?.profilePicture ||
@@ -360,6 +362,13 @@ const CreateRecipe = () => {
                 user ? `${user.firstName}+${user.lastName}` : "User"
               }&background=00bf63&color=fff`,
             bio: user?.bio || "Recipe creator",
+            userId: user?.id,
+            username: user?.username,
+            location: user?.location || "Unknown",
+            joinDate: user?.createdAt || new Date().toISOString(),
+            totalRecipes: 0, // Will be calculated dynamically
+            followers: 0,
+            following: 0
           },
           comments: [],
           createdAt: new Date().toISOString(),
