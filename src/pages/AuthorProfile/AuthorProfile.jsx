@@ -507,6 +507,7 @@ const AuthorProfile = () => {
           </div>
 
           <div className={styles.authorRating}>
+            <h3 className={styles.ratingTitle}>Total Rating Posts</h3>
             <div className={styles.ratingDisplay}>
               <div className={styles.stars}>
                 {renderStars(authorRating.averageRating)}
@@ -514,14 +515,6 @@ const AuthorProfile = () => {
               <span className={styles.ratingValue}>{authorRating.averageRating}</span>
               <span className={styles.ratingCount}>({authorRating.totalRatings} ratings)</span>
             </div>
-            {user && (
-              <button 
-                className={styles.rateBtn}
-                onClick={() => setShowRatingModal(true)}
-              >
-                <FaStar /> Rate Author
-              </button>
-            )}
           </div>
 
           <div className={styles.authorActions}>
@@ -531,6 +524,14 @@ const AuthorProfile = () => {
             >
               <FaUsers /> {isFollowing ? 'Following' : 'Follow'}
             </button>
+            {user && (
+              <button 
+                className={styles.rateBtn}
+                onClick={() => setShowRatingModal(true)}
+              >
+                <FaStar /> Rate Author
+              </button>
+            )}
           </div>
         </div>
       </div>

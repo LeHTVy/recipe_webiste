@@ -4,7 +4,14 @@ import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
 import { useNotification } from "../../context/NotificationContext";
 import { useNavigate } from "react-router-dom";
-import { FaUser, FaUtensils, FaLeaf } from 'react-icons/fa';
+import {
+  FaUser,
+  FaUtensils,
+  FaLeaf,
+  FaEye,
+  FaEyeSlash,
+  FaLock,
+} from "react-icons/fa";
 import Stack from "../../components/Stack/Stack";
 import styles from "./Auth.module.css";
 
@@ -29,6 +36,8 @@ const Auth = () => {
   });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Recipe images data for Stack
   const recipeImages = [
@@ -135,7 +144,7 @@ const Auth = () => {
           existingUsers = [];
           localStorage.setItem("tastemate_users", JSON.stringify([]));
         }
-        
+
         const userExists = existingUsers.find(
           (user) =>
             user.email === formData.email || user.username === formData.username
@@ -158,7 +167,7 @@ const Auth = () => {
           id: Date.now(),
           username: formData.username,
           email: formData.email,
-          password: formData.password, // Store password (in real app, this would be hashed)
+          password: formData.password,
           firstName: formData.firstName,
           lastName: formData.lastName,
           profilePicture:
@@ -183,7 +192,6 @@ const Auth = () => {
         try {
           const storedData = localStorage.getItem("tastemate_users");
           existingUsers = storedData ? JSON.parse(storedData) : [];
-          // Ensure existingUsers is an array
           if (!Array.isArray(existingUsers)) {
             existingUsers = [];
           }
@@ -202,7 +210,6 @@ const Auth = () => {
           return;
         }
 
-        // Check if password matches (in a real app, this would be hashed)
         if (user.password && user.password !== formData.password) {
           setErrors({ password: "Incorrect password" });
           setIsLoading(false);
@@ -240,7 +247,9 @@ const Auth = () => {
   };
 
   return (
-    <div className={`${styles.authContainer} ${isDarkMode ? styles.darkMode : ''}`}>
+    <div
+      className={`${styles.authContainer} ${isDarkMode ? styles.darkMode : ""}`}
+    >
       {/* Left Side - Form */}
       <div className={styles.formSection}>
         <div className={styles.formContainer}>
@@ -374,9 +383,11 @@ const Auth = () => {
 
             <div className={styles.inputGroup}>
               <div className={styles.inputWithIcon}>
-                <span className={styles.inputIcon}>🔒</span>
+                <span className={styles.inputIcon}>
+                  <FaLock />
+                </span>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="Enter your password"
                   value={formData.password}
@@ -385,6 +396,15 @@ const Auth = () => {
                     errors.password ? styles.error : ""
                   }`}
                 />
+                {formData.password.length > 0 && (
+                  <button
+                    type="button"
+                    className={styles.togglePasswordBtn}
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                )}
               </div>
               {errors.password && (
                 <span className={styles.errorText}>{errors.password}</span>
@@ -394,9 +414,11 @@ const Auth = () => {
             {isSignUp && (
               <div className={styles.inputGroup}>
                 <div className={styles.inputWithIcon}>
-                  <span className={styles.inputIcon}>🔒</span>
+                  <span className={styles.inputIcon}>
+                    <FaLock />
+                  </span>
                   <input
-                    type="password"
+                    type={showConfirmPassword ? "text" : "password"}
                     name="confirmPassword"
                     placeholder="Confirm Password"
                     value={formData.confirmPassword}
@@ -405,6 +427,17 @@ const Auth = () => {
                       styles.inputWithIconPadding
                     } ${errors.confirmPassword ? styles.error : ""}`}
                   />
+                  {formData.confirmPassword.length > 0 && (
+                    <button
+                      type="button"
+                      className={styles.togglePasswordBtn}
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                    >
+                      {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  )}
                 </div>
                 {errors.confirmPassword && (
                   <span className={styles.errorText}>
@@ -431,7 +464,7 @@ const Auth = () => {
         </div>
       </div>
 
-      {/* Main GIF - Center */}  
+      {/* Main GIF - Center */}
       {/* Right Side - Full Visual Section */}
       <div className={styles.visualSection}>
         <div className={styles.visualContent}>

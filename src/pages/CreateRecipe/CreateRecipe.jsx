@@ -762,7 +762,7 @@ const CreateRecipe = () => {
               {formData.instructions.map((instruction, index) => (
                 <div key={index} className={styles.instructionItem}>
                   <div className={styles.stepNumber}>
-                    Step {instruction.step}
+                    {instruction.step} 
                   </div>
                   <div className={styles.instructionContent}>
                     <input

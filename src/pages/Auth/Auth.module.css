@@ -184,6 +184,26 @@
 
 .inputWithIconPadding {
   padding-left: 3rem;
+  padding-right: 3rem;
+}
+
+.togglePasswordBtn {
+  position: absolute;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+  z-index: 2;
+}
+
+.togglePasswordBtn:hover {
+  color: var(--accent);
 }
 
 .input:focus {
