@@ -1,23 +1,23 @@
-// src/pages/Profile/Profile.jsx - Thêm avatar upload functionality
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useFavorites } from '../../context/FavoritesContext';
 import { useNotification } from '../../context/NotificationContext';
 import { useTheme } from '../../context/ThemeContext';
-import RecipeCard from '../../components/RecipeCard/RecipeCard';
-import ProfileRecipeCard from '../../components/ProfileRecipeCard/ProfileRecipeCard';
+
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
-import { FaCamera, FaEdit, FaHeart, FaClock, FaUsers, FaTrophy, FaMapMarkerAlt, FaCalendarAlt, FaStar, FaEye, FaComment } from 'react-icons/fa';
+import UserInformation from './component/UserInformation/UserInformation';
+import UserCreatedList from './component/UserCreatedList/UserCreatedList';
+import { FaEdit, FaHeart, FaUsers, FaBars, FaTimes, FaBookmark, FaUserFriends, FaComment, FaMapMarkerAlt } from 'react-icons/fa';
+import { getFollowingDetails, getFollowersDetails, getAuthorBookmarks, getCommunityBookmarks, getUserById, getCurrentUserId, getFollowersCount } from '../../lib/localStorageUtils';
 import styles from './Profile.module.css';
 
 const Profile = () => {
   const { user, updateProfile, logout } = useAuth();
-  const { favorites } = useFavorites();
+  useFavorites(); 
   const { showDeleteSuccess, showError } = useNotification();
   const { isDarkMode } = useTheme();
   const navigate = useNavigate();
-  const fileInputRef = useRef(null);
   const [activeTab, setActiveTab] = useState('recipes');
   const [userRecipes, setUserRecipes] = useState([]);
   const [userCommunityPosts, setUserCommunityPosts] = useState([]);
@@ -33,13 +33,106 @@ const Profile = () => {
     location: user?.location || '',
     dietaryPreferences: user?.dietaryPreferences || []
   });
+  const [showFloatingMenu, setShowFloatingMenu] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState('');
+  const [modalData, setModalData] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [authorBookmarks, setAuthorBookmarks] = useState([]);
+  const [communityBookmarks, setCommunityBookmarks] = useState([]);
+  
+
+
+  const getFollowingCount = () => {
+    const currentUserId = getCurrentUserId();
+    if (!currentUserId) return 0;
+    
+    try {
+      const followingKey = `following_${currentUserId}`;
+      const followingData = localStorage.getItem(followingKey);
+      const followingArray = JSON.parse(followingData || '[]');
+      return followingArray.length;
+    } catch (error) {
+      console.error('Error getting following count:', error);
+      return 0;
+    }
+  };
+  
+  const loadFloatingMenuData = useCallback(() => {
+    console.log('Loading floating menu data...');
+
+    const followers = getFollowersDetails();
+    console.log('Followers data:', followers);
+    console.log('Followers data length:', followers.length);
+
+    // Load author bookmarks
+    const authorBookmarkIds = getAuthorBookmarks();
+    console.log('Author bookmark IDs:', authorBookmarkIds);
+    const authorBookmarkDetails = authorBookmarkIds.map(id => getUserById(id)).filter(user => user !== null);
+    console.log('Author bookmark details:', authorBookmarkDetails);
+    console.log('Author bookmark details length:', authorBookmarkDetails.length);
+    setAuthorBookmarks(authorBookmarkDetails);
+    console.log('Set authorBookmarks to:', authorBookmarkDetails);
+
+    // Load community bookmarks
+    const communityBookmarksList = getCommunityBookmarks();
+    console.log('Community bookmarks:', communityBookmarksList);
+    console.log('Community bookmarks length:', communityBookmarksList.length);
+    setCommunityBookmarks(communityBookmarksList);
+    console.log('Set communityBookmarks to:', communityBookmarksList);
+    
+    // Debug: Check localStorage directly
+    const currentUserId = getCurrentUserId();
+    console.log('Current user ID from getCurrentUserId():', currentUserId);
+    const directUserId = localStorage.getItem('tastemate_current_user_id');
+    console.log('Direct current user ID from localStorage:', directUserId);
+    
+    if (currentUserId) {
+      const followingKey = `following_${currentUserId}`;
+      const followingData = localStorage.getItem(followingKey);
+      console.log('Raw following data from localStorage with key:', followingKey, 'data:', followingData);
+    }
+  }, []);
+
+  const reloadFollowingData = useCallback(() => {
+    console.log('Reloading following data...');
+    
+    // Reload following details với logging
+    const followingDetails = getFollowingDetails();
+    console.log('Fresh following details:', followingDetails);
+    
+    // Force re-render modal nếu đang mở
+    if (modalType === 'following') {
+      setModalData(followingDetails);
+    }
+
+    loadFloatingMenuData();
+  }, [modalType, loadFloatingMenuData]);
+  
+  useEffect(() => {
+    const handleStorageChange = () => {
+      console.log('localStorage changed, reloading data...');
+      reloadFollowingData();
+    };
+  
+    // Listen for storage events
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Custom event for same-tab localStorage changes
+    window.addEventListener('localStorageUpdate', handleStorageChange);
+  
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('localStorageUpdate', handleStorageChange);
+    };
+  }, [reloadFollowingData]);
 
   useEffect(() => {
     if (!user) {
       navigate('/auth');
       return;
     }
-
     // Load user's created recipes from localStorage
     const savedRecipes = JSON.parse(localStorage.getItem('recipes') || '[]');
     const userCreatedRecipes = savedRecipes.filter(recipe => recipe.createdBy === user.id);
@@ -49,7 +142,9 @@ const Profile = () => {
     const savedCommunityPosts = JSON.parse(localStorage.getItem('tastemate_community_posts') || '[]');
     const userCreatedPosts = savedCommunityPosts.filter(post => post.userId === user.id);
     setUserCommunityPosts(userCreatedPosts);
-  }, [user, navigate]);
+
+    loadFloatingMenuData();
+  }, [user, navigate, loadFloatingMenuData]);
 
   const handleEditSubmit = (e) => {
     e.preventDefault();
@@ -57,13 +152,21 @@ const Profile = () => {
     setIsEditing(false);
   };
 
-  const handleRecipeEdit = (recipe) => {
-    navigate(`/create-recipe?edit=${recipe.id}`);
+  const handleRecipeEdit = (recipeId) => {
+    const recipe = userRecipes.find(r => r.id === recipeId);
+    if (recipe) {
+      navigate(`/create-recipe?edit=${recipeId}`, { state: { recipe } });
+    } else {
+      navigate(`/create-recipe?edit=${recipeId}`);
+    }
   };
 
-  const handleRecipeDelete = (recipe) => {
-    setRecipeToDelete(recipe);
-    setShowDeleteModal(true);
+  const handleRecipeDelete = (recipeId) => {
+    const recipe = userRecipes.find(r => r.id === recipeId);
+    if (recipe) {
+      setRecipeToDelete(recipe);
+      setShowDeleteModal(true);
+    }
   };
 
   const confirmDeleteRecipe = () => {
@@ -81,10 +184,10 @@ const Profile = () => {
     }
   };
 
-  const handleRecipePublish = (recipe) => {
+  const handleRecipePublish = (recipeId) => {
     const savedRecipes = JSON.parse(localStorage.getItem('recipes') || '[]');
     const updatedRecipes = savedRecipes.map(r => 
-      r.id === recipe.id ? { ...r, status: 'published' } : r
+      r.id === recipeId ? { ...r, status: 'published' } : r
     );
     localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
     
@@ -93,8 +196,8 @@ const Profile = () => {
     setUserRecipes(userCreatedRecipes);
   };
 
-  const handleRecipeView = (recipe) => {
-    navigate(`/recipes/${recipe.id}`);
+  const handleRecipeView = (recipeId) => {
+    navigate(`/recipes/${recipeId}`);
   };
 
   const handleInputChange = (e) => {
@@ -114,55 +217,95 @@ const Profile = () => {
     }));
   };
 
-  const handleAvatarClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleAvatarChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    // Validate file type
-    if (!file.type.startsWith('image/')) {
-      showError('Please select an image file');
-      return;
-    }
-
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      showError('File size must be less than 5MB');
-      return;
-    }
-
-    setIsUploadingAvatar(true);
-
-    try {
-      // Convert file to base64 for localStorage
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const base64String = event.target.result;
-        
-        // Update user profile with new avatar
-        updateProfile({ profilePicture: base64String });
-        setIsUploadingAvatar(false);
-      };
-      
-      reader.onerror = () => {
-        showError('Error reading file');
-        setIsUploadingAvatar(false);
-      };
-      
-      reader.readAsDataURL(file);
-    } catch (error) {
-      console.error('Error uploading avatar:', error);
-      showError('Error uploading image');
-      setIsUploadingAvatar(false);
-    }
-  };
+  
 
   const handleLogout = () => {
     logout();
     navigate('/');
+  };
+
+  const toggleFloatingMenu = () => {
+    setShowFloatingMenu(!showFloatingMenu);
+  };
+
+  const openModal = (type) => {
+    console.log(`Opening modal for type: ${type}`);
+    setModalType(type);
+    let data = [];
+    
+    switch(type) {
+      case 'following':
+        data = getFollowingDetails();
+        console.log('Following data for modal:', data);
+        console.log('Following data length:', data.length);
+        break;
+      case 'followers':
+        const currentUserId = getCurrentUserId();
+        console.log('openModal followers - currentUserId:', currentUserId);
+        
+        // Check both possible formats for the followed key
+        const followedKey1 = `followed_${currentUserId}`;
+        const followedKey2 = `followed_tastemate-user-${currentUserId}`;
+        
+        console.log('openModal followers - checking keys:', followedKey1, followedKey2);
+        
+        let followerIds = JSON.parse(localStorage.getItem(followedKey1) || '[]');
+        console.log('openModal followers - followerIds from key1:', followerIds);
+        
+        // If no followers found with first key, try second format
+        if (followerIds.length === 0) {
+          followerIds = JSON.parse(localStorage.getItem(followedKey2) || '[]');
+          console.log('openModal followers - followerIds from key2:', followerIds);
+        }
+        
+        console.log('openModal followers - final followerIds:', followerIds);
+        data = followerIds.map(id => {
+          console.log('openModal followers - processing ID:', id);
+          const user = getUserById(id);
+          console.log('openModal followers - found user for ID:', id, user);
+          return user || { id: id, username: id, firstName: 'User', lastName: id };
+        });
+        console.log('openModal followers - processed data:', data);
+        break;
+      case 'authorBookmarks':
+        data = authorBookmarks;
+        break;
+      case 'communityBookmarks':
+        data = communityBookmarks;
+        break;
+      case 'posts':
+        data = userCommunityPosts;
+        break;
+      default:
+        data = [];
+    }
+    
+    console.log(`Final modal data for ${type}:`, data);
+    setModalData(data);
+    setShowModal(true);
+    setShowFloatingMenu(false);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setModalType('');
+    setModalData([]);
+  };
+
+  const openDetailModal = (item) => {
+    setSelectedItem(item);
+    setShowDetailModal(true);
+  };
+
+  const closeDetailModal = () => {
+    setShowDetailModal(false);
+    setSelectedItem(null);
+  };
+
+  const navigateToProfile = (userId) => {
+    navigate(`/author/${userId}`);
+    closeModal();
+    closeDetailModal();
   };
 
   if (!user) {
@@ -176,393 +319,258 @@ const Profile = () => {
 
   return (
     <div className={`${styles.profileContainer} ${isDarkMode ? styles.darkMode : ''}`}>
-      <div className={styles.profileContent}>
-        {/* Instagram-like Header - User Info at Top */}
-        <div className={styles.profileHeader}>
-          <div className={styles.userInfoSection}>
-            <div className={styles.avatarContainer}>
-              <img 
-                src={user.profilePicture} 
-                alt={`${user.firstName} ${user.lastName}`}
-                className={styles.avatar}
-              />
-              <button 
-                className={styles.avatarUploadBtn}
-                onClick={handleAvatarClick}
-                disabled={isUploadingAvatar}
-              >
-                {isUploadingAvatar ? (
-                  <div className={styles.uploadSpinner}></div>
-                ) : (
-                  <FaCamera />
-                )}
+      {/* Floating Menu Button */}
+      <button 
+        className={`${styles.floatingMenuBtn} ${showFloatingMenu ? styles.active : ''}`}
+        onClick={toggleFloatingMenu}
+      >
+        {showFloatingMenu ? <FaTimes /> : <FaBars />}
+      </button>
+
+      {/* Floating Menu Panel */}
+      {showFloatingMenu && (
+        <div className={styles.floatingMenuPanel}>
+          <div className={styles.floatingMenuHeader}>
+            <h3>Quick Access</h3>
+            <button className={styles.closeMenuBtn} onClick={toggleFloatingMenu}>
+              <FaTimes />
+            </button>
+          </div>
+          
+          <div className={styles.floatingMenuTabs}>
+            <button 
+              className={styles.floatingTab}
+              onClick={() => openModal('following')}
+            >
+              <FaUserFriends /> Following ({getFollowingCount()})
+            </button>
+            <button 
+              className={styles.floatingTab}
+              onClick={() => openModal('followers')}
+            >
+              <FaUsers /> Followers ({getFollowersCount(getCurrentUserId())})
+            </button>
+            <button 
+              className={styles.floatingTab}
+              onClick={() => openModal('authorBookmarks')}
+            >
+              <FaBookmark /> Author Bookmarks ({authorBookmarks.length})
+            </button>
+            <button 
+              className={styles.floatingTab}
+              onClick={() => openModal('communityBookmarks')}
+            >
+              <FaBookmark /> Community Bookmarks ({communityBookmarks.length})
+            </button>
+            <button 
+              className={styles.floatingTab}
+              onClick={() => openModal('posts')}
+            >
+              <FaEdit /> Posts ({userCommunityPosts.length})
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Main Modal */}
+      {showModal && (
+        <div className={styles.modalOverlay} onClick={closeModal}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h3>
+                {modalType === 'following' && `Following (${modalData.length})`}
+                {modalType === 'followers' && `Followers (${modalData.length})`}
+                {modalType === 'authorBookmarks' && `Author Bookmarks (${modalData.length})`}
+                {modalType === 'communityBookmarks' && `Community Bookmarks (${modalData.length})`}
+                {modalType === 'posts' && `Your Posts (${modalData.length})`}
+              </h3>
+              <button className={styles.closeModalBtn} onClick={closeModal}>
+                <FaTimes />
               </button>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleAvatarChange}
-                className={styles.hiddenFileInput}
-              />
             </div>
             
-            <div className={styles.userDetails}>
-              <div className={styles.userBasicInfo}>
-                <h1 className={styles.userName}>
-                  {user.firstName} {user.lastName}
-                </h1>
-                <p className={styles.username}>@{user.username}</p>
-                {user.location && (
-                  <p className={styles.location}>
-                    <FaMapMarkerAlt /> {user.location}
-                  </p>
-                )}
-                <p className={styles.joinDate}>
-                  <FaCalendarAlt /> Joined {new Date(user.createdAt).toLocaleDateString('en-US', {
-                    month: 'long',
-                    year: 'numeric'
-                  })}
-                </p>
-              </div>
-              
-              <div className={styles.statsSection}>
-                <div className={styles.stat}>
-                  <span className={styles.statNumber}>{userRecipes.length}</span>
-                  <span className={styles.statLabel}>Recipes</span>
+            <div className={styles.modalBody}>
+              {modalData.length > 0 ? (
+                <div className={styles.modalList}>
+                  {modalData.map(item => (
+                    <div key={item.id} className={styles.modalItem}>
+                      {(modalType === 'following' || modalType === 'followers' || modalType === 'authorBookmarks') && (
+                        <>
+                          <img src={item.profilePicture} alt={item.firstName} className={styles.modalAvatar} />
+                          <div className={styles.modalItemInfo}>
+                            <span className={styles.modalItemName}>{item.firstName} {item.lastName}</span>
+                            <span className={styles.modalItemUsername}>@{item.username}</span>
+                            {item.bio && <span className={styles.modalItemBio}>{item.bio}</span>}
+                          </div>
+                          <button 
+                            className={styles.modalViewBtn}
+                            onClick={() => openDetailModal(item)}
+                          >
+                            View Details
+                          </button>
+                        </>
+                      )}
+                      
+                      {modalType === 'communityBookmarks' && (
+                        <>
+                          <div className={styles.modalItemInfo}>
+                            <span className={styles.modalItemName}>{item.title}</span>
+                            <span className={styles.modalItemUsername}>by {item.author}</span>
+                            <span className={styles.modalItemBio}>{item.content?.substring(0, 100)}...</span>
+                          </div>
+                          <button 
+                            className={styles.modalViewBtn}
+                            onClick={() => openDetailModal(item)}
+                          >
+                            View Post
+                          </button>
+                        </>
+                      )}
+                      
+                      {modalType === 'posts' && (
+                        <>
+                          <div className={styles.modalItemInfo}>
+                            <span className={styles.modalItemName}>{item.title}</span>
+                            <span className={styles.modalItemUsername}>{new Date(item.createdAt).toLocaleDateString()}</span>
+                            <span className={styles.modalItemBio}>{item.content?.substring(0, 100)}...</span>
+                          </div>
+                          <div className={styles.modalItemStats}>
+                            <span><FaHeart /> {item.likes || 0}</span>
+                            <span><FaComment /> {item.comments?.length || 0}</span>
+                          </div>
+                          <button 
+                            className={styles.modalViewBtn}
+                            onClick={() => openDetailModal(item)}
+                          >
+                            View Details
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  ))}
                 </div>
-                <div className={styles.stat}>
-                  <span className={styles.statNumber}>{favorites.length}</span>
-                  <span className={styles.statLabel}>Favorites</span>
+              ) : (
+                <div className={styles.modalEmptyState}>
+                  <p>No items found.</p>
                 </div>
-                <div className={styles.stat}>
-                  <span className={styles.statNumber}>{user.followers || 0}</span>
-                  <span className={styles.statLabel}>Followers</span>
-                </div>
-                <div className={styles.stat}>
-                  <span className={styles.statNumber}>{user.following || 0}</span>
-                  <span className={styles.statLabel}>Following</span>
-                </div>
-              </div>
-              
-              <div className={styles.actionButtons}>
-                <button 
-                  onClick={() => setIsEditing(true)}
-                  className={styles.editBtn}
-                >
-                  Edit Profile
-                </button>
-                <button 
-                  onClick={handleLogout}
-                  className={styles.logoutBtn}
-                >
-                  Logout
-                </button>
-              </div>
+              )}
             </div>
           </div>
-          
-          {user.bio && (
-            <div className={styles.bioSection}>
-              <p className={styles.bio}>{user.bio}</p>
-            </div>
-          )}
-          
-          {user.dietaryPreferences?.length > 0 && (
-            <div className={styles.dietarySection}>
-              <h4 className={styles.sectionTitle}>Dietary Preferences</h4>
-              <div className={styles.dietaryTags}>
-                {user.dietaryPreferences.map(pref => (
-                  <span key={pref} className={styles.dietaryTag}>
-                    {pref}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
+      )}
 
-        {/* Tabs and Content Below */}
-        <div className={styles.mainContent}>
-          <div className={styles.tabNavigation}>
-            <button 
-              className={`${styles.tabBtn} ${activeTab === 'recipes' ? styles.active : ''}`}
-              onClick={() => setActiveTab('recipes')}
-            >
-              <FaEdit className={styles.tabIcon} />
-              My Recipes
-              <span className={styles.tabCount}>({userRecipes.length})</span>
-            </button>
-            <button 
-              className={`${styles.tabBtn} ${activeTab === 'favorites' ? styles.active : ''}`}
-              onClick={() => setActiveTab('favorites')}
-            >
-              <FaHeart className={styles.tabIcon} />
-              Favourites
-              <span className={styles.tabCount}>({favorites.length})</span>
-            </button>
-            <button 
-              className={`${styles.tabBtn} ${activeTab === 'activity' ? styles.active : ''}`}
-              onClick={() => setActiveTab('activity')}
-            >
-              <FaClock className={styles.tabIcon} />
-              Recent Activity
-            </button>
-            <button 
-              className={`${styles.tabBtn} ${activeTab === 'community' ? styles.active : ''}`}
-              onClick={() => setActiveTab('community')}
-            >
-              <FaUsers className={styles.tabIcon} />
-              Community
-            </button>
-          </div>
-
-            <div className={styles.tabContent}>
-
-              {activeTab === 'recipes' && (
-                <div className={styles.recipesContent}>
-                  <div className={styles.sectionHeader}>
-                    <h2 className={styles.sectionTitle}>My Recipe Collection</h2>
-                    <p className={styles.sectionSubtitle}>Manage and share your culinary creations</p>
-                  </div>
-                  {userRecipes.length > 0 ? (
-                    <div className={styles.recipesGrid}>
-                      {userRecipes.map(recipe => (
-                        <div key={recipe.id} className={styles.recipeCardWrapper}>
-                          <ProfileRecipeCard 
-                            recipe={recipe}
-                            onEdit={handleRecipeEdit}
-                            onDelete={handleRecipeDelete}
-                            onPublish={handleRecipePublish}
-                            onView={handleRecipeView}
-                          />
-                          <div className={styles.recipeStats}>
-                            <span className={styles.recipeStat}>
-                              <FaEye /> {recipe.views || 0}
-                            </span>
-                            <span className={styles.recipeStat}>
-                              <FaHeart /> {recipe.likes || 0}
-                            </span>
-                            <span className={styles.recipeStat}>
-                              <FaComment /> {recipe.comments || 0}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className={styles.emptyState}>
-                      <div className={styles.emptyIcon}><FaEdit /></div>
-                      <h3>No recipes yet</h3>
-                      <p>Start sharing your favorite recipes with the community!</p>
-                      <button 
-                        className={styles.createBtn}
-                        onClick={() => navigate('/create-recipe')}
-                      >
-                        Create Your First Recipe
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {activeTab === 'favorites' && (
-                <div className={styles.favoritesContent}>
-                  <div className={styles.sectionHeader}>
-                    <h2 className={styles.sectionTitle}>Favourite Recipes</h2>
-                    <p className={styles.sectionSubtitle}>Your saved recipes from the community</p>
-                  </div>
-                  {favorites.length > 0 ? (
-                    <div className={styles.recipesGrid}>
-                      {favorites.map(recipe => (
-                        <div key={recipe.id} className={styles.favoriteCardWrapper}>
-                          <RecipeCard recipe={recipe} />
-                          <div className={styles.favoriteInfo}>
-                            <div className={styles.rating}>
-                              <FaStar className={styles.starIcon} />
-                              <span>{recipe.rating || 4.5}</span>
-                            </div>
-                            <span className={styles.difficulty}>
-                              {recipe.difficulty || 'Medium'}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className={styles.emptyState}>
-                      <div className={styles.emptyIcon}><FaHeart /></div>
-                      <h3>No favorites yet</h3>
-                      <p>Start exploring recipes and save your favorites!</p>
-                      <button 
-                        className={styles.exploreBtn}
-                        onClick={() => navigate('/')}
-                      >
-                        Explore Recipes
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {activeTab === 'activity' && (
-                <div className={styles.activityContent}>
-                  <div className={styles.sectionHeader}>
-                    <h2 className={styles.sectionTitle}>Recent Activity</h2>
-                    <p className={styles.sectionSubtitle}>Your latest interactions and updates</p>
-                  </div>
-                  <div className={styles.activityTimeline}>
-                    <div className={styles.activityItem}>
-                      <div className={styles.activityIcon}>
-                        <FaEdit />
-                      </div>
-                      <div className={styles.activityContent}>
-                        <h4>Created a new recipe</h4>
-                        <p>"Delicious Pasta Carbonara" - 2 days ago</p>
-                      </div>
-                    </div>
-                    <div className={styles.activityItem}>
-                      <div className={styles.activityIcon}>
-                        <FaHeart />
-                      </div>
-                      <div className={styles.activityContent}>
-                        <h4>Liked a recipe</h4>
-                        <p>"Chocolate Chip Cookies" by Sarah Johnson - 3 days ago</p>
-                      </div>
-                    </div>
-                    <div className={styles.activityItem}>
-                      <div className={styles.activityIcon}>
-                        <FaComment />
-                      </div>
-                      <div className={styles.activityContent}>
-                        <h4>Commented on a recipe</h4>
-                        <p>"Amazing flavors!" on "Thai Green Curry" - 5 days ago</p>
-                      </div>
-                    </div>
-                    <div className={styles.activityItem}>
-                      <div className={styles.activityIcon}>
-                        <FaUsers />
-                      </div>
-                      <div className={styles.activityContent}>
-                        <h4>Joined TasteMate community</h4>
-                        <p>Welcome to our cooking community! - 1 week ago</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeTab === 'community' && (
-                <div className={styles.communityContent}>
-                  <div className={styles.sectionHeader}>
-                    <h2 className={styles.sectionTitle}>Community & Achievements</h2>
-                    <p className={styles.sectionSubtitle}>Your groups and accomplishments</p>
-                  </div>
-                  
-                  <div className={styles.communitySection}>
-                    <h3 className={styles.subsectionTitle}>Groups Joined</h3>
-                    <div className={styles.groupsGrid}>
-                      <div className={styles.groupCard}>
-                        <div className={styles.groupIcon}>🍝</div>
-                        <h4>Italian Cuisine Lovers</h4>
-                        <p>1.2k members</p>
-                      </div>
-                      <div className={styles.groupCard}>
-                        <div className={styles.groupIcon}>🥗</div>
-                        <h4>Healthy Eating</h4>
-                        <p>856 members</p>
-                      </div>
-                      <div className={styles.groupCard}>
-                        <div className={styles.groupIcon}>🍰</div>
-                        <h4>Baking Masters</h4>
-                        <p>2.1k members</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className={styles.communitySection}>
-                    <h3 className={styles.subsectionTitle}>Achievements</h3>
-                    <div className={styles.achievementsGrid}>
-                      <div className={styles.achievementCard}>
-                        <div className={styles.achievementIcon}>
-                          <FaTrophy />
-                        </div>
-                        <h4>First Recipe</h4>
-                        <p>Created your first recipe</p>
-                      </div>
-                      <div className={styles.achievementCard}>
-                        <div className={styles.achievementIcon}>
-                          <FaHeart />
-                        </div>
-                        <h4>Recipe Lover</h4>
-                        <p>Saved 10 favorite recipes</p>
-                      </div>
-                      <div className={styles.achievementCard}>
-                        <div className={styles.achievementIcon}>
-                          <FaUsers />
-                        </div>
-                        <h4>Community Member</h4>
-                        <p>Active for 30 days</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className={styles.communitySection}>
-                    <h3 className={styles.subsectionTitle}>My Community Posts</h3>
-                    {userCommunityPosts.length > 0 ? (
-                      <div className={styles.communityPostsGrid}>
-                        {userCommunityPosts.map((post) => (
-                          <div key={post.id} className={styles.communityPostCard}>
-                            <div className={styles.postHeader}>
-                              <h4 className={styles.postTitle}>{post.title || 'Untitled Post'}</h4>
-                              <span className={styles.postDate}>
-                                {new Date(post.createdAt).toLocaleDateString()}
-                              </span>
-                            </div>
-                            <p className={styles.postContent}>
-                              {post.content.length > 100 
-                                ? `${post.content.substring(0, 100)}...` 
-                                : post.content
-                              }
-                            </p>
-                            {post.images && post.images.length > 0 && (
-                              <div className={styles.postImages}>
-                                <img 
-                                  src={post.images[0]} 
-                                  alt="Post preview" 
-                                  className={styles.postPreviewImage}
-                                />
-                                {post.images.length > 1 && (
-                                  <span className={styles.moreImages}>
-                                    +{post.images.length - 1} more
-                                  </span>
-                                )}
-                              </div>
-                            )}
-                            <div className={styles.postStats}>
-                              <span><FaHeart /> {post.likes || 0}</span>
-                              <span><FaComment /> {post.comments || 0}</span>
-                              <span><FaEye /> {post.views || 0}</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className={styles.emptyState}>
-                        <p>No community posts yet. Share your culinary journey with the community!</p>
-                        <button 
-                          className={styles.createPostBtn}
-                          onClick={() => navigate('/create-post')}
-                        >
-                          Create Your First Post
-                        </button>
-                      </div>
+      {/* Detail Modal */}
+      {showDetailModal && selectedItem && (
+        <div className={styles.modalOverlay} onClick={closeDetailModal}>
+          <div className={styles.detailModalContent} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h3>Details</h3>
+              <button className={styles.closeModalBtn} onClick={closeDetailModal}>
+                <FaTimes />
+              </button>
+            </div>
+            
+            <div className={styles.detailModalBody}>
+              {(modalType === 'following' || modalType === 'followers' || modalType === 'authorBookmarks') && (
+                <div className={styles.userDetailCard}>
+                  <img src={selectedItem.profilePicture} alt={selectedItem.firstName} className={styles.detailAvatar} />
+                  <div className={styles.userDetailInfo}>
+                    <h4>{selectedItem.firstName} {selectedItem.lastName}</h4>
+                    <p className={styles.detailUsername}>@{selectedItem.username}</p>
+                    {selectedItem.bio && <p className={styles.detailBio}>{selectedItem.bio}</p>}
+                    {selectedItem.location && (
+                      <p className={styles.detailLocation}>
+                        <FaMapMarkerAlt /> {selectedItem.location}
+                      </p>
                     )}
+                    <div className={styles.detailStats}>
+                      <span>Followers: {selectedItem.followers || 0}</span>
+                      <span>Following: {selectedItem.following || 0}</span>
+                    </div>
+                    <button 
+                      className={styles.detailActionBtn}
+                      onClick={() => navigateToProfile(selectedItem.id)}
+                    >
+                      View Profile
+                    </button>
                   </div>
+                </div>
+              )}
+              
+              {modalType === 'communityBookmarks' && (
+                <div className={styles.postDetailCard}>
+                  <h4>{selectedItem.title}</h4>
+                  <p className={styles.postDetailAuthor}>by {selectedItem.author}</p>
+                  <p className={styles.postDetailDate}>{new Date(selectedItem.createdAt).toLocaleDateString()}</p>
+                  <div className={styles.postDetailContent}>
+                    <p>{selectedItem.content}</p>
+                  </div>
+                  <div className={styles.postDetailStats}>
+                    <span><FaHeart /> {selectedItem.likes || 0} likes</span>
+                    <span><FaComment /> {selectedItem.comments?.length || 0} comments</span>
+                  </div>
+                  <button 
+                    className={styles.detailActionBtn}
+                    onClick={() => navigate('/community')}
+                  >
+                    View in Community
+                  </button>
+                </div>
+              )}
+              
+              {modalType === 'posts' && (
+                <div className={styles.postDetailCard}>
+                  <h4>{selectedItem.title}</h4>
+                  <p className={styles.postDetailDate}>{new Date(selectedItem.createdAt).toLocaleDateString()}</p>
+                  <div className={styles.postDetailContent}>
+                    <p>{selectedItem.content}</p>
+                  </div>
+                  <div className={styles.postDetailStats}>
+                    <span><FaHeart /> {selectedItem.likes || 0} likes</span>
+                    <span><FaComment /> {selectedItem.comments?.length || 0} comments</span>
+                  </div>
+                  <button 
+                    className={styles.detailActionBtn}
+                    onClick={() => navigate('/community')}
+                  >
+                    View in Community
+                  </button>
                 </div>
               )}
             </div>
           </div>
         </div>
+      )}
+
+      <div className={styles.profileContent}>
+        <UserInformation 
+          user={user}
+          userRecipes={userRecipes}
+          userCommunityPosts={userCommunityPosts}
+          followingCount={getFollowingCount()}
+          followersCount={getFollowersCount(getCurrentUserId())}
+          onEditProfile={() => setIsEditing(true)}
+          onLogout={handleLogout}
+          updateProfile={updateProfile}
+          showError={showError}
+          isUploadingAvatar={isUploadingAvatar}
+          setIsUploadingAvatar={setIsUploadingAvatar}
+        />
+        
+        <div className={styles.divider}></div>
+
+        <UserCreatedList 
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          userRecipes={userRecipes}
+          userCommunityPosts={userCommunityPosts}
+          onEditRecipe={handleRecipeEdit}
+          onDeleteRecipe={handleRecipeDelete}
+          onPublishRecipe={handleRecipePublish}
+          onViewRecipe={handleRecipeView}
+          navigate={navigate}
+        />
+      </div>
 
       {/* Edit Profile Modal */}
       {isEditing && (

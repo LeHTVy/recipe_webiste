@@ -20,6 +20,14 @@ import {
 } from 'react-icons/fa';
 import styles from './AuthorProfile.module.css';
 import { mockRecipes } from '../../data/mockData';
+import {
+  followUser,
+  unfollowUser,
+  isFollowing as checkIsFollowing,
+  toggleAuthorBookmark,
+  isAuthorBookmarked,
+  getFollowers
+} from '../../lib/localStorageUtils';
 
 const AuthorProfile = () => {
   const { authorId } = useParams();
@@ -221,13 +229,18 @@ const AuthorProfile = () => {
          console.log('Found posts for author:', posts.length);
          setAuthorPosts(posts);
         
-        // Load bookmark status
-        const bookmarks = JSON.parse(localStorage.getItem('authorBookmarks') || '[]');
-        setIsBookmarked(bookmarks.includes(authorId));
+        // Load bookmark status using new utility
+        setIsBookmarked(isAuthorBookmarked(authorId));
         
-        // Load following status
-        const following = JSON.parse(localStorage.getItem('authorFollowing') || '[]');
-        setIsFollowing(following.includes(authorId));
+        // Load following status using new utility
+         setIsFollowing(checkIsFollowing(authorId));
+        
+        // Update follower count with actual data
+        const followers = getFollowers(authorId);
+        setAuthorData(prev => ({
+          ...prev,
+          followers: followers.length
+        }));
         
       } catch (error) {
         console.error('Error loading author data:', error);
@@ -278,35 +291,47 @@ const AuthorProfile = () => {
   };
 
   const handleBookmark = () => {
-    const bookmarks = JSON.parse(localStorage.getItem('authorBookmarks') || '[]');
-    let updatedBookmarks;
+    const newBookmarkStatus = toggleAuthorBookmark(authorId);
     
-    if (isBookmarked) {
-      updatedBookmarks = bookmarks.filter(id => id !== authorId);
-      showNotification('Author removed from bookmarks', 'info');
-    } else {
-      updatedBookmarks = [...bookmarks, authorId];
+    if (newBookmarkStatus) {
       showNotification('Author bookmarked!', 'success');
+    } else {
+      showNotification('Author removed from bookmarks', 'info');
     }
     
-    localStorage.setItem('authorBookmarks', JSON.stringify(updatedBookmarks));
-    setIsBookmarked(!isBookmarked);
+    setIsBookmarked(newBookmarkStatus);
   };
 
   const handleFollow = () => {
-    const following = JSON.parse(localStorage.getItem('following') || '[]');
-    let updatedFollowing;
+    let success = false;
     
     if (isFollowing) {
-      updatedFollowing = following.filter(id => id !== authorId);
-      showNotification('Unfollowed author', 'info');
+      success = unfollowUser(authorId);
+      if (success) {
+        showNotification('Unfollowed author', 'info');
+        setIsFollowing(false);
+        // Update follower count
+        setAuthorData(prev => ({
+          ...prev,
+          followers: Math.max(0, prev.followers - 1)
+        }));
+      }
     } else {
-      updatedFollowing = [...following, authorId];
-      showNotification('Now following author!', 'success');
+      success = followUser(authorId);
+      if (success) {
+        showNotification('Now following author!', 'success');
+        setIsFollowing(true);
+        // Update follower count
+        setAuthorData(prev => ({
+          ...prev,
+          followers: prev.followers + 1
+        }));
+      }
     }
     
-    localStorage.setItem('following', JSON.stringify(updatedFollowing));
-    setIsFollowing(!isFollowing);
+    if (!success) {
+      showNotification('Unable to update follow status. Please try again.', 'error');
+    }
   };
 
   const handleRateAuthor = (rating) => {

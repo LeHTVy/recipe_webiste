@@ -3,6 +3,10 @@ import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { useNotification } from '../../context/NotificationContext';
 import { useNavigate } from 'react-router-dom';
+import {
+  toggleCommunityBookmark,
+  isCommunityPostBookmarked
+} from '../../lib/localStorageUtils';
 import { 
   communityPosts, 
   trendingRecipes, 
@@ -38,6 +42,28 @@ const Community = () => {
   const [posts, setPosts] = useState([]);
   const [activeFilter, setActiveFilter] = useState('all');
 
+  // Initialize community users and recipes in localStorage if not present
+  useEffect(() => {
+    const existingCommunityUsers = localStorage.getItem('tastemate_community_users');
+    if (!existingCommunityUsers) {
+      // Import and store community users
+      import('../../data/mockCommunityData').then(({ communityUsers }) => {
+        localStorage.setItem('tastemate_community_users', JSON.stringify(communityUsers));
+        console.log('Initialized community users in localStorage:', communityUsers.length);
+      });
+    }
+    
+    const existingRecipes = localStorage.getItem('tastemate_recipes');
+    if (!existingRecipes) {
+      // Import and store recipes from mockData
+      import('../../data/mockData').then((mockDataModule) => {
+        const recipes = mockDataModule.default || mockDataModule.recipes || [];
+        localStorage.setItem('tastemate_recipes', JSON.stringify(recipes));
+        console.log('Initialized recipes in localStorage:', recipes.length);
+      });
+    }
+  }, []);
+
   // Load posts from localStorage and merge with mock data
   useEffect(() => {
     const savedPosts = localStorage.getItem('tastemate_community_posts');
@@ -53,7 +79,14 @@ const Community = () => {
     
     // Merge user posts with mock posts, user posts first
     const allPosts = [...userPosts, ...communityPosts];
-    setPosts(allPosts);
+    
+    // Update bookmark status for each post based on localStorage
+    const postsWithBookmarkStatus = allPosts.map(post => ({
+      ...post,
+      isBookmarked: isCommunityPostBookmarked(post.id)
+    }));
+    
+    setPosts(postsWithBookmarkStatus);
   }, []);
 
   // Handle post interactions
@@ -72,14 +105,28 @@ const Community = () => {
   };
 
   const handleBookmark = (postId) => {
+    // Find the post object
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
+    
+    // Toggle bookmark in localStorage
+    const isBookmarked = toggleCommunityBookmark(post);
+    
+    // Update local state
     setPosts(prevPosts => 
-      prevPosts.map(post => 
-        post.id === postId 
-          ? { ...post, isBookmarked: !post.isBookmarked }
-          : post
+      prevPosts.map(p => 
+        p.id === postId 
+          ? { ...p, isBookmarked }
+          : p
       )
     );
-    showSuccess('Recipe bookmarked!');
+    
+    // Show appropriate notification
+    if (isBookmarked) {
+      showSuccess('Post bookmarked!');
+    } else {
+      showSuccess('Post removed from bookmarks!');
+    }
   };
 
   const handleShare = (post) => {
