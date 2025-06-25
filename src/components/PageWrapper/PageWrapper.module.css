@@ -1,0 +1,87 @@
+/* src/components/PageWrapper/PageWrapper.module.css */
+.pageWrapper {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.staggerItem {
+  width: 100%;
+}
+
+/* Smooth scroll behavior */
+.pageWrapper * {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced hover effects for interactive elements */
+.pageWrapper button,
+.pageWrapper a,
+.pageWrapper [role="button"] {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pageWrapper button:hover,
+.pageWrapper a:hover,
+.pageWrapper [role="button"]:hover {
+  transform: translateY(-2px);
+}
+
+/* Subtle animation for cards and containers */
+.pageWrapper .card,
+.pageWrapper [class*="card"],
+.pageWrapper [class*="Card"] {
+  transition: all 0.3s ease;
+}
+
+.pageWrapper .card:hover,
+.pageWrapper [class*="card"]:hover,
+.pageWrapper [class*="Card"]:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Animation for form elements */
+.pageWrapper input,
+.pageWrapper textarea,
+.pageWrapper select {
+  transition: all 0.3s ease;
+}
+
+.pageWrapper input:focus,
+.pageWrapper textarea:focus,
+.pageWrapper select:focus {
+  transform: scale(1.02);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .pageWrapper {
+    padding: 0;
+  }
+  
+  .pageWrapper button:hover,
+  .pageWrapper a:hover,
+  .pageWrapper [role="button"]:hover {
+    transform: none; /* Disable hover effects on mobile */
+  }
+  
+  .pageWrapper .card:hover,
+  .pageWrapper [class*="card"]:hover,
+  .pageWrapper [class*="Card"]:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* Accessibility - Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .pageWrapper,
+  .pageWrapper *,
+  .staggerItem {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

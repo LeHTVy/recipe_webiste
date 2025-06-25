@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Hero from '../../components/Hero/Hero';
+import PageWrapper from '../../components/PageWrapper/PageWrapper';
+import AnimatedSection from '../../components/AnimatedSection/AnimatedSection';
+import { fadeInUp, fadeInLeft, fadeInRight } from '../../hooks/useScrollAnimation';
 import RecipeCard from '../../components/RecipeCard/RecipeCard';
 import RecipeTagsCarousel from '../../components/RecipeTagsCarousel/RecipeTagsCarousel';
 import PopularRecipesCarousel from '../../components/PopularRecipesCarousel/PopularRecipesCarousel';
@@ -76,31 +79,38 @@ const Home = () => {
   };
 
   return (
-    <div className={styles.home}>
-      <Hero />
+    <PageWrapper className={styles.home}>
+      <AnimatedSection variant={fadeInUp}>
+        <Hero />
+      </AnimatedSection>
 
       {/* Popular Recipes Carousel Section */}
-      <section className={styles.popularSection}>
-        <div className="container">
-          <PopularRecipesCarousel selectedTag={selectedTag} />
-        </div>
-      </section>
+      <AnimatedSection variant={fadeInLeft} delay={0.2}>
+        <section className={styles.popularSection}>
+          <div className="container">
+            <PopularRecipesCarousel selectedTag={selectedTag} />
+          </div>
+        </section>
+      </AnimatedSection>
 
       {/* Feature Carousel Section */}
-      <section className={styles.featuresCarouselSection}>
-        <div className="container">
-          <FeatureCarousel
-            title="Discover TasteMate Features"
-            description="Explore our powerful features designed to enhance your cooking journey"
-            image={featureImages}
-            autoPlay={true}
-            autoPlayInterval={4000}
-            bgClass="bg-gradient-to-tr from-orange-500/10 to-green-500/10"
-          />
-        </div>
-      </section>
+      <AnimatedSection variant={fadeInRight} delay={0.4}>
+        <section className={styles.featuresCarouselSection}>
+          <div className="container">
+            <FeatureCarousel
+              title="Discover TasteMate Features"
+              description="Explore our powerful features designed to enhance your cooking journey"
+              image={featureImages}
+              autoPlay={true}
+              autoPlayInterval={4000}
+              bgClass="bg-gradient-to-tr from-orange-500/10 to-green-500/10"
+            />
+          </div>
+        </section>
+      </AnimatedSection>
 
-      <section className={styles.recipesSection}>
+      <AnimatedSection variant={fadeInUp} delay={0.6}>
+        <section className={styles.recipesSection}>
         <div className="container">
           <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>
@@ -158,34 +168,37 @@ const Home = () => {
           )}
         </div>
       </section>
+      </AnimatedSection>
 
       {/* Features Section */}
-      <section className={styles.featuresSection}>
-        <div className="container">
-          <div className={styles.featuresGrid}>
-            <div className={styles.featureCard}>
-              <div className={styles.featureIcon}><FaSearch /></div>
-              <h3 className={styles.featureTitle}>Explore the latest</h3>
-              <p className={styles.featureDescription}>
-                Stay up to date and check out our recently added recipes. You
-                won't regret.
-              </p>
-              <button className={styles.featureBtn}>See recipes</button>
-            </div>
+      <AnimatedSection variant={fadeInLeft} delay={0.8}>
+        <section className={styles.featuresSection}>
+          <div className="container">
+            <div className={styles.featuresGrid}>
+              <div className={styles.featureCard}>
+                <div className={styles.featureIcon}><FaSearch /></div>
+                <h3 className={styles.featureTitle}>Explore the latest</h3>
+                <p className={styles.featureDescription}>
+                  Stay up to date and check out our recently added recipes. You
+                  won't regret.
+                </p>
+                <button className={styles.featureBtn}>See recipes</button>
+              </div>
 
-            <div className={styles.featureCard}>
-              <div className={styles.featureIcon} onClick={handleViewRecipe}><FaBolt /></div>
-              <h3 className={styles.featureTitle}>Quick and easy</h3>
-              <p className={styles.featureDescription}>
-                Vegan recipes or low-carb diet? Here you find ideas for quick
-                meals.
-              </p>
-              <button className={styles.featureBtn} onClick={handleViewRecipe}>See recipes</button>
+              <div className={styles.featureCard}>
+                <div className={styles.featureIcon} onClick={handleViewRecipe}><FaBolt /></div>
+                <h3 className={styles.featureTitle}>Quick and easy</h3>
+                <p className={styles.featureDescription}>
+                  Vegan recipes or low-carb diet? Here you find ideas for quick
+                  meals.
+                </p>
+                <button className={styles.featureBtn} onClick={handleViewRecipe}>See recipes</button>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+      </AnimatedSection>
+    </PageWrapper>
   );
 };
 

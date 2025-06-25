@@ -92,6 +92,12 @@ const Navbar = () => {
             >
               Recipes
             </button>
+            <button
+              onClick={() => handleNavigation('/about')}
+              className={`${styles.navLink} ${isActive('/about') ? styles.active : ''}`}
+            >
+              About Us
+            </button>
 
             {/* Community và Meal Planner - Chỉ hiện khi đã login */}
             {isAuthenticated && (
@@ -254,6 +260,13 @@ const Navbar = () => {
               className={`${styles.mobileNavLink} ${isActive('/recipes') ? styles.active : ''}`}
             >
               Recipes
+            </button>
+
+            <button
+              onClick={() => handleNavigation('/about')}
+              className={`${styles.mobileNavLink} ${isActive('/about') ? styles.active : ''}`}
+            >
+              About Us
             </button>
 
             {isAuthenticated ? (

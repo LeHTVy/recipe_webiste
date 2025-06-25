@@ -18,6 +18,8 @@ import Community from "./pages/Community/Community";
 import CreatePost from "./pages/CreatePost/CreatePost";
 import MealPlanner from "./pages/MealPlanner/MealPlanner";
 import AuthorProfile from "./pages/AuthorProfile/AuthorProfile";
+import AboutUs from "./pages/AboutUs/AboutUs";
+
 import ConfirmationModal from "./components/ConfirmationModal/ConfirmationModal";
 import { useState, createContext, useContext } from "react";
 import { mockRecipes } from "./data/mockData";
@@ -152,6 +154,7 @@ const AppContent = () => {
             <Route path="/auth" element={<Auth />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/author/:authorId" element={<AuthorProfile />} />
+            <Route path="/about" element={<AboutUs />} />
           </Routes>
         </main>
         <Footer />
