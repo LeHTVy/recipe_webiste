@@ -1,41 +1,28 @@
 import { useEffect, useState, useRef } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
-// replace icons with your own if needed
-import { FiCircle, FiCode, FiFileText, FiLayers, FiLayout } from "react-icons/fi";
+import { FaChalkboardTeacher, FaBook, FaLaptopCode } from 'react-icons/fa';
 
 import "./Carousel.css";
 
 const DEFAULT_ITEMS = [
   {
-    title: "Text Animations",
-    description: "Cool text animations for your projects.",
-    id: 1,
-    icon: <FiFileText className="carousel-icon" />,
-  },
-  {
-    title: "Animations",
-    description: "Smooth animations for your projects.",
-    id: 2,
-    icon: <FiCircle className="carousel-icon" />,
-  },
-  {
-    title: "Components",
-    description: "Reusable components for your projects.",
-    id: 3,
-    icon: <FiLayers className="carousel-icon" />,
-  },
-  {
-    title: "Backgrounds",
-    description: "Beautiful backgrounds and patterns for your projects.",
-    id: 4,
-    icon: <FiLayout className="carousel-icon" />,
-  },
-  {
-    title: "Common UI",
-    description: "Common UI components are coming soon!",
-    id: 5,
-    icon: <FiCode className="carousel-icon" />,
-  },
+      title: "Front-End Development Course",
+      description: "SW306DE01 - 0100",
+      id: 1,
+      icon: <FaLaptopCode className="h-[16px] w-[16px] text-white" />,
+    },
+    {
+      title: "Professor",
+      description: "Pham Hong Thanh ",
+      id: 2,
+      icon: <FaChalkboardTeacher className="h-[16px] w-[16px] text-white" />,
+    },
+    {
+      title: "Hoasen University",
+      description: "Thank you for providing us a chance to study this course",
+      id: 3,
+      icon: <FaBook className="h-[16px] w-[16px] text-white" />,
+    },
 ];
 
 const DRAG_BUFFER = 0;

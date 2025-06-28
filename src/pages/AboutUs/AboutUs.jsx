@@ -69,8 +69,8 @@ const AboutUs = () => {
               blurAmount={5}
               borderColor="#113e21"
               glowColor="rgba(17, 62, 33, 0.6)"
-              animationDuration={2}
-              pauseBetweenAnimations={1}
+              animationDuration={1}
+              pauseBetweenAnimations={0.6}
             />
           </div>
           <div className={styles.heroDescription}>
@@ -80,8 +80,8 @@ const AboutUs = () => {
               blurAmount={3}
               borderColor="#00bf63"
               glowColor="rgba(0, 191, 99, 0.4)"
-              animationDuration={1.5}
-              pauseBetweenAnimations={0.2}
+              animationDuration={1}
+              pauseBetweenAnimations={0.5}
             />
           </div>
         </div>
