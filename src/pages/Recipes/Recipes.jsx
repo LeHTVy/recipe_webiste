@@ -17,6 +17,8 @@ const Recipes = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const recipesPerPage = 9;
 
   const fetchRecipes = async () => {
     setLoading(true);
@@ -94,6 +96,18 @@ const Recipes = () => {
     }
     
     setFilteredRecipes(filtered);
+    setCurrentPage(1); // Reset to first page when filters change
+  };
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredRecipes.length / recipesPerPage);
+  const startIndex = (currentPage - 1) * recipesPerPage;
+  const endIndex = startIndex + recipesPerPage;
+  const currentRecipes = filteredRecipes.slice(startIndex, endIndex);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const featuredRecipes = getRandomRecipes(4);
@@ -164,6 +178,7 @@ const Recipes = () => {
                     setSelectedCategory('all');
                     setSearchTerm('');
                     setFilteredRecipes(recipes);
+                    setCurrentPage(1);
                   }}
                 >
                   Clear filters ✕
@@ -183,11 +198,46 @@ const Recipes = () => {
               <p>Loading delicious recipes...</p>
             </div>
           ) : (
-            <div className={styles.recipeGrid}>
-              {filteredRecipes.map(recipe => (
-                <RecipeCard key={recipe.id} recipe={recipe} />
-              ))}
-            </div>
+            <>
+              <div className={styles.recipeGrid}>
+                {currentRecipes.map(recipe => (
+                  <RecipeCard key={recipe.id} recipe={recipe} />
+                ))}
+              </div>
+              
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className={styles.pagination}>
+                  <button 
+                    className={`${styles.pageBtn} ${currentPage === 1 ? styles.disabled : ''}`}
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    ← Previous
+                  </button>
+                  
+                  <div className={styles.pageNumbers}>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                      <button
+                        key={page}
+                        className={`${styles.pageNumber} ${currentPage === page ? styles.active : ''}`}
+                        onClick={() => handlePageChange(page)}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                  </div>
+                  
+                  <button 
+                    className={`${styles.pageBtn} ${currentPage === totalPages ? styles.disabled : ''}`}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    Next →
+                  </button>
+                </div>
+              )}
+            </>
           )}
 
           {!loading && filteredRecipes.length === 0 && (
@@ -201,6 +251,7 @@ const Recipes = () => {
                   setSelectedCategory('all');
                   setSearchTerm('');
                   setFilteredRecipes(recipes);
+                  setCurrentPage(1);
                 }}
               >
                 Show all recipes
