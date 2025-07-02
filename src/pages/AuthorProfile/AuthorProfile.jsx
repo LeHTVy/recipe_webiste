@@ -467,94 +467,100 @@ const AuthorProfile = () => {
         </div>
       </div>
 
-      {/* Author Info */}
-      <div className={styles.authorInfo}>
-        <div className={styles.authorAvatar}>
-          <img src={authorData.avatar} alt={authorData.name} />
-        </div>
-        <div className={styles.authorDetails}>
-          <h1 className={styles.authorName}>{authorData.name}</h1>
-          <p className={styles.authorBio}>{authorData.bio}</p>
-          
-          <div className={styles.authorMeta}>
-            {authorData.location && (
+      {/* Main Content Layout */}
+      <div className={styles.mainContent}>
+        {/* Author Info */}
+        <div className={styles.authorInfo}>
+          <div className={styles.authorAvatar}>
+            <img src={authorData.avatar} alt={authorData.name} />
+          </div>
+          <div className={styles.authorDetails}>
+            <h1 className={styles.authorName}>{authorData.name}</h1>
+            <p className={styles.authorBio}>{authorData.bio}</p>
+            
+            <div className={styles.authorMeta}>
+              {authorData.location && (
+                <span className={styles.metaItem}>
+                  <FaMapMarkerAlt /> {authorData.location}
+                </span>
+              )}
               <span className={styles.metaItem}>
-                <FaMapMarkerAlt /> {authorData.location}
+                <FaCalendarAlt /> Joined {new Date(authorData.joinDate).toLocaleDateString()}
               </span>
-            )}
-            <span className={styles.metaItem}>
-              <FaCalendarAlt /> Joined {new Date(authorData.joinDate).toLocaleDateString()}
-            </span>
-          </div>
+            </div>
 
-          <div className={styles.authorStats}>
-            <div className={styles.statItem}>
-              <span className={styles.statNumber}>{authorData.totalRecipes}</span>
-              <span className={styles.statLabel}>Recipes</span>
-            </div>
-            <div className={styles.statItem}>
-              <span className={styles.statNumber}>{authorPosts.length}</span>
-              <span className={styles.statLabel}>Posts</span>
-            </div>
-            <div className={styles.statItem}>
-              <span className={styles.statNumber}>{authorData.followers}</span>
-              <span className={styles.statLabel}>Followers</span>
-            </div>
-            <div className={styles.statItem}>
-              <span className={styles.statNumber}>{authorData.following}</span>
-              <span className={styles.statLabel}>Following</span>
-            </div>
-          </div>
-
-          <div className={styles.authorRating}>
-            <h3 className={styles.ratingTitle}>Total Rating Posts</h3>
-            <div className={styles.ratingDisplay}>
-              <div className={styles.stars}>
-                {renderStars(authorRating.averageRating)}
+            <div className={styles.authorStats}>
+              <div className={styles.statItem}>
+                <span className={styles.statNumber}>{authorData.totalRecipes}</span>
+                <span className={styles.statLabel}>Recipes</span>
               </div>
-              <span className={styles.ratingValue}>{authorRating.averageRating}</span>
-              <span className={styles.ratingCount}>({authorRating.totalRatings} ratings)</span>
+              <div className={styles.statItem}>
+                <span className={styles.statNumber}>{authorPosts.length}</span>
+                <span className={styles.statLabel}>Posts</span>
+              </div>
+              <div className={styles.statItem}>
+                <span className={styles.statNumber}>{authorData.followers}</span>
+                <span className={styles.statLabel}>Followers</span>
+              </div>
+              <div className={styles.statItem}>
+                <span className={styles.statNumber}>{authorData.following}</span>
+                <span className={styles.statLabel}>Following</span>
+              </div>
             </div>
-          </div>
 
-          <div className={styles.authorActions}>
-            <button 
-              className={`${styles.followBtn} ${isFollowing ? styles.following : ''}`}
-              onClick={handleFollow}
-            >
-              <FaUsers /> {isFollowing ? 'Following' : 'Follow'}
-            </button>
-            {user && (
+            <div className={styles.authorRating}>
+              <h3 className={styles.ratingTitle}>Total Rating Posts</h3>
+              <div className={styles.ratingDisplay}>
+                <div className={styles.stars}>
+                  {renderStars(authorRating.averageRating)}
+                </div>
+                <span className={styles.ratingValue}>{authorRating.averageRating}</span>
+                <span className={styles.ratingCount}>({authorRating.totalRatings} ratings)</span>
+              </div>
+            </div>
+
+            <div className={styles.authorActions}>
               <button 
-                className={styles.rateBtn}
-                onClick={() => setShowRatingModal(true)}
+                className={`${styles.followBtn} ${isFollowing ? styles.following : ''}`}
+                onClick={handleFollow}
               >
-                <FaStar /> Rate Author
+                <FaUsers /> {isFollowing ? 'Following' : 'Follow'}
               </button>
-            )}
+              {user && (
+                <button 
+                  className={styles.rateBtn}
+                  onClick={() => setShowRatingModal(true)}
+                >
+                  <FaStar /> Rate Author
+                </button>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Tabs */}
-      <div className={styles.tabs}>
-        <button 
-          className={`${styles.tab} ${activeTab === 'recipes' ? styles.active : ''}`}
-          onClick={() => setActiveTab('recipes')}
-        >
-          <FaUtensils /> Recipes ({authorRecipes.length})
-        </button>
-        <button 
-          className={`${styles.tab} ${activeTab === 'posts' ? styles.active : ''}`}
-          onClick={() => setActiveTab('posts')}
-        >
-          <FaNewspaper /> Posts ({authorPosts.length})
-        </button>
-      </div>
+        {/* Tabs and Content Section */}
+        <div className={styles.tabsSection}>
+          {/* Tabs */}
+          <div className={styles.tabs}>
+            <button 
+              className={`${styles.tab} ${activeTab === 'recipes' ? styles.active : ''}`}
+              onClick={() => setActiveTab('recipes')}
+            >
+              <FaUtensils /> Recipes ({authorRecipes.length})
+            </button>
+            <button 
+              className={`${styles.tab} ${activeTab === 'posts' ? styles.active : ''}`}
+              onClick={() => setActiveTab('posts')}
+            >
+              <FaNewspaper /> Posts ({authorPosts.length})
+            </button>
+          </div>
 
-      {/* Tab Content */}
-      <div className={styles.tabContent}>
-        {renderTabContent()}
+          {/* Tab Content */}
+          <div className={styles.tabContent}>
+            {renderTabContent()}
+          </div>
+        </div>
       </div>
 
       {/* Rating Modal */}

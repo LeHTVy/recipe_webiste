@@ -206,58 +206,66 @@ const CreatePost = () => {
           </button>
         </div>
         
-        {/* User Info */}
-        <div className={styles.userInfo}>
-          <img 
-            src={user?.profilePicture || `https://ui-avatars.com/api/?name=${user?.firstName}+${user?.lastName}&background=00bf63&color=fff`}
-            alt="Your avatar"
-            className={styles.userAvatar}
-          />
-          <div className={styles.userDetails}>
-            <h3>{user?.firstName} {user?.lastName}</h3>
-            <div className={styles.privacySelector}>
-              <select 
-                value={postData.privacy}
-                onChange={(e) => setPostData(prev => ({ ...prev, privacy: e.target.value }))}
-                className={styles.privacySelect}
+        {/* Main Content Layout */}
+        <div className={styles.mainContentLayout}>
+          {/* Left Side - User Info & Tabs */}
+          <div className={styles.leftSide}>
+            {/* User Info */}
+            <div className={styles.userInfo}>
+              <img 
+                src={user?.profilePicture || `https://ui-avatars.com/api/?name=${user?.firstName}+${user?.lastName}&background=00bf63&color=fff`}
+                alt="Your avatar"
+                className={styles.userAvatar}
+              />
+              <div className={styles.userDetails}>
+                <h3>{user?.firstName} {user?.lastName}</h3>
+                <div className={styles.privacySelector}>
+                  <select 
+                    value={postData.privacy}
+                    onChange={(e) => setPostData(prev => ({ ...prev, privacy: e.target.value }))}
+                    className={styles.privacySelect}
+                  >
+                    <option value="public">🌍 Public</option>
+                    <option value="friends">👥 Friends</option>
+                    <option value="private">🔒 Only me</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            {/* Content Tabs */}
+            <div className={styles.contentTabs}>
+              <button 
+                className={`${styles.tab} ${activeTab === 'text' ? styles.active : ''}`}
+                onClick={() => setActiveTab('text')}
               >
-                <option value="public">🌍 Public</option>
-                <option value="friends">👥 Friends</option>
-                <option value="private">🔒 Only me</option>
-              </select>
+                Text
+              </button>
+              <button 
+                className={`${styles.tab} ${activeTab === 'photo' ? styles.active : ''}`}
+                onClick={() => setActiveTab('photo')}
+              >
+                <FaImage /> Photo
+              </button>
+              <button 
+                className={`${styles.tab} ${activeTab === 'video' ? styles.active : ''}`}
+                onClick={() => setActiveTab('video')}
+              >
+                <FaVideo /> Video
+              </button>
+              <button 
+                className={`${styles.tab} ${activeTab === 'feeling' ? styles.active : ''}`}
+                onClick={() => setActiveTab('feeling')}
+              >
+                <FaSmile /> Feeling
+              </button>
             </div>
           </div>
-        </div>
+          
+          {/* Right Side - Content Area */}
+          <div className={styles.rightSide}>
         
-        {/* Content Tabs */}
-        <div className={styles.contentTabs}>
-          <button 
-            className={`${styles.tab} ${activeTab === 'text' ? styles.active : ''}`}
-            onClick={() => setActiveTab('text')}
-          >
-            Text
-          </button>
-          <button 
-            className={`${styles.tab} ${activeTab === 'photo' ? styles.active : ''}`}
-            onClick={() => setActiveTab('photo')}
-          >
-            <FaImage /> Photo
-          </button>
-          <button 
-            className={`${styles.tab} ${activeTab === 'video' ? styles.active : ''}`}
-            onClick={() => setActiveTab('video')}
-          >
-            <FaVideo /> Video
-          </button>
-          <button 
-            className={`${styles.tab} ${activeTab === 'feeling' ? styles.active : ''}`}
-            onClick={() => setActiveTab('feeling')}
-          >
-            <FaSmile /> Feeling
-          </button>
-        </div>
-        
-        {/* Content Area */}
+            {/* Content Area */}
         <div className={styles.contentArea}>
           {/* Title Input */}
           <input
@@ -441,6 +449,8 @@ const CreatePost = () => {
                 ))}
               </div>
             )}
+          </div>
+        </div>
           </div>
         </div>
       </div>

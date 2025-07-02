@@ -11,6 +11,8 @@ import {
   FaEye,
   FaEyeSlash,
   FaLock,
+  FaGoogle,
+  FaFacebookF,
 } from "react-icons/fa";
 import Stack from "../../components/Stack/Stack";
 import styles from "./Auth.module.css";
@@ -460,6 +462,31 @@ const Auth = () => {
                 "Sign In"
               )}
             </button>
+
+            {/* Social Login Divider */}
+            <div className={styles.divider}>
+              <span className={styles.dividerText}>or continue with</span>
+            </div>
+
+            {/* Social Login Buttons */}
+            <div className={styles.socialButtons}>
+              <button
+                type="button"
+                className={`${styles.socialBtn} ${styles.googleBtn}`}
+                onClick={() => console.log('Google login')}
+              >
+                <FaGoogle className={styles.socialIcon} />
+                <span>Google</span>
+              </button>
+              <button
+                type="button"
+                className={`${styles.socialBtn} ${styles.facebookBtn}`}
+                onClick={() => console.log('Facebook login')}
+              >
+                <FaFacebookF className={styles.socialIcon} />
+                <span>Facebook</span>
+              </button>
+            </div>
           </form>
         </div>
       </div>

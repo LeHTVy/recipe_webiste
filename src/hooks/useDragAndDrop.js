@@ -9,8 +9,12 @@ const useDragAndDrop = (items, onReorder) => {
   const handleDragStart = (e, index) => {
     setDraggedItem(index);
     e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/html', e.target.outerHTML);
-    e.dataTransfer.setDragImage(e.target, 0, 0);
+    e.dataTransfer.setData('text/plain', index.toString());
+    // Create a more visible drag image
+    const dragImage = e.currentTarget.cloneNode(true);
+    dragImage.style.transform = 'rotate(5deg)';
+    dragImage.style.opacity = '0.8';
+    e.dataTransfer.setDragImage(dragImage, 0, 0);
   };
 
   const handleDragEnd = () => {
@@ -39,22 +43,27 @@ const useDragAndDrop = (items, onReorder) => {
 
   const handleDrop = (e, dropIndex) => {
     e.preventDefault();
+    e.stopPropagation();
     dragCounter.current = 0;
     
     if (draggedItem !== null && draggedItem !== dropIndex) {
       const newItems = [...items];
       const draggedItemData = newItems[draggedItem];
       
-      // Remove the dragged item
+      // Remove the dragged item from its current position
       newItems.splice(draggedItem, 1);
       
-      // Insert at new position
+      // Calculate the correct insert position
       const insertIndex = draggedItem < dropIndex ? dropIndex - 1 : dropIndex;
+      
+      // Insert the item at the new position
       newItems.splice(insertIndex, 0, draggedItemData);
       
+      // Call the reorder callback
       onReorder(newItems);
     }
     
+    // Reset drag state
     setDraggedItem(null);
     setDragOverIndex(null);
   };

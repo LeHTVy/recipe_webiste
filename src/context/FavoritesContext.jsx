@@ -47,6 +47,21 @@ export const FavoritesProvider = ({ children }) => {
     }
   }, [user, isAuthenticated, getFavoritesKey]);
 
+  // Listen for favorites reordering events
+  useEffect(() => {
+    const handleFavoritesReordered = (event) => {
+      if (event.detail && event.detail.favorites) {
+        setFavorites(event.detail.favorites);
+      }
+    };
+
+    window.addEventListener('favoritesReordered', handleFavoritesReordered);
+    
+    return () => {
+      window.removeEventListener('favoritesReordered', handleFavoritesReordered);
+    };
+  }, []);
+
   // Save favorites to localStorage
   const saveFavoritesToStorage = (updatedFavorites) => {
     if (isAuthenticated && user) {

@@ -70,20 +70,20 @@ const RecipeAuthor = ({ author, onViewProfile }) => {
               <div className={styles.profileStats}>
                 <div className={styles.stat}>
                   <FaUtensils className={styles.statIcon} />
-                  <span className={styles.statValue}>{author.recipesCount || 0}</span>
+                  <span className={styles.statValue}>{author.totalRecipes || 0}</span>
                   <span className={styles.statLabel}>Recipes</span>
                 </div>
                 
                 <div className={styles.stat}>
                   <FaHeart className={styles.statIcon} />
-                  <span className={styles.statValue}>{author.followersCount || 0}</span>
+                  <span className={styles.statValue}>{author.followers || 0}</span>
                   <span className={styles.statLabel}>Followers</span>
                 </div>
                 
                 <div className={styles.stat}>
                   <FaEye className={styles.statIcon} />
-                  <span className={styles.statValue}>{author.viewsCount || 0}</span>
-                  <span className={styles.statLabel}>Views</span>
+                  <span className={styles.statValue}>{author.following || 0}</span>
+                  <span className={styles.statLabel}>Following</span>
                 </div>
               </div>
             </div>

@@ -514,6 +514,10 @@
   color: var(--accent);
 }
 
+.darkMode .bookmarkBtn.bookmarked {
+  color: var(--accent);
+}
+
 /* Sidebar */
 .sidebar {
   display: flex;

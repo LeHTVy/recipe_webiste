@@ -8,7 +8,7 @@ export const communityUsers = [
     bio: "Professional chef with 15 years experience. Specializing in Mediterranean cuisine.",
     followers: 12500,
     following: 340,
-    recipesCount: 89,
+    totalRecipes: 89,
     isVerified: true,
     userType: "Professional Chef",
     location: "Barcelona, Spain"
@@ -21,7 +21,7 @@ export const communityUsers = [
     bio: "Home cook sharing family recipes and quick weeknight meals.",
     followers: 3200,
     following: 180,
-    recipesCount: 45,
+    totalRecipes: 45,
     isVerified: false,
     userType: "Home Cook",
     location: "San Francisco, CA"
@@ -34,7 +34,7 @@ export const communityUsers = [
     bio: "Pastry chef and bread enthusiast. Teaching the art of baking.",
     followers: 8900,
     following: 220,
-    recipesCount: 67,
+    totalRecipes: 67,
     isVerified: true,
     userType: "Pastry Chef",
     location: "London, UK"
@@ -47,7 +47,7 @@ export const communityUsers = [
     bio: "Nutritionist sharing healthy and delicious recipes for better living.",
     followers: 15600,
     following: 290,
-    recipesCount: 123,
+    totalRecipes: 123,
     isVerified: true,
     userType: "Nutritionist",
     location: "Los Angeles, CA"
@@ -60,7 +60,7 @@ export const communityUsers = [
     bio: "Indian cuisine expert. Bringing authentic flavors to your kitchen.",
     followers: 7800,
     following: 150,
-    recipesCount: 78,
+    totalRecipes: 78,
     isVerified: false,
     userType: "Home Cook",
     location: "Mumbai, India"
@@ -246,7 +246,7 @@ export const suggestedChefs = [
     avatar: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150",
     speciality: "Italian Cuisine",
     followers: 45600,
-    recipesCount: 156,
+    totalRecipes: 156,
     isVerified: true
   },
   {
@@ -256,7 +256,7 @@ export const suggestedChefs = [
     avatar: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=150",
     speciality: "Japanese Cuisine",
     followers: 32100,
-    recipesCount: 89,
+    totalRecipes: 89,
     isVerified: true
   },
   {
@@ -266,7 +266,7 @@ export const suggestedChefs = [
     avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150",
     speciality: "French Pastries",
     followers: 28900,
-    recipesCount: 134,
+    totalRecipes: 134,
     isVerified: true
   }
 ];

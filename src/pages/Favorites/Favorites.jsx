@@ -42,18 +42,22 @@ const Favorites = () => {
     });
   }, [favorites, selectedCategory, searchTerm]);
 
+  // Get localStorage key for current user
+  const getFavoritesKey = () => {
+    return user ? `favorites_${user.id || user.username}` : 'favorites_guest';
+  };
+
   // Drag and drop for favorites reordering
   const { getDragProps: getFavoriteDragProps } = useDragAndDrop(
     filteredFavorites,
     (reorderedFavorites) => {
-      // Update the favorites order in localStorage
-      const allFavorites = JSON.parse(localStorage.getItem('tastemate_favorites') || '[]');
-      const updatedFavorites = allFavorites.map(fav => {
-        const reorderedIndex = reorderedFavorites.findIndex(rf => rf.id === fav.id);
-        return reorderedIndex !== -1 ? { ...fav, order: reorderedIndex } : fav;
-      });
-      localStorage.setItem('tastemate_favorites', JSON.stringify(updatedFavorites));
-      window.dispatchEvent(new Event('favoritesUpdated'));
+      // Update the favorites order in localStorage using the correct key
+      const favoritesKey = getFavoritesKey();
+      localStorage.setItem(favoritesKey, JSON.stringify(reorderedFavorites));
+      // Trigger a custom event to notify FavoritesContext
+      window.dispatchEvent(new CustomEvent('favoritesReordered', {
+        detail: { favorites: reorderedFavorites }
+      }));
     }
   );
 
