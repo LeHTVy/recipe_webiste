@@ -41,7 +41,7 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Recipe images data for Stack
+  // Recipe images data for Stack (ReactBits Stack component)
   const recipeImages = [
     {
       id: 1,
@@ -137,7 +137,6 @@ const Auth = () => {
         try {
           const storedData = localStorage.getItem("tastemate_users");
           existingUsers = storedData ? JSON.parse(storedData) : [];
-          // Ensure existingUsers is an array
           if (!Array.isArray(existingUsers)) {
             existingUsers = [];
           }

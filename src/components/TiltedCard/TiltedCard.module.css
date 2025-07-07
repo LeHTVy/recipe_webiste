@@ -1,5 +1,3 @@
-/* src/components/TiltedCard/TiltedCard.module.css */
-
 .tiltedCard {
   position: relative;
   transform-style: preserve-3d;

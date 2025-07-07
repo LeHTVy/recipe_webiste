@@ -12,7 +12,6 @@ const RecipeTagsCarousel = ({ onTagSelect, selectedTag }) => {
   const [visibleTags, setVisibleTags] = useState(7); 
   const carouselRef = useRef(null);
 
-  // Update visible tags based on screen size
   useEffect(() => {
     const updateVisibleTags = () => {
       const width = window.innerWidth;
@@ -32,7 +31,7 @@ const RecipeTagsCarousel = ({ onTagSelect, selectedTag }) => {
     return () => window.removeEventListener('resize', updateVisibleTags);
   }, []);
 
-  // Filter tags based on search keyword
+  // Filter tags - keyboard input
   useEffect(() => {
     if (searchKeyword.trim() === '') {
       setFilteredTags(allTags);
@@ -42,7 +41,7 @@ const RecipeTagsCarousel = ({ onTagSelect, selectedTag }) => {
       );
       setFilteredTags(filtered);
     }
-    setCurrentIndex(0); // Reset index when filtering
+    setCurrentIndex(0); 
   }, [searchKeyword, allTags]);
 
   const slideLeft = () => {

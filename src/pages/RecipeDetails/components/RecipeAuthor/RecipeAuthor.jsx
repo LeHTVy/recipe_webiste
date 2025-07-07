@@ -14,7 +14,6 @@ const RecipeAuthor = ({ author, onViewProfile }) => {
   };
 
   const handleViewProfile = () => {
-    // Use author.id if available, otherwise fallback to author.name formatted as ID
     const authorId = author.id || author.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
     navigate(`/author/${authorId}`);
     onViewProfile && onViewProfile(author);

@@ -23,7 +23,6 @@ export const useScrollAnimation = (threshold = 0.1, triggerOnce = true) => {
   return { ref, controls, isInView };
 };
 
-// Animation variants
 export const fadeInUp = {
   hidden: {
     opacity: 0,

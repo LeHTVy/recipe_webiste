@@ -1,5 +1,3 @@
-/* src/components/Hero/Hero.module.css - Áp dụng font style từ Recipe page */
-
 /* ===========================================
    1. HERO SECTION BASE
    =========================================== */
@@ -59,17 +57,17 @@
 }
 
 /* ===========================================
-   3. HERO TEXT SECTION - ÁP DỤNG FONT STYLE TỪ RECIPE PAGE
+   3. HERO TEXT SECTION 
    =========================================== */
 .heroText {
   max-width: 500px;
 }
 
 .heroTitle {
-  font-size: 4.5rem; /* Tăng từ 3.5rem lên 4.5rem như Recipe page */
-  font-weight: 900; /* Tăng từ 700 lên 900 như Recipe page */
-  line-height: 0.9; /* Giảm từ 1.1 xuống 0.9 như Recipe page */
-  letter-spacing: -2px; /* Thêm letter-spacing như Recipe page */
+  font-size: 4.5rem; 
+  font-weight: 900; 
+  line-height: 0.9; 
+  letter-spacing: -2px; 
   color: #FEFEFE;
   margin-bottom: 1.5rem;
   position: relative;
@@ -88,7 +86,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: block;
-  margin-top: -0.5rem; /* Thêm negative margin như Recipe page */
+  margin-top: -0.5rem; 
   position: relative;
 }
 
@@ -215,16 +213,16 @@
 
 /* Theme-based accent colors for overlay title */
 .lightAccent {
-  color: #00bf63; /* Light mode green */
+  color: #00bf63; 
 }
 
 .darkAccent {
-  color: #ffbd59; /* Dark mode orange */
+  color: #ffbd59; 
 }
 
 .overlaySubtitle {
   font-size: 1rem;
-  color: white; /* Always white as requested */
+  color: white; 
   opacity: 0.95;
   margin: 0;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
@@ -314,7 +312,7 @@
   }
 
   .heroTitle {
-    font-size: 3.5rem; /* Giảm responsive như Recipe page */
+    font-size: 3.5rem; 
   }
 
   .gifContainer {
@@ -329,7 +327,7 @@
   }
 
   .heroTitle {
-    font-size: 2.5rem; /* Giảm responsive như Recipe page */
+    font-size: 2.5rem; 
   }
 
   .heroSubtitle {
@@ -364,7 +362,7 @@
   }
 
   .heroTitle {
-    font-size: 2rem; /* Giảm responsive như Recipe page */
+    font-size: 2rem; 
   }
 
   .gifContainer {
@@ -408,13 +406,12 @@
   }
 }
 
-/* Focus styles for accessibility */
 .exploreBtn:focus {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
-/* High contrast mode support */
+/* High contrast */
 @media (prefers-contrast: high) {
   .overlayTitle,
   .overlaySubtitle {

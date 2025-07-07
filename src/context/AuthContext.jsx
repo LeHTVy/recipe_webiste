@@ -18,11 +18,9 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing user session in localStorage
     const savedUserId = localStorage.getItem('tastemate_current_user_id');
     if (savedUserId) {
       try {
-        // Get all users and find the current user
         const allUsersData = localStorage.getItem('tastemate_users');
         if (allUsersData) {
           const allUsers = JSON.parse(allUsersData);
@@ -32,7 +30,6 @@ export const AuthProvider = ({ children }) => {
               setUser(currentUser);
               setIsAuthenticated(true);
             } else {
-              // User not found, clear session
               localStorage.removeItem('tastemate_current_user_id');
             }
           }
@@ -48,22 +45,18 @@ export const AuthProvider = ({ children }) => {
   const login = (userData) => {
     setUser(userData);
     setIsAuthenticated(true);
-    // Store the current user's ID in session
     localStorage.setItem('tastemate_current_user_id', userData.id.toString());
   };
 
   const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
-    // Clear the current user session
     localStorage.removeItem('tastemate_current_user_id');
   };
 
   const updateProfile = (updatedData) => {
     const newUserData = { ...user, ...updatedData };
     setUser(newUserData);
-    
-    // Update the user in the users array
     try {
       const allUsersData = localStorage.getItem('tastemate_users');
       if (allUsersData) {

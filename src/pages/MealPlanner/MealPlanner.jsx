@@ -38,8 +38,7 @@ const MealPlanner = () => {
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const mealTypes = ['breakfast', 'lunch', 'dinner', 'snacks'];
   const categories = ['all', 'breakfast', 'lunch', 'dinner', 'dessert', 'snack', 'appetizer'];
-  
-  // Get week dates
+
   const getWeekDates = (date) => {
     const week = [];
     const startOfWeek = new Date(date);
@@ -57,7 +56,6 @@ const MealPlanner = () => {
   
   const weekDates = getWeekDates(selectedWeek);
   
-  // Load meal plan from localStorage
   useEffect(() => {
     if (user) {
       const savedMealPlan = localStorage.getItem(`tastemate_meal_plan_${user.id}`);
@@ -70,8 +68,7 @@ const MealPlanner = () => {
       }
     }
   }, [user]);
-  
-  // Save meal plan to localStorage
+
   const saveMealPlan = (newMealPlan) => {
     if (user) {
       localStorage.setItem(`tastemate_meal_plan_${user.id}`, JSON.stringify(newMealPlan));
@@ -79,7 +76,6 @@ const MealPlanner = () => {
     }
   };
   
-  // Filter recipes
   useEffect(() => {
     let filtered = mockRecipes;
     
@@ -99,8 +95,7 @@ const MealPlanner = () => {
     
     setFilteredRecipes(filtered);
   }, [searchTerm, selectedCategory]);
-  
-  // Generate shopping list
+
   useEffect(() => {
     const ingredients = new Map();
     
@@ -131,7 +126,6 @@ const MealPlanner = () => {
     setShoppingList(Array.from(ingredients.values()));
   }, [mealPlan]);
   
-  // Add meal to plan
   const addMealToPlan = (recipe) => {
     if (!selectedMealSlot || !user) return;
     
@@ -153,7 +147,6 @@ const MealPlanner = () => {
     showNotification('Meal added to your plan!', 'success');
   };
   
-  // Drag and drop handlers for meals
   const handleMealDragStart = (e, meal, sourceDate, sourceMealType) => {
     setDraggedMeal({ meal, sourceDate, sourceMealType });
     e.dataTransfer.effectAllowed = 'move';
@@ -173,7 +166,6 @@ const MealPlanner = () => {
     const sourceDateKey = sourceDate.toISOString().split('T')[0];
     const targetDateKey = targetDate.toISOString().split('T')[0];
     
-    // Don't do anything if dropped in the same slot
     if (sourceDateKey === targetDateKey && sourceMealType === targetMealType) {
       setDraggedMeal(null);
       return;
@@ -181,14 +173,12 @@ const MealPlanner = () => {
     
     const newMealPlan = { ...mealPlan };
     
-    // Remove from source
     if (newMealPlan[sourceDateKey] && newMealPlan[sourceDateKey][sourceMealType]) {
       newMealPlan[sourceDateKey][sourceMealType] = newMealPlan[sourceDateKey][sourceMealType].filter(
         m => m.id !== meal.id
       );
     }
     
-    // Add to target
     if (!newMealPlan[targetDateKey]) {
       newMealPlan[targetDateKey] = {};
     }
@@ -202,7 +192,6 @@ const MealPlanner = () => {
     showNotification(`${meal.title} moved to ${targetMealType}!`, 'success');
   };
   
-  // Remove meal from plan
   const removeMealFromPlan = (date, mealType, recipeId) => {
     const dateKey = date.toISOString().split('T')[0];
     const newMealPlan = { ...mealPlan };
@@ -225,7 +214,6 @@ const MealPlanner = () => {
     showNotification('Meal removed from your plan!', 'info');
   };
   
-  // Calculate daily calories
   const getDailyCalories = (date) => {
     const dateKey = date.toISOString().split('T')[0];
     const dayMeals = mealPlan[dateKey];
@@ -244,7 +232,6 @@ const MealPlanner = () => {
     return totalCalories;
   };
   
-  // Calculate weekly stats
   const getWeeklyStats = () => {
     let totalMeals = 0;
     let totalCalories = 0;
@@ -275,14 +262,12 @@ const MealPlanner = () => {
   
   const weeklyStats = getWeeklyStats();
   
-  // Navigate weeks
   const navigateWeek = (direction) => {
     const newDate = new Date(selectedWeek);
     newDate.setDate(newDate.getDate() + (direction * 7));
     setSelectedWeek(newDate);
   };
   
-  // Export shopping list
   const exportShoppingList = () => {
     const listText = shoppingList.map(item => `• ${item.item}`).join('\n');
     const blob = new Blob([listText], { type: 'text/plain' });

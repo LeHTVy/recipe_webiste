@@ -53,10 +53,7 @@ const AuthorProfile = () => {
       setIsLoading(true);
       
       try {
-        // Simulate loading delay for better UX
         await new Promise(resolve => setTimeout(resolve, 800));
-        
-        // Find author from recipes using proper ID matching
         const allRecipes = [...mockRecipes, ...JSON.parse(localStorage.getItem('recipes') || '[]')];
         const communityPosts = JSON.parse(localStorage.getItem('communityPosts') || '[]');
         const tasteMateUsers = JSON.parse(localStorage.getItem('tastemate_users') || '[]');
@@ -65,8 +62,7 @@ const AuthorProfile = () => {
         console.log('Total recipes available:', allRecipes.length);
         console.log('Total community posts:', communityPosts.length);
         console.log('Total TasteMate users:', tasteMateUsers.length);
-        
-        // Check if this is a TasteMate user ID
+
         let tasteMateUser = null;
         if (authorId.startsWith('tastemate-user-')) {
           const userId = parseInt(authorId.replace('tastemate-user-', ''));
@@ -74,7 +70,6 @@ const AuthorProfile = () => {
           console.log('Found TasteMate user:', tasteMateUser);
         }
         
-        // Debug: Show first few recipes and their author structures
         console.log('Sample recipes:', allRecipes.slice(0, 3).map(r => ({
           id: r.id,
           title: r.title,
@@ -82,39 +77,29 @@ const AuthorProfile = () => {
           createdBy: r.createdBy
         })));
         
-        // Find recipes by this author using comprehensive matching
         const recipes = allRecipes.filter(recipe => {
           if (recipe.author) {
-            // Primary: Match by author ID (including TasteMate user IDs)
             if (recipe.author.id === authorId) {
               return true;
             }
-            
-            // Match by TasteMate user ID in author.userId field
             if (tasteMateUser && recipe.author.userId === tasteMateUser.id) {
               return true;
             }
-            
-            // Secondary: Match by author name converted to ID format
             if (recipe.author.name) {
               const nameAsId = recipe.author.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
               if (nameAsId === authorId) {
                 return true;
               }
-              
-              // Tertiary: Partial name matching for backward compatibility
               if (recipe.author.name.toLowerCase().includes(authorId.toLowerCase().replace(/-/g, ' '))) {
                 return true;
               }
             }
           }
-          
-          // Quaternary: Match by createdBy field (for TasteMate users)
+
           if (tasteMateUser && recipe.createdBy === tasteMateUser.id) {
             return true;
           }
-          
-          // Fallback: Match by createdBy field as string
+
           return recipe.createdBy === authorId;
          });
          
@@ -122,10 +107,8 @@ const AuthorProfile = () => {
          if (recipes.length > 0) {
            console.log('First recipe author data:', recipes[0].author);
          }
-         
-        // Set author data based on TasteMate user or recipe data
+
         if (tasteMateUser) {
-          // Use TasteMate user data as primary source
           setAuthorData({
             id: authorId,
             name: `${tasteMateUser.firstName} ${tasteMateUser.lastName}`,
@@ -144,13 +127,11 @@ const AuthorProfile = () => {
             dietaryPreferences: tasteMateUser.dietaryPreferences || []
           });
         } else if (recipes.length > 0) {
-          // Find the most complete author data from all recipes
           let bestAuthor = null;
           let maxCompleteness = 0;
           
           recipes.forEach(recipe => {
             if (recipe.author) {
-              // Calculate completeness score
               let completeness = 0;
               if (recipe.author.id) completeness += 3;
               if (recipe.author.name) completeness += 2;
@@ -183,7 +164,6 @@ const AuthorProfile = () => {
             following: author.following || 0
           });
         } else {
-          // If no recipes found, create a basic author profile
           setAuthorData({
             id: authorId,
             name: authorId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
@@ -199,8 +179,6 @@ const AuthorProfile = () => {
         
         setAuthorRecipes(recipes);
         calculateAuthorRating(recipes);
-        
-        // Load author posts with comprehensive matching
         const posts = communityPosts.filter(post => {
           // Match by TasteMate user ID
           if (tasteMateUser && post.userId === tasteMateUser.id) {
@@ -339,8 +317,7 @@ const AuthorProfile = () => {
     if (!authorRatings[authorId]) {
       authorRatings[authorId] = [];
     }
-    
-    // Check if user already rated
+
     const existingRatingIndex = authorRatings[authorId].findIndex(r => r.userId === user?.id);
     
     if (existingRatingIndex >= 0) {

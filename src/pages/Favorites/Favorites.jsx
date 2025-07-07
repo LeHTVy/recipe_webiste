@@ -1,4 +1,3 @@
-// src/pages/Favorites/Favorites.jsx
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
@@ -21,17 +20,14 @@ const Favorites = () => {
   
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
-  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+  const [viewMode, setViewMode] = useState('grid'); 
   const [showFilters, setShowFilters] = useState(false);
   const [isDragMode, setIsDragMode] = useState(false);
-  
-  // Get unique categories from favorites
   const categories = useMemo(() => {
     const uniqueCategories = [...new Set(favorites.map(recipe => recipe.category))];
     return ['All', ...uniqueCategories.sort()];
   }, [favorites]);
   
-  // Filter favorites based on category and search term
   const filteredFavorites = useMemo(() => {
     return favorites.filter(recipe => {
       const matchesCategory = selectedCategory === 'All' || recipe.category === selectedCategory;
@@ -42,7 +38,6 @@ const Favorites = () => {
     });
   }, [favorites, selectedCategory, searchTerm]);
 
-  // Get localStorage key for current user
   const getFavoritesKey = () => {
     return user ? `favorites_${user.id || user.username}` : 'favorites_guest';
   };

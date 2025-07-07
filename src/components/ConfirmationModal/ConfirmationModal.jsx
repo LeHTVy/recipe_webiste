@@ -11,7 +11,7 @@ const ConfirmationModal = ({
   message, 
   confirmText = 'Confirm', 
   cancelText = 'Cancel',
-  type = 'warning' // 'warning', 'danger', 'info'
+  type = 'warning' // 3 type: 'warning', 'danger', 'info'
 }) => {
   const { isDarkMode } = useTheme();
   if (!isOpen) return null;

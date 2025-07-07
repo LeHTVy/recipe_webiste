@@ -1,4 +1,3 @@
-// src/components/RecipeCard/RecipeCard.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
@@ -15,11 +14,9 @@ const RecipeCard = ({ recipe }) => {
 
   const [calculatedRating, setCalculatedRating] = useState({ averageRating: recipe.rating || 0, totalRatings: recipe.totalRatings || 0 });
 
-  // Load comments from localStorage and calculate ratings
   useEffect(() => {
     const loadCommentsAndCalculateRating = () => {
       try {
-        // First check if this is a user-created recipe
         const userRecipes = JSON.parse(localStorage.getItem('recipes') || '[]');
         const userRecipe = userRecipes.find(r => r.id === recipe.id);
         
@@ -27,12 +24,10 @@ const RecipeCard = ({ recipe }) => {
         if (userRecipe && userRecipe.comments) {
           comments = userRecipe.comments;
         } else {
-          // Check for comments in recipeComments storage
           const recipeComments = JSON.parse(localStorage.getItem('recipeComments') || '{}');
           comments = recipeComments[recipe.id] || recipe.comments || [];
         }
         
-        // Calculate rating from comments
         const ratingsFromComments = comments.filter(comment => comment.rating && comment.rating > 0);
         
         if (ratingsFromComments.length === 0) {
@@ -60,7 +55,6 @@ const RecipeCard = ({ recipe }) => {
 
     loadCommentsAndCalculateRating();
 
-    // Listen for localStorage updates
     const handleStorageUpdate = () => {
       loadCommentsAndCalculateRating();
     };
@@ -71,13 +65,12 @@ const RecipeCard = ({ recipe }) => {
     };
   }, [recipe.id, recipe.comments, recipe.rating, recipe.totalRatings]);
 
-  // Function to get display image - randomly select from images array if multiple exist
   const getDisplayImage = () => {
     if (recipe.images && recipe.images.length > 1) {
       const randomIndex = Math.floor(Math.random() * recipe.images.length);
       return recipe.images[randomIndex];
     }
-    return recipe.image; // Fallback to single image
+    return recipe.image; 
   };
 
   const renderStars = (rating) => {
@@ -97,14 +90,11 @@ const RecipeCard = ({ recipe }) => {
     return stars;
   };
 
-  // Handle navigation to recipe details
   const handleViewRecipe = () => {
     navigate(`/recipes/${recipe.id}`);
   };
 
-  // Handle card click (navigate to details)
   const handleCardClick = (e) => {
-    // Prevent navigation if clicking on interactive elements
     if (e.target.closest(`.${styles.favoriteBtn}`) || 
         e.target.closest(`.${styles.shareBtn}`) ||
         e.target.closest(`.${styles.viewBtn}`)) {

@@ -1,4 +1,3 @@
-// src/components/FeatureCarousel/FeatureCarousel.jsx - Thêm TiltedCard wrapper
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNumberCycler } from '../../hooks/useNumberCycler';
@@ -55,7 +54,6 @@ export function FeatureCarousel({
   const { currentNumber: step, increment } = useNumberCycler(4, 1);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  // Auto-play functionality
   React.useEffect(() => {
     if (!autoPlay) return;
 

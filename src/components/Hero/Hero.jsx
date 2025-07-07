@@ -1,11 +1,10 @@
-// src/components/Hero/Hero.jsx - Cập nhật với Aurora effect
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 import TasteMateAurora from '../Aurora/Aurora';
 import styles from './Hero.module.css';
 
-// Import GIF files
+// Import GIF files for logo animation
 import heroGifLight from '../../assets/hero/hero-light.gif';
 import heroGifDark from '../../assets/hero/hero-dark.gif';
 

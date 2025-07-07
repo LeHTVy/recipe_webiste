@@ -1,4 +1,3 @@
-// src/components/SearchBox/SearchBox.jsx
 import React from 'react';
 import { useTheme } from '../../../../context/ThemeContext';
 import styles from './SearchBox.module.css';

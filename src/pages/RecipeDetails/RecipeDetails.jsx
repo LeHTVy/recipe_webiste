@@ -24,7 +24,6 @@ const RecipeDetails = () => {
     const fetchRecipe = async () => {
       setLoading(true);
       try {
-        // Simulate API call delay
         await new Promise(resolve => setTimeout(resolve, 500));
         
         const recipeData = getRecipeById(id);

@@ -4,7 +4,6 @@ import { useAuth } from '../../context/AuthContext';
 import { useFavorites } from '../../context/FavoritesContext';
 import { useNotification } from '../../context/NotificationContext';
 import { useTheme } from '../../context/ThemeContext';
-
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 import UserInformation from './component/UserInformation/UserInformation';
 import UserCreatedList from './component/UserCreatedList/UserCreatedList';
@@ -65,24 +64,21 @@ const Profile = () => {
     const followers = getFollowersDetails();
     console.log('Followers data:', followers);
     console.log('Followers data length:', followers.length);
-
-    // Load author bookmarks
+    
     const authorBookmarkIds = getAuthorBookmarks();
     console.log('Author bookmark IDs:', authorBookmarkIds);
+    
     const authorBookmarkDetails = authorBookmarkIds.map(id => getUserById(id)).filter(user => user !== null);
     console.log('Author bookmark details:', authorBookmarkDetails);
     console.log('Author bookmark details length:', authorBookmarkDetails.length);
     setAuthorBookmarks(authorBookmarkDetails);
     console.log('Set authorBookmarks to:', authorBookmarkDetails);
-
-    // Load community bookmarks
     const communityBookmarksList = getCommunityBookmarks();
     console.log('Community bookmarks:', communityBookmarksList);
     console.log('Community bookmarks length:', communityBookmarksList.length);
     setCommunityBookmarks(communityBookmarksList);
     console.log('Set communityBookmarks to:', communityBookmarksList);
     
-    // Debug: Check localStorage directly
     const currentUserId = getCurrentUserId();
     console.log('Current user ID from getCurrentUserId():', currentUserId);
     const directUserId = localStorage.getItem('tastemate_current_user_id');
@@ -98,11 +94,8 @@ const Profile = () => {
   const reloadFollowingData = useCallback(() => {
     console.log('Reloading following data...');
     
-    // Reload following details với logging
     const followingDetails = getFollowingDetails();
     console.log('Fresh following details:', followingDetails);
-    
-    // Force re-render modal nếu đang mở
     if (modalType === 'following') {
       setModalData(followingDetails);
     }
@@ -115,11 +108,7 @@ const Profile = () => {
       console.log('localStorage changed, reloading data...');
       reloadFollowingData();
     };
-  
-    // Listen for storage events
     window.addEventListener('storage', handleStorageChange);
-    
-    // Custom event for same-tab localStorage changes
     window.addEventListener('localStorageUpdate', handleStorageChange);
   
     return () => {
@@ -133,12 +122,9 @@ const Profile = () => {
       navigate('/auth');
       return;
     }
-    // Load user's created recipes from localStorage
     const savedRecipes = JSON.parse(localStorage.getItem('recipes') || '[]');
     const userCreatedRecipes = savedRecipes.filter(recipe => recipe.createdBy === user.id);
     setUserRecipes(userCreatedRecipes);
-
-    // Load user's community posts from localStorage
     const savedCommunityPosts = JSON.parse(localStorage.getItem('tastemate_community_posts') || '[]');
     const userCreatedPosts = savedCommunityPosts.filter(post => post.userId === user.id);
     setUserCommunityPosts(userCreatedPosts);
@@ -175,7 +161,6 @@ const Profile = () => {
       const updatedRecipes = savedRecipes.filter(r => r.id !== recipeToDelete.id);
       localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
       
-      // Update the state
       const userCreatedRecipes = updatedRecipes.filter(r => r.createdBy === user.id);
       setUserRecipes(userCreatedRecipes);
       
@@ -190,8 +175,7 @@ const Profile = () => {
       r.id === recipeId ? { ...r, status: 'published' } : r
     );
     localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
-    
-    // Update the state
+  
     const userCreatedRecipes = updatedRecipes.filter(r => r.createdBy === user.id);
     setUserRecipes(userCreatedRecipes);
   };
@@ -242,8 +226,7 @@ const Profile = () => {
       case 'followers':
         const currentUserId = getCurrentUserId();
         console.log('openModal followers - currentUserId:', currentUserId);
-        
-        // Check both possible formats for the followed key
+      
         const followedKey1 = `followed_${currentUserId}`;
         const followedKey2 = `followed_tastemate-user-${currentUserId}`;
         
@@ -251,8 +234,7 @@ const Profile = () => {
         
         let followerIds = JSON.parse(localStorage.getItem(followedKey1) || '[]');
         console.log('openModal followers - followerIds from key1:', followerIds);
-        
-        // If no followers found with first key, try second format
+
         if (followerIds.length === 0) {
           followerIds = JSON.parse(localStorage.getItem(followedKey2) || '[]');
           console.log('openModal followers - followerIds from key2:', followerIds);

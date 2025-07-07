@@ -1,4 +1,3 @@
-// src/context/FavoritesContext.jsx
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useAuth } from './AuthContext';
 import { useNotification } from './NotificationContext';
@@ -19,13 +18,10 @@ export const FavoritesProvider = ({ children }) => {
   const { user, isAuthenticated } = useAuth();
   const { showFavoriteAdded } = useNotification();
   const [favorites, setFavorites] = useState([]);
-
-  // Get localStorage key for specific user
   const getFavoritesKey = useCallback(() => {
     return user ? `favorites_${user.id || user.username}` : 'favorites_guest';
   }, [user]);
 
-  // Load favorites from localStorage when user changes
   useEffect(() => {
     if (isAuthenticated && user) {
       const favoritesKey = getFavoritesKey();
@@ -47,7 +43,6 @@ export const FavoritesProvider = ({ children }) => {
     }
   }, [user, isAuthenticated, getFavoritesKey]);
 
-  // Listen for favorites reordering events
   useEffect(() => {
     const handleFavoritesReordered = (event) => {
       if (event.detail && event.detail.favorites) {
@@ -62,15 +57,12 @@ export const FavoritesProvider = ({ children }) => {
     };
   }, []);
 
-  // Save favorites to localStorage
   const saveFavoritesToStorage = (updatedFavorites) => {
     if (isAuthenticated && user) {
       const favoritesKey = getFavoritesKey();
       localStorage.setItem(favoritesKey, JSON.stringify(updatedFavorites));
     }
   };
-
-  // Add recipe to favorites
   const addToFavorites = (recipe) => {
     if (!isAuthenticated) {
       alert('Please login to add favorites');
@@ -90,14 +82,12 @@ export const FavoritesProvider = ({ children }) => {
     return false;
   };
 
-  // Remove recipe from favorites
   const removeFromFavorites = (recipeId) => {
     const updatedFavorites = favorites.filter(fav => fav.id !== recipeId);
     setFavorites(updatedFavorites);
     saveFavoritesToStorage(updatedFavorites);
   };
 
-  // Toggle favorite status
   const toggleFavorite = (recipe) => {
     if (!isAuthenticated) {
       alert('Please login to add favorites');
@@ -115,17 +105,14 @@ export const FavoritesProvider = ({ children }) => {
     }
   };
 
-  // Check if recipe is favorite
   const isFavorite = (recipeId) => {
     return favorites.some(fav => fav.id === recipeId);
   };
 
-  // Get favorites count
   const getFavoritesCount = () => {
     return favorites.length;
   };
 
-  // Clear all favorites
   const clearFavorites = () => {
     setFavorites([]);
     if (isAuthenticated && user) {

@@ -14,10 +14,10 @@ export const mockRecipes = [
     totalRatings: 234,
     tags: ["chocolate", "dessert", "sweet", "cake", "indulgent", "party"],
 
-    commentCount: 15, // Số lượng comments
+    commentCount: 15, 
     topRate: 1146.6, // rating * totalRatings
     popularityScore: 1161.6, // topRate + commentCount
-    recipeaward: "TOP_RATED", // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
+    recipeaward: "TOP_RATED", // Scenario in real production application - Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
 
     ingredients: [
       "dark chocolate",
@@ -162,7 +162,7 @@ export const mockRecipes = [
     commentCount: 8,
     topRate: 907.2,
     popularityScore: 915.2,
-    recipeaward: "POPULAR", // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
+    recipeaward: "POPULAR", 
 
     ingredients: [
       "spaghetti",
@@ -297,7 +297,7 @@ export const mockRecipes = [
     commentCount: 12,
     topRate: 717.6,
     popularityScore: 729.6,
-    recipeaward: "TOP_RATED", // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
+    recipeaward: "TOP_RATED", 
 
     ingredients: [
       "sourdough bread",
@@ -420,7 +420,7 @@ export const mockRecipes = [
     commentCount: 6,
     topRate: 930.6,
     popularityScore: 936.6,
-    recipeaward: "POPULAR", // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
+    recipeaward: "POPULAR",
 
     ingredients: [
       "coconut milk",
@@ -557,7 +557,7 @@ export const mockRecipes = [
     commentCount: 9,
     topRate: 639.0,
     popularityScore: 648.0,
-    recipeaward: "TOP_RATED", // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
+    recipeaward: "TOP_RATED", 
 
     ingredients: [
       "quinoa",
@@ -691,7 +691,7 @@ export const mockRecipes = [
     commentCount: 11,
     topRate: 801.6,
     popularityScore: 812.6,
-    recipeaward: "POPULAR", // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
+    recipeaward: "POPULAR", 
 
     ingredients: [
       "chicken wings",
@@ -764,7 +764,7 @@ export const mockRecipes = [
     commentCount: 8,
     topRate: 616.4,
     popularityScore: 624.4,
-    recipeaward: "", // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
+    recipeaward: "", 
 
     ingredients: [
       "beef bulgogi",
@@ -852,7 +852,7 @@ export const mockRecipes = [
     commentCount: 5,
     topRate: 391.6,
     popularityScore: 396.6,
-    recipeaward: "", // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
+    recipeaward: "", 
 
     ingredients: [
       "romaine lettuce",
@@ -952,7 +952,7 @@ export const mockRecipes = [
     commentCount: 12,
     topRate: 733.2,
     popularityScore: 745.2,
-    recipeaward: "", // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
+    recipeaward: "", 
 
     ingredients: [
       "ground beef",
@@ -1040,7 +1040,7 @@ export const mockRecipes = [
     commentCount: 15,
     topRate: 974.4,
     popularityScore: 989.4,
-    recipeaward: "", // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
+    recipeaward: "", 
 
     ingredients: [
       "flour",
@@ -1128,7 +1128,7 @@ export const mockRecipes = [
     commentCount: 7,
     topRate: 801.0,
     popularityScore: 808.0,
-    recipeaward: "", // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
+    recipeaward: "", 
 
     ingredients: [
       "white fish fillets",
@@ -1220,7 +1220,7 @@ export const mockRecipes = [
     commentCount: 8,
     topRate: 570.4,
     popularityScore: 578.4,
-    recipeaward: "", // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
+    recipeaward: "", 
 
     ingredients: [
       "Greek yogurt",
@@ -1305,7 +1305,7 @@ export const mockRecipes = [
     commentCount: 9,
     topRate: 681.5,
     popularityScore: 690.5,
-    recipeaward: "", // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
+    recipeaward: "", 
 
     ingredients: [
       "flour tortillas",
@@ -1395,7 +1395,7 @@ export const mockRecipes = [
     commentCount: 6,
     topRate: 431.2,
     popularityScore: 437.2,
-    recipeaward: "", // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
+    recipeaward: "", 
 
     ingredients: [
       "mixed vegetables",
@@ -1484,7 +1484,7 @@ export const mockRecipes = [
     commentCount: 18,
     topRate: 1308.3,
     popularityScore: 1326.3,
-    recipeaward: "", // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
+    recipeaward: "", 
 
     ingredients: [
       "flour",
@@ -1571,7 +1571,7 @@ export const mockRecipes = [
     commentCount: 7,
     topRate: 504.0,
     popularityScore: 511.0,
-    recipeaward: "", // Admin-selected award: 'TOP_RATED', 'POPULAR', or empty
+    recipeaward: "", 
 
     ingredients: [
       "chicken breast",
@@ -1656,7 +1656,6 @@ export const mockRecipes = [
   },
 ];
 
-// Food categories for filtering
 export const FOOD_CATEGORIES = [
   { value: "all", label: "All Categories" },
   { value: "Breakfast", label: "Breakfast" },
@@ -1668,7 +1667,7 @@ export const FOOD_CATEGORIES = [
   { value: "FingerFood", label: "Finger Food" },
 ];
 
-// Helper functions
+
 export const getAllTags = () => {
   const allTags = mockRecipes.flatMap((recipe) => recipe.tags);
   return [...new Set(allTags)];
@@ -1684,11 +1683,9 @@ export const getRecipesByCategory = (category) => {
 };
 
 export const getRecipeById = (id) => {
-  // First check in mockRecipes
   const mockRecipe = mockRecipes.find((recipe) => recipe.id === parseInt(id));
   if (mockRecipe) return mockRecipe;
 
-  // Then check in user-created recipes from localStorage
   const userRecipes = JSON.parse(localStorage.getItem("recipes") || "[]");
   return userRecipes.find((recipe) => recipe.id === parseInt(id));
 };

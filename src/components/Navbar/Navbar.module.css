@@ -1,5 +1,3 @@
-/* src/components/Navbar/Navbar.module.css */
-
 /* ===========================================
    1. NAVBAR BASE
    =========================================== */
@@ -120,7 +118,7 @@
 }
 
 /* ===========================================
-   4. LOGIN BUTTON (SPECIAL STYLING)
+   4. LOGIN BUTTON 
    =========================================== */
 .loginBtn {
   background: var(--gradient-primary);
@@ -154,7 +152,7 @@
 }
 
 /* ===========================================
-   5. PROFILE SECTION - UPDATED
+   5. PROFILE SECTION 
    =========================================== */
 .navActions {
   display: flex;
@@ -311,7 +309,7 @@
 
 /* Specific icon colors */
 .menuAction:nth-child(1) .menuActionIcon {
-  color: #007aff; /* Blue for profile */
+  color: #007aff; 
 }
 
 .menuAction:nth-child(1):hover .menuActionIcon {
@@ -320,7 +318,7 @@
 }
 
 .menuAction:nth-child(2) .menuActionIcon {
-  color: #34c759; /* Green for create */
+  color: #34c759; 
 }
 
 .menuAction:nth-child(2):hover .menuActionIcon {
@@ -329,7 +327,7 @@
 }
 
 .logoutAction .menuActionIcon {
-  color: #ff3b30; /* Red for logout */
+  color: #ff3b30;
 }
 
 .logoutAction:hover .menuActionIcon {
@@ -394,12 +392,9 @@
   transition: all 0.3s ease;
 }
 
-/* ===========================================
-   PROFILE MENU ACTIONS - ENHANCED
-   =========================================== */
-/* Community icon color */
+/* Community icon  */
 .menuAction:nth-child(3) .menuActionIcon {
-  color: #ff9500; /* Orange for community */
+  color: #ff9500; 
 }
 
 .menuAction:nth-child(3):hover .menuActionIcon {
@@ -407,9 +402,9 @@
   transform: scale(1.1) rotate(5deg);
 }
 
-/* Meal Planner icon color */
+/* Meal Planner icon  */
 .menuAction:nth-child(4) .menuActionIcon {
-  color: #5856d6; /* Purple for meal planner */
+  color: #5856d6; 
 }
 
 .menuAction:nth-child(4):hover .menuActionIcon {
@@ -779,7 +774,6 @@
   outline-offset: 2px;
 }
 
-/* High contrast mode */
 @media (prefers-contrast: high) {
   .menuAction,
   .profileBtn,

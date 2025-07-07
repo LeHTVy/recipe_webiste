@@ -29,14 +29,13 @@ const CreatePost = () => {
     feeling: [],
     location: '',
     tags: [],
-    privacy: 'public' // public, friends, private
+    privacy: 'public' // Status option: public, friends, private
   });
   
   const [activeTab, setActiveTab] = useState('text');
   const [tagInput, setTagInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // Set initial tab based on URL params
   useEffect(() => {
     const type = searchParams.get('type');
     if (type === 'photo') setActiveTab('photo');
@@ -44,7 +43,6 @@ const CreatePost = () => {
     else if (type === 'feeling') setActiveTab('feeling');
   }, [searchParams]);
   
-  // Redirect if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/auth');
@@ -148,7 +146,6 @@ const CreatePost = () => {
         isBookmarked: false
       };
       
-      // Save to localStorage
       const existingPosts = localStorage.getItem('tastemate_community_posts');
       let posts = [];
       

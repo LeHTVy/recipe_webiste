@@ -1,4 +1,3 @@
-// src/pages/Recipes/Recipes.jsx - Cập nhật với OurPicks component
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import { mockRecipes, searchRecipes, getRandomRecipes } from '../../data/mockData';
@@ -25,12 +24,8 @@ const Recipes = () => {
     try {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Get user-created recipes from localStorage
       const userRecipes = JSON.parse(localStorage.getItem('recipes') || '[]');
-      // Only include published recipes in the main recipes page
       const publishedUserRecipes = userRecipes.filter(recipe => recipe.status === 'published');
-      
-      // Combine mock recipes with published user recipes
       const allRecipes = [...mockRecipes, ...publishedUserRecipes];
       const sortedRecipes = allRecipes.sort((a, b) => b.rating - a.rating);
       
@@ -45,15 +40,11 @@ const Recipes = () => {
 
   useEffect(() => {
     fetchRecipes();
-
-    // Listen for localStorage changes to update recipe data
     const handleStorageChange = (e) => {
       if (e.key === 'recipes') {
         fetchRecipes();
       }
     };
-
-    // Listen for custom storage events (for same-tab updates)
     const handleCustomStorageChange = () => {
       fetchRecipes();
     };
@@ -96,10 +87,9 @@ const Recipes = () => {
     }
     
     setFilteredRecipes(filtered);
-    setCurrentPage(1); // Reset to first page when filters change
+    setCurrentPage(1); 
   };
 
-  // Calculate pagination
   const totalPages = Math.ceil(filteredRecipes.length / recipesPerPage);
   const startIndex = (currentPage - 1) * recipesPerPage;
   const endIndex = startIndex + recipesPerPage;
@@ -146,7 +136,7 @@ const Recipes = () => {
       {/* Content Section */}
       <div className={styles.contentSection}>
         <div className="container">
-          {/* Our Picks Section - Sử dụng OurPicks Component */}
+          {/* Our Picks Section */}
           <OurPicks 
             featuredRecipes={featuredRecipes}
             title="Our Picks"

@@ -1,4 +1,3 @@
-// src/components/AnimatedSection/AnimatedSection.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useScrollAnimation, fadeInUp } from '../../hooks/useScrollAnimation';

@@ -1,5 +1,3 @@
-/* CreateRecipe.module.css */
-
 .createRecipeContainer {
   min-height: 100vh;
   padding: 0;
@@ -19,7 +17,7 @@
   color: #333;
 }
 
-/* Header Section - Matching Recipes page style */
+/* Header Section */
 .pageHeader {
   margin-bottom: 0;
   position: relative;

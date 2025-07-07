@@ -1,4 +1,3 @@
-// src/components/PageWrapper/PageWrapper.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useScrollAnimation, staggerContainer, staggerItem } from '../../hooks/useScrollAnimation';

@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import NotificationModal from '../components/NotificationModal/NotificationModal';
 
-// Helper function to create notification objects
 const createNotification = (type, message, title, options = {}) => {
   return {
     id: Date.now() + Math.random(),
@@ -46,7 +45,6 @@ export const NotificationProvider = ({ children }) => {
     setNotifications([]);
   }, []);
 
-  // Convenience methods for common notification types
   const showSuccess = useCallback((message, title, options = {}) => {
     return addNotification(createNotification('success', message, title, options));
   }, [addNotification]);
@@ -87,12 +85,10 @@ export const NotificationProvider = ({ children }) => {
     return addNotification(createNotification('success', `${recipeName} bookmarked successfully!`, 'Bookmarked', options));
   }, [addNotification]);
 
-  // Custom notification with full control
   const showCustom = useCallback((config) => {
     return addNotification(config);
   }, [addNotification]);
 
-  // General showNotification function that accepts message and type
   const showNotification = useCallback((message, type = 'info', title = '', options = {}) => {
     switch (type) {
       case 'success':
@@ -112,7 +108,6 @@ export const NotificationProvider = ({ children }) => {
     addNotification,
     removeNotification,
     clearAllNotifications,
-    // Convenience methods
     showSuccess,
     showError,
     showWarning,

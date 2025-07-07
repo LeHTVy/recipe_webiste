@@ -42,11 +42,9 @@ const Community = () => {
   const [posts, setPosts] = useState([]);
   const [activeFilter, setActiveFilter] = useState('all');
 
-  // Initialize community users and recipes in localStorage if not present
   useEffect(() => {
     const existingCommunityUsers = localStorage.getItem('tastemate_community_users');
     if (!existingCommunityUsers) {
-      // Import and store community users
       import('../../data/mockCommunityData').then(({ communityUsers }) => {
         localStorage.setItem('tastemate_community_users', JSON.stringify(communityUsers));
         console.log('Initialized community users in localStorage:', communityUsers.length);
@@ -55,7 +53,6 @@ const Community = () => {
     
     const existingRecipes = localStorage.getItem('tastemate_recipes');
     if (!existingRecipes) {
-      // Import and store recipes from mockData
       import('../../data/mockData').then((mockDataModule) => {
         const recipes = mockDataModule.default || mockDataModule.recipes || [];
         localStorage.setItem('tastemate_recipes', JSON.stringify(recipes));
@@ -64,7 +61,6 @@ const Community = () => {
     }
   }, []);
 
-  // Load posts from localStorage and merge with mock data
   useEffect(() => {
     const savedPosts = localStorage.getItem('tastemate_community_posts');
     let userPosts = [];
@@ -77,10 +73,8 @@ const Community = () => {
       }
     }
     
-    // Merge user posts with mock posts, user posts first
     const allPosts = [...userPosts, ...communityPosts];
-    
-    // Update bookmark status for each post based on localStorage
+
     const postsWithBookmarkStatus = allPosts.map(post => ({
       ...post,
       isBookmarked: isCommunityPostBookmarked(post.id)
@@ -89,7 +83,6 @@ const Community = () => {
     setPosts(postsWithBookmarkStatus);
   }, []);
 
-  // Handle post interactions
   const handleLike = (postId) => {
     setPosts(prevPosts => 
       prevPosts.map(post => 
@@ -105,14 +98,10 @@ const Community = () => {
   };
 
   const handleBookmark = (postId) => {
-    // Find the post object
     const post = posts.find(p => p.id === postId);
     if (!post) return;
-    
-    // Toggle bookmark in localStorage
     const isBookmarked = toggleCommunityBookmark(post);
-    
-    // Update local state
+
     setPosts(prevPosts => 
       prevPosts.map(p => 
         p.id === postId 
@@ -120,8 +109,6 @@ const Community = () => {
           : p
       )
     );
-    
-    // Show appropriate notification
     if (isBookmarked) {
       showSuccess('Post bookmarked!');
     } else {

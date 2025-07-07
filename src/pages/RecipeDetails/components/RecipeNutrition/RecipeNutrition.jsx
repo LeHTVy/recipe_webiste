@@ -13,7 +13,6 @@ const RecipeNutrition = ({ recipe }) => {
   const [newRating, setNewRating] = useState(0);
   const [sortBy, setSortBy] = useState('newest');
 
-  // Redirect to nutrition tab if user is not authenticated and comments tab is selected
   useEffect(() => {
     if (!isAuthenticated && activeTab === 'comments') {
       setActiveTab('nutrition');
@@ -59,21 +58,17 @@ const RecipeNutrition = ({ recipe }) => {
     if (!nutrition) return '0';
     
     const ratio = newServings / originalServings;
-    
-    // Extract numeric values from nutrition strings
     const extractValue = (value) => {
       if (!value || typeof value !== 'string') return 0;
       const match = value.match(/(\d+(?:\.\d+)?)/)?.[0];
       return match ? parseFloat(match) : 0;
     };
-    
-    // Get nutrition values in grams
+
     const fat = extractValue(nutrition.fat) * ratio;
     const carbs = extractValue(nutrition.carbs) * ratio;
     const protein = extractValue(nutrition.protein) * ratio;
     const fibre = extractValue(nutrition.fibre) * ratio;
     
-    // Calculate calories based on conversion table
     // Fat: 9 kcal/g, Carbs: 4 kcal/g, Protein: 4 kcal/g, Fibre: 2 kcal/g
     const totalCalories = (fat * 9) + (carbs * 4) + (protein * 4) + (fibre * 2);
     
@@ -99,9 +94,7 @@ const RecipeNutrition = ({ recipe }) => {
     const updatedComments = [comment, ...comments];
     setComments(updatedComments);
 
-    // Save comment to localStorage for both user-created and existing recipes
     try {
-      // Update user-created recipes
       const userRecipes = JSON.parse(localStorage.getItem('recipes') || '[]');
       const recipeIndex = userRecipes.findIndex(r => r.id === recipe.id);
       
@@ -113,13 +106,11 @@ const RecipeNutrition = ({ recipe }) => {
         };
         localStorage.setItem('recipes', JSON.stringify(userRecipes));
       }
-      
-      // Also save comments for existing recipes (from mockData)
+
       const recipeComments = JSON.parse(localStorage.getItem('recipeComments') || '{}');
       recipeComments[recipe.id] = updatedComments;
       localStorage.setItem('recipeComments', JSON.stringify(recipeComments));
-      
-      // Dispatch custom event to notify other components
+
       window.dispatchEvent(new Event('localStorageUpdate'));
     } catch (error) {
       console.error('Error saving comment to localStorage:', error);
@@ -137,7 +128,6 @@ const RecipeNutrition = ({ recipe }) => {
     );
     setComments(updatedComments);
 
-    // Save updated likes to localStorage if this is a user-created recipe
     try {
       const userRecipes = JSON.parse(localStorage.getItem('recipes') || '[]');
       const recipeIndex = userRecipes.findIndex(r => r.id === recipe.id);
@@ -148,7 +138,6 @@ const RecipeNutrition = ({ recipe }) => {
           comments: updatedComments
         };
         localStorage.setItem('recipes', JSON.stringify(userRecipes));
-        // Dispatch custom event to notify other components
         window.dispatchEvent(new Event('localStorageUpdate'));
       }
     } catch (error) {

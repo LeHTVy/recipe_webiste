@@ -1,5 +1,3 @@
-/* RecipeAuthor.module.css */
-
 .authorContainer {
   position: fixed;
   top: 50%;
@@ -589,7 +587,7 @@
   color: #ffbd59;
 }
 
-[data-theme="dark"] .authorTrigge
+[data-theme="dark"] .authorTrigger
 r:hover {
   background: #ffbd59;
 }

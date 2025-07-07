@@ -56,8 +56,6 @@ const CreateRecipe = () => {
   const [currentTag, setCurrentTag] = useState("");
   const [imagePreview, setImagePreview] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Drag and drop for ingredients
   const { getDragProps: getIngredientDragProps } = useDragAndDrop(
     formData.ingredients,
     (reorderedIngredients) => {
@@ -87,7 +85,6 @@ const CreateRecipe = () => {
     "Sauce",
   ];
   const difficulties = ["Easy", "Medium", "Hard"];
-  //const recipeAwards = ["", "POPULAR", "TOP_RATED"];
   const dietaryOptions = [
     "Vegetarian",
     "Vegan",
@@ -99,14 +96,12 @@ const CreateRecipe = () => {
     "High-Protein",
   ];
 
-  // Load recipe data when editing
   useEffect(() => {
     if (editRecipeId) {
       const existingRecipes = JSON.parse(localStorage.getItem("recipes") || "[]");
       const recipeToEdit = existingRecipes.find(recipe => recipe.id === parseInt(editRecipeId));
       
       if (recipeToEdit) {
-        // Map the existing recipe data to form structure
         setFormData({
           title: recipeToEdit.title || "",
           description: recipeToEdit.description || "",
@@ -145,7 +140,6 @@ const CreateRecipe = () => {
           status: recipeToEdit.status || "draft",
         });
         
-        // Set image previews if images exist
         if (recipeToEdit.images && recipeToEdit.images.length > 0) {
           setImagePreview(recipeToEdit.images);
         }
@@ -301,7 +295,6 @@ const CreateRecipe = () => {
       const existingRecipes = JSON.parse(localStorage.getItem("recipes") || "[]");
       
       if (editRecipeId) {
-        // Update existing recipe
         const recipeIndex = existingRecipes.findIndex(recipe => recipe.id === parseInt(editRecipeId));
         if (recipeIndex !== -1) {
           const existingRecipe = existingRecipes[recipeIndex];
@@ -329,7 +322,6 @@ const CreateRecipe = () => {
           localStorage.setItem("recipes", JSON.stringify(existingRecipes));
         }
       } else {
-        // Create new recipe
         const recipeData = {
           id: generateRecipeId(),
           ...formData,
@@ -377,9 +369,8 @@ const CreateRecipe = () => {
         
         const updatedRecipes = [...existingRecipes, recipeData];
         localStorage.setItem("recipes", JSON.stringify(updatedRecipes));
-      }
-
-      // Show success notifications
+      }  
+      
       if (editRecipeId) {
         if (status === "published") {
           showUpdateSuccess("Recipe updated and published successfully!");

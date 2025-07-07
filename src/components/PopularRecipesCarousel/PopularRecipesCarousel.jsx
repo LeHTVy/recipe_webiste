@@ -1,4 +1,3 @@
-// src/components/PopularRecipesCarousel/PopularRecipesCarousel.jsx
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
@@ -24,12 +23,12 @@ const RecipeWithDynamicRating = ({ recipe, children }) => {
         if (userRecipe && userRecipe.comments) {
           comments = userRecipe.comments;
         } else {
-          // Check for comments in recipeComments storage
+          //  comments in recipeComments storage
           const recipeComments = JSON.parse(localStorage.getItem('recipeComments') || '{}');
           comments = recipeComments[recipe.id] || recipe.comments || [];
         }
         
-        // Calculate rating from comments
+        // Calculate rating 
         const ratingsFromComments = comments.filter(comment => comment.rating && comment.rating > 0);
         
         if (ratingsFromComments.length === 0) {
@@ -57,7 +56,6 @@ const RecipeWithDynamicRating = ({ recipe, children }) => {
 
     loadCommentsAndCalculateRating();
 
-    // Listen for localStorage updates
     const handleStorageUpdate = () => {
       loadCommentsAndCalculateRating();
     };
@@ -74,21 +72,20 @@ const RecipeWithDynamicRating = ({ recipe, children }) => {
 const PopularRecipesCarousel = ({ selectedTag }) => {
   const { isDarkMode } = useTheme();
   const { toggleFavorite, isFavorite } = useFavorites();
-  const { showNotification } = useNotification(); // Added for share notification
+  const { showNotification } = useNotification(); 
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [viewMode, setViewMode] = useState('popular'); 
 
-  // Function to get display image - randomly select from images array if multiple exist
   const getDisplayImage = (recipe) => {
     if (recipe.images && recipe.images.length > 1) {
       const randomIndex = Math.floor(Math.random() * recipe.images.length);
       return recipe.images[randomIndex];
     }
-    return recipe.image; // Fallback to single image
+    return recipe.image; 
   };
 
-  // Get recipes based on view mode with memoization
+  // Get recipes 
   const recipes = useMemo(() => {
     if (viewMode === 'popular') {
       // Show recipes with POPULAR award or TRENDING (commentCount > 10)

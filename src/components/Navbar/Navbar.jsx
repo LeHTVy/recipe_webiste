@@ -1,4 +1,3 @@
-// src/components/Navbar/Navbar.jsx
 import React, { useState } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
@@ -15,7 +14,6 @@ import {
 } from 'react-icons/fa';
 import styles from './Navbar.module.css';
 
-// Import logo GIFs
 import logoLight from '../../assets/logo/logo-light.png';
 import logoDark from '../../assets/logo/logo-dark.png';
 
@@ -58,7 +56,7 @@ const Navbar = () => {
     <nav className={`${styles.navbar} ${isDarkMode ? styles.darkMode : ''}`}>
       <div className="container">
         <div className={styles.navContent}>
-          {/* Logo - Clickable to home */}
+          {/* Logo Section*/}
           <div
             onClick={() => handleNavigation('/')}
             className={styles.logo}
@@ -195,7 +193,6 @@ const Navbar = () => {
                         <span className={styles.menuActionText}>Create Recipe</span>
                       </button>
 
-                      {/* Thêm Community và Meal Planner vào Profile Menu */}
                       <button
                         onClick={() => {
                           handleNavigation("/community");

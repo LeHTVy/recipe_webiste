@@ -9,7 +9,6 @@ const ProfileRecipeCard = ({ recipe, onEdit, onDelete, onPublish, onView }) => {
   const { isDarkMode } = useTheme();
   const [calculatedRating, setCalculatedRating] = useState({ averageRating: recipe.rating || 0, totalRatings: recipe.totalRatings || 0 });
 
-  // Load comments from localStorage and calculate ratings
   useEffect(() => {
     const loadCommentsAndCalculateRating = () => {
       try {
@@ -54,7 +53,6 @@ const ProfileRecipeCard = ({ recipe, onEdit, onDelete, onPublish, onView }) => {
 
     loadCommentsAndCalculateRating();
 
-    // Listen for localStorage updates
     const handleStorageUpdate = () => {
       loadCommentsAndCalculateRating();
     };
@@ -65,7 +63,6 @@ const ProfileRecipeCard = ({ recipe, onEdit, onDelete, onPublish, onView }) => {
     };
   }, [recipe.id, recipe.comments, recipe.rating, recipe.totalRatings]);
 
-  // Function to get display image - randomly select from images array if multiple exist
   const getDisplayImage = () => {
     if (recipe.images && recipe.images.length > 1) {
       const randomIndex = Math.floor(Math.random() * recipe.images.length);

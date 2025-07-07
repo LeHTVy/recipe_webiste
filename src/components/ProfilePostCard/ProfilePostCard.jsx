@@ -13,7 +13,6 @@ const ProfilePostCard = ({ post, onEdit, onDelete, onView }) => {
     views: post.views || 0
   });
 
-  // Load post stats from localStorage
   useEffect(() => {
     const loadPostStats = () => {
       try {
@@ -39,7 +38,6 @@ const ProfilePostCard = ({ post, onEdit, onDelete, onView }) => {
 
     loadPostStats();
 
-    // Listen for localStorage updates
     const handleStorageUpdate = () => {
       loadPostStats();
     };
@@ -50,7 +48,7 @@ const ProfilePostCard = ({ post, onEdit, onDelete, onView }) => {
     };
   }, [post.id, post.likes, post.comments, post.views]);
 
-  // Function to get display image - randomly select from images array if multiple exist
+  // Function to get display image - randomly 
   const getDisplayImage = () => {
     if (post.images && post.images.length > 1) {
       const randomIndex = Math.floor(Math.random() * post.images.length);
@@ -64,7 +62,6 @@ const ProfilePostCard = ({ post, onEdit, onDelete, onView }) => {
     if (onEdit) {
       onEdit(post.id);
     } else {
-      // Navigate to edit post page (you can customize this route)
       navigate(`/create-post?edit=${post.id}`);
     }
   };
@@ -74,7 +71,6 @@ const ProfilePostCard = ({ post, onEdit, onDelete, onView }) => {
     if (onView) {
       onView(post.id);
     } else {
-      // Navigate to post view page (you can customize this route)
       navigate(`/community/posts/${post.id}`);
     }
   };

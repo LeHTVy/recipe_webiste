@@ -23,8 +23,6 @@ const HeroRecipe = ({ recipe, onLike, onShare, isLiked = false }) => {
   const { toggleFavorite, isFavorite } = useFavorites();
   const { isAuthenticated } = useAuth();
   const { showNotification } = useNotification();
-
-  // Get all images (fallback to single image if images array doesn't exist)
   const recipeImages =
     recipe.images && recipe.images.length > 0 ? recipe.images : [recipe.image];
   const hasMultipleImages = recipeImages.length > 1;
@@ -62,18 +60,15 @@ const HeroRecipe = ({ recipe, onLike, onShare, isLiked = false }) => {
     onShare && onShare();
   };
 
-  // Load comments from localStorage
   useEffect(() => {
     const loadComments = () => {
       try {
-        // First check if this is a user-created recipe
         const userRecipes = JSON.parse(localStorage.getItem("recipes") || "[]");
         const userRecipe = userRecipes.find((r) => r.id === recipe.id);
 
         if (userRecipe && userRecipe.comments) {
           setCommentsFromStorage(userRecipe.comments);
         } else {
-          // Check for comments in recipeComments storage
           const recipeComments = JSON.parse(
             localStorage.getItem("recipeComments") || "{}"
           );
@@ -88,7 +83,6 @@ const HeroRecipe = ({ recipe, onLike, onShare, isLiked = false }) => {
 
     loadComments();
 
-    // Listen for localStorage updates
     const handleStorageUpdate = () => {
       loadComments();
     };
@@ -99,7 +93,6 @@ const HeroRecipe = ({ recipe, onLike, onShare, isLiked = false }) => {
     };
   }, [recipe.id, recipe.comments]);
 
-  // Calculate rating statistics from comments
   const calculateRatingStats = () => {
     const comments =
       commentsFromStorage.length > 0
@@ -117,14 +110,13 @@ const HeroRecipe = ({ recipe, onLike, onShare, isLiked = false }) => {
       };
     }
 
-    // Calculate average rating
     const totalRating = ratingsFromComments.reduce(
       (sum, comment) => sum + comment.rating,
       0
     );
     const averageRating = totalRating / ratingsFromComments.length;
 
-    // Calculate rating distribution (1-5 stars)
+    // Calculate rating (1-5 stars)
     const distribution = [0, 0, 0, 0, 0];
     ratingsFromComments.forEach((comment) => {
       if (comment.rating >= 1 && comment.rating <= 5) {
@@ -212,7 +204,7 @@ const HeroRecipe = ({ recipe, onLike, onShare, isLiked = false }) => {
             </div>
           </div>
 
-          {/* Dynamic Badge - Moved to separate container */}
+          {/* Dynamic Badge */}
           <div className={styles.badgeContainer}>
             <RecipeBadge recipe={recipe} />
           </div>

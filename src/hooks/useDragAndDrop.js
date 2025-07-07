@@ -1,4 +1,3 @@
-// src/hooks/useDragAndDrop.js
 import { useState, useRef } from 'react';
 
 const useDragAndDrop = (items, onReorder) => {
@@ -10,7 +9,6 @@ const useDragAndDrop = (items, onReorder) => {
     setDraggedItem(index);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', index.toString());
-    // Create a more visible drag image
     const dragImage = e.currentTarget.cloneNode(true);
     dragImage.style.transform = 'rotate(5deg)';
     dragImage.style.opacity = '0.8';
@@ -58,8 +56,6 @@ const useDragAndDrop = (items, onReorder) => {
       
       // Insert the item at the new position
       newItems.splice(insertIndex, 0, draggedItemData);
-      
-      // Call the reorder callback
       onReorder(newItems);
     }
     

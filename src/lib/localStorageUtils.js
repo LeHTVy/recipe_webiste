@@ -1,11 +1,8 @@
-// localStorage utility functions for managing user data tables
-
 /**
  * Get current user ID from localStorage
  * @returns {string|null} Current user ID or null if not logged in
  */
 export const getCurrentUserId = () => {
-  // Try both possible keys for current user ID
   let userId = localStorage.getItem('tastemate_current_user_id');
   if (!userId) {
     userId = localStorage.getItem('currentUserId');
@@ -29,7 +26,6 @@ export const getUserById = (userId) => {
       searchId = userId.replace('tastemate-user-', '');
     }
 
-    // Tìm trong localStorage users trước
     let user = allUsers.find(u =>
       u.id === userId ||
       u.id === searchId ||
@@ -50,7 +46,6 @@ export const getUserById = (userId) => {
       );
     }
 
-    // **QUAN TRỌNG: Tìm trong mock data cho TẤT CẢ userId, không chỉ 'chef-'**
     if (!user) {
       console.log(`getUserById - searching for author: ${userId}`);
       const recipes = JSON.parse(localStorage.getItem('tastemate_recipes') || '[]');
@@ -60,7 +55,7 @@ export const getUserById = (userId) => {
       console.log(`getUserById - found recipe for author:`, recipe ? recipe.title : 'none');
       
       if (recipe && recipe.author) {
-        // Transform mock author thành user format
+        // Transform mock author to  user format
         user = {
           id: recipe.author.id,
           username: recipe.author.id,
@@ -74,7 +69,7 @@ export const getUserById = (userId) => {
           following: recipe.author.following || 0,
           totalRecipes: recipe.author.totalRecipes || 0,
           joinDate: recipe.author.joinDate,
-          isFromMockData: true // Flag để phân biệt
+          isFromMockData: true 
         };
         console.log(`getUserById - created user from author:`, user);
       }
@@ -140,7 +135,6 @@ export const followUser = (userIdToFollow) => {
     const followingKey = `following_${currentUserId}`;
     const followedKey = `followed_${userIdToFollow}`;
 
-    // Add to current user's following list
     const currentFollowing = getFollowingList();
     if (!currentFollowing.includes(userIdToFollow.toString())) {
       currentFollowing.push(userIdToFollow.toString());
@@ -148,7 +142,6 @@ export const followUser = (userIdToFollow) => {
       console.log(`Added ${userIdToFollow} to following list of ${currentUserId}`);
     }
 
-    // Add current user to the followed user's followers list
     const followedByList = JSON.parse(localStorage.getItem(followedKey) || '[]');
     if (!followedByList.includes(currentUserId)) {
       followedByList.push(currentUserId);
@@ -156,12 +149,10 @@ export const followUser = (userIdToFollow) => {
       console.log(`Added ${currentUserId} to followers list of ${userIdToFollow}`);
     }
 
-    // **Trigger multiple events để notify tất cả components**
     window.dispatchEvent(new CustomEvent('localStorageUpdate', {
       detail: { type: 'follow', userId: userIdToFollow, currentUserId }
     }));
     
-    // Trigger storage event manually (cho same-tab updates)
     window.dispatchEvent(new StorageEvent('storage', {
       key: followedKey,
       newValue: JSON.stringify(followedByList),
@@ -188,12 +179,10 @@ export const unfollowUser = (userIdToUnfollow) => {
     const followingKey = `following_${currentUserId}`;
     const followedKey = `followed_${userIdToUnfollow}`;
     
-    // Remove from current user's following list
     const currentFollowing = getFollowingList();
     const updatedFollowing = currentFollowing.filter(id => id !== userIdToUnfollow.toString());
     localStorage.setItem(followingKey, JSON.stringify(updatedFollowing));
     
-    // Remove current user from the followed user's followers list
     const followedByList = JSON.parse(localStorage.getItem(followedKey) || '[]');
     const updatedFollowedBy = followedByList.filter(id => id !== currentUserId);
     localStorage.setItem(followedKey, JSON.stringify(updatedFollowedBy));
@@ -224,7 +213,6 @@ export const getFollowers = (userId) => {
   try {
     console.log('getFollowers - userId:', userId);
     
-    // Check both possible formats for the followed key
     const followedKey1 = `followed_${userId}`;
     const followedKey2 = `followed_tastemate-user-${userId}`;
     
@@ -233,7 +221,6 @@ export const getFollowers = (userId) => {
     let followerIds = JSON.parse(localStorage.getItem(followedKey1) || '[]');
     console.log('getFollowers - followerIds from key1:', followerIds);
     
-    // If no followers found with first key, try second format
     if (followerIds.length === 0) {
       followerIds = JSON.parse(localStorage.getItem(followedKey2) || '[]');
       console.log('getFollowers - followerIds from key2:', followerIds);
@@ -267,7 +254,6 @@ export const getFollowersDetails = () => {
     return [];
   }
   
-  // Check both possible formats for the followed key
   const followedKey1 = `followed_${currentUserId}`;
   const followedKey2 = `followed_tastemate-user-${currentUserId}`;
   
@@ -276,7 +262,6 @@ export const getFollowersDetails = () => {
   let followerIds = JSON.parse(localStorage.getItem(followedKey1) || '[]');
   console.log('getFollowersDetails - followerIds from key1:', followerIds);
   
-  // If no followers found with first key, try second format
   if (followerIds.length === 0) {
     followerIds = JSON.parse(localStorage.getItem(followedKey2) || '[]');
     console.log('getFollowersDetails - followerIds from key2:', followerIds);
@@ -345,7 +330,7 @@ export const bookmarkAuthor = (authorId) => {
       return true;
     }
     
-    return false; // Already bookmarked
+    return false; 
   } catch (error) {
     console.error('Error bookmarking author:', error);
     return false;
@@ -431,10 +416,8 @@ export const bookmarkCommunityPost = (post) => {
     const bookmarksKey = `communityBookmarks_${currentUserId}`;
     const currentBookmarks = getCommunityBookmarks();
     
-    // Check if post is already bookmarked
     const existingIndex = currentBookmarks.findIndex(bookmark => bookmark.id === post.id);
     if (existingIndex === -1) {
-      // Add bookmark with timestamp
       const bookmarkData = {
         ...post,
         bookmarkedAt: new Date().toISOString()
@@ -444,7 +427,7 @@ export const bookmarkCommunityPost = (post) => {
       return true;
     }
     
-    return false; // Already bookmarked
+    return false; 
   } catch (error) {
     console.error('Error bookmarking community post:', error);
     return false;
@@ -509,14 +492,9 @@ export const clearUserData = (userId = null) => {
   if (!targetUserId) return;
   
   try {
-    // Clear following data
     localStorage.removeItem(`following_${targetUserId}`);
-    
-    // Clear bookmark data
     localStorage.removeItem(`authorBookmarks_${targetUserId}`);
     localStorage.removeItem(`communityBookmarks_${targetUserId}`);
-    
-    // Note: We don't clear followed_userId tables as they belong to other users
   } catch (error) {
     console.error('Error clearing user data:', error);
   }
@@ -530,8 +508,6 @@ export const clearUserData = (userId = null) => {
 export const getFollowersCount = (userId) => {
   try {
     console.log('getFollowersCount - userId:', userId);
-    
-    // Check both possible formats for the followed key
     const followedKey1 = `followed_${userId}`;
     const followedKey2 = `followed_tastemate-user-${userId}`;
     
@@ -539,8 +515,6 @@ export const getFollowersCount = (userId) => {
     
     let followerIds = JSON.parse(localStorage.getItem(followedKey1) || '[]');
     console.log('getFollowersCount - followerIds from key1:', followerIds);
-    
-    // If no followers found with first key, try second format
     if (followerIds.length === 0) {
       followerIds = JSON.parse(localStorage.getItem(followedKey2) || '[]');
       console.log('getFollowersCount - followerIds from key2:', followerIds);

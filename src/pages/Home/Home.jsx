@@ -57,18 +57,14 @@ const Home = () => {
   };
 
   const featureImages = {
-    // Step 1: World Flavors - Cần 2 hình
     step1light1: worldFlavors,
     step1light2: recipeSharing, 
     
-    // Step 2: Recipe Sharing - Cần 2 hình
     step2light1: recipeSharing,
     step2light2: communitySharing, 
     
-    // Step 3: Community Sharing - Chỉ cần 1 hình
     step3light: communitySharing,
     
-    // Step 4: Share Your Flavors - Chỉ cần 1 hình
     step4light: shareyourFlavors,
     
     alt: "TasteMate Features Showcase"

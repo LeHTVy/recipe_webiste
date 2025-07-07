@@ -26,13 +26,11 @@ const UserInformation = ({
     const file = e.target.files[0];
     if (!file) return;
 
-    // Validate file type
     if (!file.type.startsWith('image/')) {
       showError('Please select an image file');
       return;
     }
 
-    // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       showError('File size must be less than 5MB');
       return;
@@ -41,12 +39,9 @@ const UserInformation = ({
     setIsUploadingAvatar(true);
 
     try {
-      // Convert file to base64 for localStorage
       const reader = new FileReader();
       reader.onload = (event) => {
         const base64String = event.target.result;
-        
-        // Update user profile with new avatar
         updateProfile({ profilePicture: base64String });
         setIsUploadingAvatar(false);
       };

@@ -236,7 +236,7 @@ const Footer = () => {
               </div>
             </form>
 
-            {/* Features với React Icons và Màu Sắc */}
+            {/* Features with React Icons */}
             <div className={styles.features}>
               <div className={styles.feature}>
                 <FaMobileAlt className={styles.featureIcon} />

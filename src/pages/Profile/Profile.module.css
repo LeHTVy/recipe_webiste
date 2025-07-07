@@ -1,9 +1,4 @@
 /* ===========================================
-   TWO-COLUMN PROFILE PAGE STYLES
-   Light Mode: #113e21 | Dark Mode: #ffbd59
-   =========================================== */
-
-/* ===========================================
    1. PROFILE CONTAINER & LAYOUT
    =========================================== */
 .profileContainer {
@@ -1167,7 +1162,7 @@
 }
 
 /* ===========================================
-   2. PROFILE HEADER (Instagram-like)
+   2. PROFILE HEADER 
    =========================================== */
 .profileHeader {
   background: rgba(255, 255, 255, 0.95);
@@ -1313,7 +1308,7 @@
 }
 
 /* ===========================================
-   5. STATS SECTION (Instagram-like)
+   5. STATS SECTION 
    =========================================== */
 .statsSection {
   display: flex;
